@@ -1,0 +1,8 @@
+@import uk.gov.hmrc.play.views.html.helpers
+@import config.AppConfig
+@import controllers._
+@()(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+
+@main_template(title = Messages("selectdectype.title"), bodyClasses = None) {
+<h1>@Messages("selectdectype.header")</h1>
+}
