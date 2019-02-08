@@ -1,8 +1,57 @@
-@import uk.gov.hmrc.play.views.html.helpers
+@import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
 @import config.AppConfig
 @import controllers._
-@()(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@import model.SelectDecType
+@import views.helper.Helpers.titleMakerWithForm
 
-@main_template(title = Messages("selectdectype.title"), bodyClasses = None) {
-<h1>@Messages("selectdectype.header")</h1>
+
+
+@(formAction: Call,
+form: Form[SelectDecType])(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
+
+@header = @{
+<legend>
+    <h1 class="heading-large">
+        { Messages("select.dec.header") }
+    </h1>
+</legend>
 }
+
+@views.html.main(
+appConfig = appConfig,
+contentHeader = None,
+bodyClasses = None,
+navTitle = Some(Messages("global.title")),
+title = Some(Messages("global.title")),
+includeHmrcLogo = true,
+backButtonUrl = None) {
+
+
+@if(form.hasErrors) { @uiHelpers.errorSummary(Messages("global.error-header"), form) }
+
+@uiHelpers.form(
+action = controllers.routes.MibController.submitSelectDecTypePage(),
+'id -> "select_dec_type_form",
+'class -> "form js-form",
+'autocomplete -> "off",
+'novalidate -> "novalidate"
+) {
+<fieldset id="select_dec_type">
+    @header
+
+
+
+    <div class="form-group @form.errors("select_dec_type").map { e => form-group-error }">
+    @views.html.partial.error_message_form_input("way_to_pay", form)
+    @views.html.partial.radio_option(form("select_dec_type"), "select_dec_type", "1", "import", Messages("select.dec.radio1"), None, None)
+    @views.html.partial.radio_option(form("select_dec_type"), "select_dec_type", "2", "export", Messages("select.dec.radio2"), None, None)
+   </div>
+
+
+</fieldset>
+
+<div class="form-field">
+    <button id="next" type="submit" class="button">@Messages("global.continue")</button>
+</div>
+}
+} 

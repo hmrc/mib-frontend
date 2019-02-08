@@ -1,0 +1,76 @@
+.tableheading-multiline {
+    vertical-align: top;
+}
+
+/*
+ * Things to fix common failings of assets-frontend
+ */
+
+.important-notice {
+    min-height: 2em;
+}
+
+.important-notice p {
+    font-weight: 700;
+}
+
+.img--inline {
+    height: 1.25em;
+    max-width: inherit;
+}
+
+.figure.bold-total {
+    font-weight: 700;
+}
+
+.header-options {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.form-hint {
+    display: block;
+    color: #6f777b;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.top-padded {
+    margin-top: 25px !important;
+}
+
+.th-bold th {
+    width: 200px;
+    font-weight: 700;
+}
+
+#DDlogo img {
+    max-width: 50%;
+    display: block;
+    margin: 0 auto 1em;
+}
+
+@media only screen and (min-width: 450px) {
+    #DDlogo {
+        text-align: right;
+        margin-bottom: 1em;
+    }
+    #DDlogo img {
+        display: inline;
+        margin: 0;
+        width: 25%;
+    }
+}
+.form-group .panel{
+    margin-left: .9em;
+    padding-top: 0;
+}
+.form-group .panel ul{
+    margin-left: 2em;
+}
+.form-group .panel ul li{
+    margin-bottom: 5px;
+}
+.margin-bottom-20{
+    margin-bottom: 20px;
+}

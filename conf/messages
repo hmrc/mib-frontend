@@ -1,2 +1,11 @@
-selectdectype.title=Merchandise in Baggage
-selectdectype.header=Select the type of declaration?
+global.title = Merchandise in Baggage
+select.dec.header = Select the type of declaration?
+global.continue = Continue
+global.back = Back
+global.error-header = There is a problem
+global.error-prefix = Error:
+select.dec.radio1 = Import
+select.dec.radio2 = Export
+select.dec.type.error = Select a declaration type
+yes = yes
+no = no
