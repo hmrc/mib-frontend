@@ -36,7 +36,8 @@ action = controllers.routes.MibController.submitSelectDecTypePage(),
 'autocomplete -> "off",
 'novalidate -> "novalidate"
 ) {
-<fieldset id="select_dec_type">
+<div class="form-group">
+<fieldset id="select_dec_type" class="inline">
     @header
 
 
@@ -49,9 +50,11 @@ action = controllers.routes.MibController.submitSelectDecTypePage(),
 
 
 </fieldset>
+</div>
+
 
 <div class="form-field">
     <button id="next" type="submit" class="button">@Messages("global.continue")</button>
 </div>
 }
-} 
+}

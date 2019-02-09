@@ -27,7 +27,7 @@ class MibController @Inject() (val messagesApi: MessagesApi)(implicit ec: Execut
         formWithErrors
       )),
       {
-        case SelectDecType(Some("1")) => Redirect(routes.MibController.submitSelectDecTypePage())
+        case SelectDecType(Some("1")) => Redirect(routes.ImportController.getImportPortPage1())
         case SelectDecType(Some("2")) => Redirect(routes.MibController.submitSelectDecTypePage())
       }
     )
