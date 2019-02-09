@@ -1,0 +1,7 @@
+@import org.joda.time.DateTime
+@(errorKey: String, form:Form[_])(implicit m: Messages)
+@if(form.errors(errorKey).nonEmpty) {
+@for(error <- form.errors(errorKey)) {
+<span id="@error.message-errorKey" class="error-message">@Messages(error.message,DateTime.now.year().get)</span>
+}
+}

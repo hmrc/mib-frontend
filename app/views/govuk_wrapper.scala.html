@@ -1,6 +1,7 @@
 @import config.AppConfig
 @(appConfig: AppConfig,
 title: String,
+navTitle: Option[String] = None,
 mainClass: Option[String] = None,
 mainDataAttributes: Option[Html] = None,
 bodyClasses: Option[String] = None,
@@ -8,67 +9,105 @@ sidebar: Html = HtmlFormat.empty,
 contentHeader: Option[Html] = None,
 mainContent: Html = HtmlFormat.empty,
 serviceInfoContent: Html = HtmlFormat.empty,
-scriptElem: Option[Html] = None)(implicit request: Request[_], messages: Messages)
+backButtonUrl: Option[play.api.mvc.Call] = None,
+scriptElem: Option[Html] = None)(implicit request: play.api.mvc.Request[_], messages: Messages)
 
 @import layouts.{govuk_template => hmrcGovUkTemplate}
 @import uk.gov.hmrc.play.views.html.{layouts => uiLayouts}
 @import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
 
+
+@commonLinkElement = {
+<link rel="stylesheet" href='@routes.Assets.at("css/styles.css")' />
+}
+
 @head = {
 @uiLayouts.head(
-linkElem = None,
+linkElem = Some(commonLinkElement),
 headScripts = None)
-<meta name="format-detection" content="telephone=no"/>
-}
+<meta name="format-detection" content="telephone=no" />
+<script src="@routes.Assets.at("js/button.js")"></script>
+    }
 
-@headerNavLinks = {}
+   @scriptElement = {
+       @scriptElem.getOrElse(Html(""))
+       <script src="@controllers.routes.Assets.at("js/ga-events.js")" type="text/javascript"></script>
+<script src="@controllers.routes.Assets.at("js/disclosure.js")" type="text/javascript"></script>
+   }
 
-@insideHeader = {
-@uiLayouts.header_nav(
-navTitle = Some("mib-frontend"),
-navTitleLink = None,
-showBetaLink = false,
-navLinks = Some(headerNavLinks))
-}
 
-@afterHeader = {}
+    @insideHeader = {
+    @uiLayouts.header_nav(
+        navTitle = navTitle.orElse(Some(Messages("header.default"))),
+        navTitleLink = None,
+        showBetaLink = false,
+        navLinks = None)
+    }
 
-@bodyEnd = {
-@uiLayouts.footer(
-analyticsToken = Some(appConfig.analyticsToken),
-analyticsHost = appConfig.analyticsHost,
-ssoUrl = None,
-scriptElem = scriptElem,
-gaCalls = None)
-}
+    @afterHeader = {}
 
-@footerTop = {}
-@footerLinks = {}
+    @bodyEnd = {
+    @uiLayouts.footer(
+        analyticsToken = None,
+        analyticsHost = "",
+        ssoUrl = None,
+        scriptElem = Some(scriptElement),
+        gaCalls = None)
+    }
 
-@serviceInfo = {
-@uiLayouts.serviceInfo(
-betaBanner = HtmlFormat.empty,
-includeGridWrapper = false,
-serviceInfoContent = Some(serviceInfoContent))
-}
+    @footerTop = {}
 
-@mainContentHeader = {
-@if(contentHeader.isDefined) {
-@uiLayouts.main_content_header(contentHeader = contentHeader.get)
-}
-}
+    @footerLinks = {
+        @uiLayouts.footer_links(None)
+    }
 
-@getHelpForm = @{uiHelpers.reportAProblemLink(appConfig.reportAProblemPartialUrl, appConfig.reportAProblemNonJSUrl)}
+    @serviceInfo = {
+    @uiLayouts.serviceInfo(
+        betaBanner = HtmlFormat.empty,
+        includeGridWrapper = false,
+        serviceInfoContent = Some(serviceInfoContent),
+        includeHMRCBranding = false
+        )
+    }
+    @mainContentHeader = {
+    @if(contentHeader.isDefined) {
+        @uiLayouts.main_content_header(contentHeader = contentHeader.get)
+    }
 
-@content = {
-@uiLayouts.main_content(
-article = mainContent,
-mainClass = mainClass,
-mainDataAttributes = mainDataAttributes,
-mainContentHeader = mainContentHeader,
-serviceInfo = serviceInfo,
-getHelpForm = getHelpForm,
-sidebar = sidebar)
-}
+    @if(backButtonUrl.isDefined) {
+        <div class="grid-layout header-options print-hidden">
+            @if(backButtonUrl.isDefined) {
+                <div class="grid-layout__column--2-3">
+                    <a id="back" class="link-back" href="@backButtonUrl">@Messages("global.back")</a>
+                </div>
+            }
+        </div>
+    }
 
-@hmrcGovUkTemplate(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(uiLayouts.footer_links()), true)(content)
+    }
+
+    @getHelpForm = @{
+        uiHelpers.reportAProblemLink(appConfig.reportAProblemPartialUrl, appConfig.reportAProblemNonJSUrl)
+    }
+
+    @content = {
+    @uiLayouts.main_content(
+        article = mainContent,
+        mainClass = mainClass,
+        mainDataAttributes = mainDataAttributes,
+        mainContentHeader = mainContentHeader,
+        serviceInfo = serviceInfo,
+        getHelpForm = getHelpForm,
+        sidebar = sidebar)
+    }
+
+    @hmrcGovUkTemplate(
+        Some(title),
+        bodyClasses)(
+        head = head,
+        bodyEnd,
+        insideHeader,
+        afterHeader,
+        footerTop,
+        Some(footerLinks),
+        true)(content)

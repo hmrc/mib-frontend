@@ -1,0 +1,98 @@
+@import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
+@import config.AppConfig
+@import controllers._
+@import model._
+@import views.helper.Helpers.titleMakerWithForm
+
+
+
+@(formAction: Call,
+form: Form[ImportDec])(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
+
+@header = @{
+<legend>
+    <h1 class="heading-large">
+        { Messages("import.port.page1.header") }
+    </h1>
+</legend>
+}
+
+@views.html.main(
+appConfig = appConfig,
+contentHeader = None,
+bodyClasses = None,
+navTitle = Some(Messages("global.title")),
+backButtonUrl = Some(controllers.routes.MibController.getSelectDeclarationTypePage()),
+title = Some(Messages("global.title")),
+includeHmrcLogo = true) {
+
+
+@if(form.hasErrors) { @uiHelpers.errorSummary(Messages("global.error-header"), form) }
+
+@uiHelpers.form(
+action = controllers.routes.ImportController.submitImportPortPage1(),
+'id -> "import_dec_type_form",
+'class -> "form js-form",
+'autocomplete -> "off",
+'novalidate -> "novalidate"
+) {
+<fieldset id="import-port-page1">
+    @header
+
+
+
+    <div class="form-group @form.errors("import-port-page1").map { e => form-group-error }">
+
+
+    @views.html.partial.error_message_form_input("way_to_pay", form)
+
+
+    <div class="form-group">
+    <label for="portOfEntry" class="form-label">@Messages("import.port.page1.portOfEntry")
+
+        @if(form.errors("portOfEntry").nonEmpty) {
+        @for(error <- form.errors("portOfEntry")) {
+        <span id="@error.message-portOfEntry" class="error-message">@Messages(error.message)</span>
+        }
+        }
+    </label>
+    <input type="text" class="form-control @if(form.errors("portOfEntry").nonEmpty) { form-control-error }" name="portOfEntry" id="portOfEntry" value="@form("portOfEntry").value" />
+    </div>
+
+    <div class="form-group">
+    <label for="countryOfOrigin" class="form-label">@Messages("import.port.page1.countryOfOrigin")
+
+        @if(form.errors("countryOfOrigin").nonEmpty) {
+        @for(error <- form.errors("countryOfOrigin")) {
+        <span id="@error.message-countryOfOrigin" class="error-message">@Messages(error.message)</span>
+        }
+        }
+    </label>
+
+    <input type="text" class="form-control @if(form.errors("countryOfOrigin").nonEmpty) { form-control-error }" name="countryOfOrigin" id="countryOfOrigin" value="@form("countryOfOrigin").value" />
+    </div>
+
+
+    <div class="form-group">
+    <label for="eori" class="form-label">@Messages("import.port.page1.eori")
+
+        @if(form.errors("eori").nonEmpty) {
+        @for(error <- form.errors("eori")) {
+        <span id="@error.message-eori" class="error-message">@Messages(error.message)</span>
+        }
+        }
+    </label>
+
+    <input type="text" class="form-control @if(form.errors("eori").nonEmpty) { form-control-error }" name="eori" id="eori" value="@form("eori").value" />
+    </div>
+
+    </div>
+
+
+</fieldset>
+
+<div class="form-field">
+    <button id="next" type="submit" class="button">@Messages("global.continue")</button>
+</div>
+}
+} 
