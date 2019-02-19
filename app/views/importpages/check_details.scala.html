@@ -1,0 +1,201 @@
+@import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
+@import config.AppConfig
+@import controllers._
+@import model._
+@import views.helper.Helpers.titleMakerWithForm
+@(formAction: Call,
+form: Form[JourneyDetails],
+traderForm: Form[TraderDetailsCheck],
+merchandiseForm: Form[MerchandiseDetails],
+arrivalDecForm: Form[ArrivalDecDates],
+pricesTaxesForm: Form[PricesTaxes],
+countries: Seq[model.Country]
+)(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
+
+@header = @{
+<legend>
+    <h1 class="heading-large">
+        { Messages("import.checkdetails.header") }
+    </h1>
+</legend>
+}
+
+@views.html.main(
+appConfig = appConfig,
+contentHeader = None,
+bodyClasses = None,
+navTitle = Some(Messages("global.title")),
+backButtonUrl = Some(controllers.routes.ImportController.getImportPage("prices_taxes")),
+title = Some(Messages("global.title")),
+includeHmrcLogo = true) {
+
+
+@if(form.hasErrors) { @uiHelpers.errorSummary(Messages("global.error-header"), form) }
+
+@uiHelpers.form(
+action = controllers.routes.ImportController.submitImportPage(),
+'id -> "import_dec_type_form",
+'class -> "form js-form",
+'autocomplete -> "off",
+'novalidate -> "novalidate"
+) {
+<fieldset id="import-checkdetails">
+    @header
+
+
+
+    <div class="form-group @form.errors("import-checkdetails").map { e => form-group-error }">
+
+
+    @views.html.partial.error_message_form_input("import-checkdetails", form)
+    <input type="hidden" name="page" value="check_details" />
+
+
+        <dl class="govuk-check-your-answers cya-questions-long">
+
+            <!--  -->
+            <h2 class="heading-medium">
+                @Messages("import.journeydetails.header")
+            </h2>
+            <br>
+
+            @for(field <- Seq("portOfEntry","countryOfOrigin", "eori")) {
+            <div id="@field-fieldset">
+
+                <dt class="cya-question">
+                    @Messages("import.journeydetails." + field)
+                </dt>
+                <dd class="cya-answer">
+                    @if(field == "countryOfOrigin") {
+                    @for(country <- countries) {
+                    @if(form("countryOfOrigin").value.getOrElse("") == country.code){
+                    @country.name } } }
+
+                    @if(field != "countryOfOrigin") {
+                    @form(field).value
+                    }
+                </dd>
+                <dd class="app-check-your-answers__change">
+                    <a href="@routes.ImportController.getImportPage("journey_details")">@Messages("change")</a>
+                </dd>
+
+            </div>
+            }
+
+            <!--  -->
+            <br>
+            <br>
+            <h2 class="heading-medium">
+                @Messages("import.traderDetails.header")
+            </h2>
+            <br>
+
+            @for(field <- Seq("nameAddress","vrn", "vehicleRegNo")) {
+            <div id="@field-fieldset">
+
+                <dt class="cya-question">
+                    @Messages("import.checkdetails." + field)
+                </dt>
+                <dd class="cya-answer">
+                     @if(field == "nameAddress") {
+                      @Html(traderForm(field).value.get) }
+
+                     @if(field != "nameAddress") {
+                      @traderForm(field).value }
+                </dd>
+                <dd class="app-check-your-answers__change">
+                    <a href="@routes.ImportController.getImportPage("trader_details")" id="@field">@Messages("change")</a>
+                </dd>
+
+            </div>
+            }
+            <!--  -->
+            <br>
+            <br>
+            <h2 class="heading-medium">
+                @Messages("import.merchandisedetails.header")
+            </h2>
+            <br>
+
+            @for(field <- Seq("invoiceNumber", "desciptionOfGoods")) {
+            <div id="@field-fieldset">
+
+                <dt class="cya-question">
+                    @Messages("import.merchandisedetails." + field)
+                </dt>
+                <dd class="cya-answer">
+                    @merchandiseForm(field).value
+                </dd>
+                <dd class="app-check-your-answers__change">
+                    <a href="@routes.ImportController.getImportPage("merchandise_details")" id="@field">@Messages("change")</a>
+                </dd>
+
+            </div>
+            }
+            <!--  -->
+            <br>
+            <br>
+            <h2 class="heading-medium">
+                @Messages("import.arrivaldecdates.header")
+            </h2>
+            <br>
+
+            @for(field <- Seq("arrivaldate", "declarationdate")) {
+            <div id="@field-fieldset">
+
+                <dt class="cya-question">
+                    @Messages("import.arrivaldecdates." + field)
+                    <br>
+                    @Messages("daymonthyear")
+                </dt>
+                <dd class="cya-answer">
+                    @if(field == "arrivaldate") {
+                    @arrivalDecForm("arrivalDay").value/@arrivalDecForm("arrivalMonth").value/@arrivalDecForm("arrivalYear").value
+                    }
+                    @if(field == "declarationdate") {
+                    @arrivalDecForm("declarationDay").value/@arrivalDecForm("declarationMonth").value/@arrivalDecForm("declarationYear").value
+                    }
+                </dd>
+                <dd class="app-check-your-answers__change">
+                    <a href="@routes.ImportController.getImportPage("arrivaldec_dates")" id="@field">@Messages("change")</a>
+                </dd>
+
+            </div>
+            }
+            <!--  -->
+            <br>
+            <br>
+            <h2 class="heading-medium">
+                @Messages("import.pricestaxes.header")
+            </h2>
+            <br>
+
+            @for(field <- Seq("purchasePrice","customsDuty", "importVat")) {
+            <div id="@field-fieldset">
+
+                <dt class="cya-question">
+                    @Messages("import.pricestaxes." + field)
+                </dt>
+                <dd class="cya-answer">
+                    £@pricesTaxesForm(field).value.get.toDouble.formatted("%,1.2f")
+                </dd>
+                <dd class="app-check-your-answers__change">
+                    <a href="@routes.ImportController.getImportPage("prices_taxes")" id="@field">@Messages("change")</a>
+                </dd>
+
+            </div>
+            }
+            <!--  -->
+
+        </dl>
+
+
+    </div>
+
+</fieldset>
+
+<div class="form-field">
+    <button id="next" type="submit" class="button">@Messages("global.calculate.tax")</button>
+</div>
+}
+}

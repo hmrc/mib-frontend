@@ -1,8 +1,8 @@
 # microservice specific routes
-GET         /assets/*file                                 controllers.Assets.at(path="/public", file)
+GET        /assets/*file                           controllers.Assets.at(path="/public", file)
 
-GET        /start                                         controllers.MibController.getSelectDeclarationTypePage
-POST       /submit-select-dec-type                        controllers.MibController.submitSelectDecTypePage
+GET        /start                                  controllers.MibController.getSelectDeclarationTypePage
+POST       /submit-select-dec-type                 controllers.MibController.submitSelectDecTypePage
 
-GET        /import-port-page1                             controllers.ImportController.getImportPortPage1
-POST       /import-port-page1                             controllers.ImportController.submitImportPortPage1
+GET        /import-page/:page                      controllers.ImportController.getImportPage(page: String)
+POST       /import-page                            controllers.ImportController.submitImportPage

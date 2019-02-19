@@ -1,13 +1,77 @@
 global.title = Merchandise in Baggage
 select.dec.header = Select the type of declaration?
 global.continue = Continue
+global.calculate.tax = Calculate Tax
 global.back = Back
 global.error-header = There is a problem
 global.error-prefix = Error:
 select.dec.radio1 = Import
 select.dec.radio2 = Export
 select.dec.type.error = Select a declaration type
-import.port.page1.header = page1 header
-import.port.page1.eori = UK EORI number (optional)
-import.port.page1.portOfEntry = Port of entry
-import.port.page1.countryOfOrigin = Country of origin
+optional = (optional)
+day = Day
+month = Month
+year = Year
+daymonthyear = (Day/Month/Year)
+change = Change
+select.message = Please select…
+
+#page1
+import.journeydetails.header = Journey details
+import.journeydetails.eori = UK EORI number (optional)
+import.journeydetails.eori.example = For example, GB123456789000
+import.journeydetails.portOfEntry = Where did the merchandise come from?
+import.journeydetails.countryOfOrigin = Where did the merchandise enter the UK?
+import.journeydetails.details1 = Where to find the EORI number
+import.journeydetails.details2 = The business should have an EORI number if it imports merchandise from sellers outside the EU. Contact the
+import.journeydetails.details3 = EORI team at HMRC (opens in a new window or tab)
+import.journeydetails.details4 = if you cannot find your number.
+
+#page2
+import.traderDetails.header = Details of trader
+import.traderDetails.trader = Full Name
+import.traderDetails.line1 = Address line 1
+import.traderDetails.line2 = Address line 2
+import.traderDetails.city = Town or City
+import.traderDetails.county = County
+import.traderDetails.postcode = Postcode
+import.traderDetails.country = Country
+import.traderDetails.vrn = VAT registration number
+import.traderDetails.vehicleRegNo = Vehicle registration number
+import.traderDetails.nameaddress = Trader name and address
+
+#page3
+import.merchandisedetails.header = Merchandise details
+import.merchandisedetails.invoiceNumber = Invoice number (optional)
+import.merchandisedetails.desciptionOfGoods = Description of merchandise to import
+
+#page4
+import.arrivaldecdates.header = Arrival and declaration dates
+import.arrivaldecdates.arrivaldate = Date of arrival
+import.arrivaldecdates.arrival.date.example = For example, 20 12 2018
+import.arrivaldecdates.declarationdate = Date of declaration
+
+#page5
+import.pricestaxes.header = Prices and taxes
+import.pricestaxes.purchasePrice = Purchase price
+import.pricestaxes.customsDuty = Customs Duty
+import.pricestaxes.importVat = Import VAT
+
+#page6
+import.checkdetails.header =  Check import details
+import.checkdetails.nameAddress = Trader name and address
+import.checkdetails.vrn = VAT registration number
+import.checkdetails.vehicleRegNo = Vehicle registration number
+
+error.invalid.addressline1 = Enter the first line of your address
+error.invalid.postcode = Enter a valid postcode
+error.required.postcode = Postcode is required
+error.required.country = Select a country
+error.invalid.portOfEntry = Enter a Port of entry
+error.invalid.countryOfOrigin = Enter a Country of origin
+error.invalid.desciptionOfGoods = Enter a Description of merchandise to import
+error.invalid.year = Enter a valid year
+error.invalid.month = Enter a valid month
+error.invalid.day = Enter a valid day
+
+country-code.path = conf/country-codes-en.properties

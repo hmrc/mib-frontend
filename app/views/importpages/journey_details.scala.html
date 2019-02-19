@@ -1,0 +1,109 @@
+@import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
+@import config.AppConfig
+@import controllers._
+@import model._
+@import views.helper.Helpers.titleMakerWithForm
+
+
+
+@(formAction: Call,
+form: Form[JourneyDetails], countries: Seq[model.Country])(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
+
+@header = @{
+<legend>
+    <h1 class="heading-large">
+        { Messages("import.journeydetails.header") }
+    </h1>
+</legend>
+}
+
+@views.html.main(
+appConfig = appConfig,
+contentHeader = None,
+bodyClasses = None,
+navTitle = Some(Messages("global.title")),
+backButtonUrl = Some(controllers.routes.MibController.getSelectDeclarationTypePage()),
+title = Some(Messages("global.title")),
+includeHmrcLogo = true) {
+
+
+@if(form.hasErrors) { @uiHelpers.errorSummary(Messages("global.error-header"), form) }
+
+@uiHelpers.form(
+action = controllers.routes.ImportController.submitImportPage(),
+'id -> "import_dec_type_form",
+'class -> "form js-form",
+'autocomplete -> "off",
+'novalidate -> "novalidate"
+) {
+<fieldset id="import-journeydetails">
+    @header
+
+
+
+    <div class="form-group @form.errors("import-journeydetails").map { e => form-group-error }">
+
+
+    @views.html.partial.error_message_form_input("import-journeydetails", form)
+
+
+    <div class="form-group">
+        <label for="portOfEntry" class="form-label">@Messages("import.journeydetails.portOfEntry")
+            @if(form.errors("portOfEntry").nonEmpty) {
+            @for(error <- form.errors("portOfEntry")) {
+            <span id="@error.message-portOfEntry" class="error-message">@Messages(error.message)</span>
+            }
+            }
+        </label>
+        <input type="text" class="form-control @if(form.errors("portOfEntry").nonEmpty) { form-control-error }" name="portOfEntry" id="portOfEntry" value="@form("portOfEntry").value" />
+    </div>
+
+    <input type="hidden" name="page" value="journey_details" />
+
+    <div  id="countryOfOrigin-fieldset"  class="form-group @form.errors("countryOfOrigin").map { e => form-group-error }">
+
+    <label for="countryOfOrigin" class="form-label">@Messages("import.journeydetails.countryOfOrigin")
+        @if(form.errors("countryOfOrigin").nonEmpty) {
+        @for(error <- form.errors("countryOfOrigin")) {
+        <span id="@error.message-countryOfOrigin" class="error-message">@Messages(error.message)</span>
+        }
+        }
+    </label>
+
+    <select id="countryOfOrigin" class="form-control @if(form.errors("countryOfOrigin").nonEmpty) { form-control-error }" name="countryOfOrigin">
+    <option value="">@Messages("select.message")</option>
+    @for(country <- countries) {
+    <option value="@country.code" @if(form("countryOfOrigin").value.getOrElse("") == country.code){ selected }>@country.name</option>
+    }
+    </select>
+    </div>
+
+
+    <div class="form-group">
+        <label for="eori" class="form-label">@Messages("import.journeydetails.eori") @if(form.errors("eori").nonEmpty) { @for(error <- form.errors("eori")) {
+            <span id="@error.message-eori" class="error-message">@Messages(error.message)</span>
+            }
+            }
+            <span class="form-hint">@Messages("import.journeydetails.eori.example")</span>
+        </label>
+
+        <input type="text" class="form-control @if(form.errors("eori").nonEmpty) { form-control-error }" name="eori" id="eori" value="@form("eori").value" />
+    </div>
+
+    <details>
+        <summary><span class="summary">@Messages("import.journeydetails.details1")</span></summary>
+        <div class="panel panel-border-narrow">
+            <p>@Messages("import.journeydetails.details2") <a href="https://www.tax.service.gov.uk/shortforms/form/EORIContact" target="_blank">@Messages("import.journeydetails.details3")</a> @Messages("import.journeydetails.details4")
+        </div>
+    </details>
+
+    </div>
+
+
+</fieldset>
+
+<div class="form-field">
+    <button id="next" type="submit" class="button">@Messages("global.continue")</button>
+</div>
+}
+}
