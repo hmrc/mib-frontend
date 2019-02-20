@@ -85,12 +85,28 @@ object Forms {
     )(PricesTaxes.apply)(PricesTaxes.unapply))
   }
 
+  def taxDue: Form[TaxDue] = {
+    Form(mapping(
+      "page" -> text,
+      "purchasePrice" -> of(doubleFormat),
+      "customsDuty" -> of(doubleFormat),
+      "importVat" -> of(doubleFormat),
+      "total" -> of(doubleFormat)
+    )(TaxDue.apply)(TaxDue.unapply))
+  }
+
   def traderDetailsCheck: Form[TraderDetailsCheck] = {
     Form(mapping(
       "nameAddress" -> text,
       "vrn" -> optional(text),
       "vehicleRegNo" -> optional(text)
     )(TraderDetailsCheck.apply)(TraderDetailsCheck.unapply))
+  }
+
+  def declare: Form[Declare] = {
+    Form(mapping(
+      "page" -> text
+    )(Declare.apply)(Declare.unapply))
   }
 
   object LocalConstraint {

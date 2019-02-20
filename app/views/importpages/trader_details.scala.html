@@ -6,8 +6,7 @@
 
 
 
-@(formAction: Call,
-form: Form[TraderDetails], countries: Seq[model.Country])(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
+@(form: Form[TraderDetails], countries: Seq[model.Country])(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
 
 @header = @{
 <legend>
@@ -52,7 +51,7 @@ action = controllers.routes.ImportController.submitImportPage(),
     <div id="@field-fieldset" class="form-group @form.errors(field).map { e => form-group-error }">
 
         <label for="@field" class="form-label">
-            @Messages("import.traderDetails." + field) @if(field == "county" || field == "line2" || field == "city") { @Messages("optional") }
+            @Messages("import.traderDetails." + field) @if(field == "county" || field == "line2" || field == "city") { @Messages("global.optional") }
             @views.html.partial.error_message_form_input(field,form)
         </label>
 
@@ -72,7 +71,7 @@ action = controllers.routes.ImportController.submitImportPage(),
     </label>
 
     <select id="country" class="form-control @if(form.errors("country").nonEmpty) { form-control-error }" name="country">
-    <option value="">@Messages("select.message")</option>
+    <option value="">@Messages("global.select.message")</option>
     @for(country <- countries) {
     <option value="@country.code" @if(form("country").value.getOrElse("") == country.code){ selected }>@country.name</option>
     }
@@ -83,7 +82,7 @@ action = controllers.routes.ImportController.submitImportPage(),
     <div id="@field-fieldset" class="form-group @form.errors(field).map { e => form-group-error }">
 
         <label for="@field" class="form-label">
-            @Messages("import.traderDetails." + field) @if(field == "vrn" || field == "vehicleRegNo") { @Messages("optional") }
+            @Messages("import.traderDetails." + field) @if(field == "vrn" || field == "vehicleRegNo") { @Messages("global.optional") }
             @views.html.partial.error_message_form_input(field,form)
         </label>
 

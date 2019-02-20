@@ -1,0 +1,79 @@
+@import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
+@import config.AppConfig
+@import controllers._
+@import model._
+@import views.helper.Helpers.titleMakerWithForm
+
+
+
+@(form: Form[TaxDue])(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
+
+@header = @{
+<legend>
+    <h1 class="heading-large">
+        { Messages("import.taxdue.header") } £{form("total").value.get.toDouble.formatted("%,1.2f")}
+    </h1>
+</legend>
+}
+
+@views.html.main(
+appConfig = appConfig,
+contentHeader = None,
+bodyClasses = None,
+navTitle = Some(Messages("global.title")),
+backButtonUrl = Some(controllers.routes.ImportController.getImportPage("check_details")),
+title = Some(Messages("global.title")),
+includeHmrcLogo = true) {
+
+
+@if(form.hasErrors) { @uiHelpers.errorSummary(Messages("global.error-header"), form) }
+
+@uiHelpers.form(
+action = controllers.routes.ImportController.submitImportPage(),
+'id -> "import_dec_type_form",
+'class -> "form js-form",
+'autocomplete -> "off",
+'novalidate -> "novalidate"
+) {
+<fieldset id="import-pricestaxes">
+    @header
+
+
+
+    <div class="form-group @form.errors("import-pricestaxes").map { e => form-group-error }">
+
+
+    @views.html.partial.error_message_form_input("import-pricestaxes", form)
+    <input type="hidden" name="page" value="tax_due" />
+    <table class="responsive-table" role="grid">
+        <thead>
+        <tr role="row">
+            <th scope="col">@Messages("global.item")</th>
+            <th class="numeric" scope="col">@Messages("global.amount")</th>
+        </tr>
+        </thead>
+        <tbody>
+        @for(field <- Seq("purchasePrice","customsDuty", "importVat", "total")) {
+        <tr role="row">
+            <td scope="row" role="gridcell">
+                <span class="table-heading" aria-hidden="true">@Messages("import.pricestaxes." + field)</span>
+
+            </td>
+            <td role="gridcell" class="numeric">
+                <span class="table-heading" aria-hidden="true">£@form(field).value.get.toDouble.formatted("%,1.2f")</span>
+            </td>
+        </tr>
+        }
+        </tbody>
+    </table>
+
+
+    </div>
+
+</fieldset>
+
+<div class="form-field">
+    <button id="next" type="submit" class="button">@Messages("global.accept.and.continue")</button>
+</div>
+}
+}

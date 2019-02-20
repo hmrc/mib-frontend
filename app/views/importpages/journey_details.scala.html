@@ -6,8 +6,7 @@
 
 
 
-@(formAction: Call,
-form: Form[JourneyDetails], countries: Seq[model.Country])(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
+@(form: Form[JourneyDetails], countries: Seq[model.Country])(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
 
 @header = @{
 <legend>
@@ -22,7 +21,7 @@ appConfig = appConfig,
 contentHeader = None,
 bodyClasses = None,
 navTitle = Some(Messages("global.title")),
-backButtonUrl = Some(controllers.routes.MibController.getSelectDeclarationTypePage()),
+backButtonUrl = Some(controllers.routes.MibController.getSelectDeclarationTypePageRestart()),
 title = Some(Messages("global.title")),
 includeHmrcLogo = true) {
 
@@ -71,7 +70,7 @@ action = controllers.routes.ImportController.submitImportPage(),
     </label>
 
     <select id="countryOfOrigin" class="form-control @if(form.errors("countryOfOrigin").nonEmpty) { form-control-error }" name="countryOfOrigin">
-    <option value="">@Messages("select.message")</option>
+    <option value="">@Messages("global.select.message")</option>
     @for(country <- countries) {
     <option value="@country.code" @if(form("countryOfOrigin").value.getOrElse("") == country.code){ selected }>@country.name</option>
     }

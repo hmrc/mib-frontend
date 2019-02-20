@@ -20,13 +20,13 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
   //------------------------------------------------------------------------------------------------------------------------------
   def getImportPage(page: String): Action[AnyContent] = Action { implicit request =>
     page match {
-      case "journey_details" => Ok(journey_details(controllers.routes.ImportController.submitImportPage(), journeyDetails.fill(JourneyDetails.fromSession(request.session).get),
+      case "journey_details" => Ok(journey_details(journeyDetails.fill(JourneyDetails.fromSession(request.session).get),
                                                    countriesService.getCountries))
       case "trader_details" =>
-        Ok(trader_details(controllers.routes.ImportController.submitImportPage(), traderDetails.fill(TraderDetails.fromSession(request.session).get), countriesService.getCountries))
-      case "merchandise_details" => Ok(merchandise_details(controllers.routes.ImportController.submitImportPage(), merchandiseDetails.fill(MerchandiseDetails.fromSession(request.session).get)))
-      case "arrivaldec_dates"    => Ok(arrivaldec_dates(controllers.routes.ImportController.submitImportPage(), arrivalDecDates.fill(ArrivalDecDates.fromSession(request.session).get)))
-      case "prices_taxes"        => Ok(prices_taxes(controllers.routes.ImportController.submitImportPage(), pricesTaxes.fill(PricesTaxes.fromSession(request.session).get)))
+        Ok(trader_details(traderDetails.fill(TraderDetails.fromSession(request.session).get), countriesService.getCountries))
+      case "merchandise_details" => Ok(merchandise_details(merchandiseDetails.fill(MerchandiseDetails.fromSession(request.session).get)))
+      case "arrivaldec_dates"    => Ok(arrivaldec_dates(arrivalDecDates.fill(ArrivalDecDates.fromSession(request.session).get)))
+      case "prices_taxes"        => Ok(prices_taxes(pricesTaxes.fill(PricesTaxes.fromSession(request.session).get)))
       case "check_details" => {
         val journey = journeyDetails.fill(JourneyDetails.fromSession(request.session).get)
         val traderFull = traderDetails.fill(TraderDetails.fromSession(request.session).get).get
@@ -34,13 +34,17 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
         val traderCheck = traderDetailsCheck.fill(TraderDetailsCheck(traderFull.getFormattedAddress(countriesService.getCountry(traderFull.country)), traderFull.vrn, traderFull.vehicleRegNo))
         val arrival = arrivalDecDates.fill(ArrivalDecDates.fromSession(request.session).get)
         val prices = pricesTaxes.fill(PricesTaxes.fromSession(request.session).get)
-        Ok(check_details(controllers.routes.ImportController.submitImportPage(),
-                         journey,
+        Ok(check_details(journey,
                          traderCheck,
                          merchandise,
                          arrival,
-                         pricesTaxes,
+                         prices,
                          countriesService.getCountries))
+      }
+      case "tax_due" => {
+        val prices = PricesTaxes.fromSession(request.session).get
+        val due = TaxDue("tax_due", prices.purchasePrice, prices.customsDuty, prices.importVat, prices.customsDuty + prices.importVat)
+        Ok(tax_due(taxDue.fill(due)))
       }
     }
   }
@@ -57,13 +61,12 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
       case Some("journey_details") => {
         Forms.journeyDetails.bindFromRequest().fold(
           formWithErrors => Ok(journey_details(
-            controllers.routes.ImportController.submitImportPage(),
             formWithErrors, countriesService.getCountries
           )),
           {
             valueInForm =>
               {
-                Ok(trader_details(controllers.routes.ImportController.submitImportPage(), TraderDetails.fromSession(request.session).fold(traderDetails)(traderDetails.fill(_)), countriesService.getCountries))
+                Ok(trader_details(TraderDetails.fromSession(request.session).fold(traderDetails)(traderDetails.fill(_)), countriesService.getCountries))
                   .addingToSession(JourneyDetails.toSession(valueInForm): _*)
               }
           }
@@ -73,15 +76,14 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
       case Some("trader_details") => {
         Forms.traderDetails.bindFromRequest().fold(
           formWithErrors => Ok(trader_details(
-            controllers.routes.ImportController.submitImportPage(),
             formWithErrors, countriesService.getCountries
           )),
           {
             valueInForm =>
               {
 
-                Ok(merchandise_details(controllers.routes.ImportController.submitImportPage(),
-                                       MerchandiseDetails.fromSession(request.session).fold(merchandiseDetails)(merchandiseDetails.fill(_)))).addingToSession(TraderDetails.toSession(valueInForm): _*)
+                Ok(merchandise_details(
+                  MerchandiseDetails.fromSession(request.session).fold(merchandiseDetails)(merchandiseDetails.fill(_)))).addingToSession(TraderDetails.toSession(valueInForm): _*)
               }
           }
         )
@@ -90,13 +92,12 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
       case Some("merchandise_details") => {
         Forms.merchandiseDetails.bindFromRequest().fold(
           formWithErrors => Ok(merchandise_details(
-            controllers.routes.ImportController.submitImportPage(),
             formWithErrors
           )),
           {
             valueInForm =>
               {
-                Ok(arrivaldec_dates(controllers.routes.ImportController.submitImportPage(), ArrivalDecDates.fromSession(request.session).fold(arrivalDecDates)(arrivalDecDates.fill(_)))).addingToSession(MerchandiseDetails.toSession(valueInForm): _*)
+                Ok(arrivaldec_dates(ArrivalDecDates.fromSession(request.session).fold(arrivalDecDates)(arrivalDecDates.fill(_)))).addingToSession(MerchandiseDetails.toSession(valueInForm): _*)
               }
           }
         )
@@ -105,13 +106,12 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
       case Some("arrivaldec_dates") => {
         Forms.arrivalDecDates.bindFromRequest().fold(
           formWithErrors => Ok(arrivaldec_dates(
-            controllers.routes.ImportController.submitImportPage(),
             formWithErrors
           )),
           {
             valueInForm =>
               {
-                Ok(prices_taxes(controllers.routes.ImportController.submitImportPage(), PricesTaxes.fromSession(request.session).fold(pricesTaxes)(pricesTaxes.fill(_)))).addingToSession(ArrivalDecDates.toSession(valueInForm): _*)
+                Ok(prices_taxes(PricesTaxes.fromSession(request.session).fold(pricesTaxes)(pricesTaxes.fill(_)))).addingToSession(ArrivalDecDates.toSession(valueInForm): _*)
               }
           }
         )
@@ -120,7 +120,6 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
       case Some("prices_taxes") => {
         Forms.pricesTaxes.bindFromRequest().fold(
           formWithErrors => Ok(prices_taxes(
-            controllers.routes.ImportController.submitImportPage(),
             formWithErrors
           )),
           {
@@ -131,8 +130,7 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
                 val merchandise = merchandiseDetails.fill(MerchandiseDetails.fromSession(request.session).get)
                 val arrival = arrivalDecDates.fill(ArrivalDecDates.fromSession(request.session).get)
                 val traderCheck = traderDetailsCheck.fill(TraderDetailsCheck(traderFull.getFormattedAddress(countriesService.getCountry(traderFull.country)), traderFull.vrn, traderFull.vehicleRegNo))
-                Ok(check_details(controllers.routes.ImportController.submitImportPage(),
-                                 journey,
+                Ok(check_details(journey,
                                  traderCheck,
                                  merchandise,
                                  arrival,
@@ -142,6 +140,17 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
           }
         )
       }
+      //------------
+      case Some("check_details") => {
+        val prices = PricesTaxes.fromSession(request.session).get
+        val due = TaxDue("tax_due", prices.purchasePrice, prices.customsDuty, prices.importVat, prices.customsDuty + prices.importVat)
+        Ok(tax_due(taxDue.fill(due)))
+      }
+      //------------
+      case Some("tax_due") => {
+        Ok(declare_merchandise(declare))
+      }
+      //------------
     }
   }
 

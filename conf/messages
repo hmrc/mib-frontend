@@ -1,20 +1,39 @@
 global.title = Merchandise in Baggage
-select.dec.header = Select the type of declaration?
 global.continue = Continue
 global.calculate.tax = Calculate Tax
 global.back = Back
 global.error-header = There is a problem
 global.error-prefix = Error:
+global.optional = (optional)
+global.day = Day
+global.month = Month
+global.year = Year
+global.total = Total
+global.change = Change
+global.item = Item
+global.amount = Amount
+global.accept.and.continue = Accept amount and continue
+global.day.month.year = (Day/Month/Year)
+global.select.message = Please select…
+global.declare.and.pay = Declare merchandise and pay online
+
+#errors
+error.invalid.addressline1 = Enter the first line of your address
+error.invalid.postcode = Enter a valid postcode
+error.required.postcode = Postcode is required
+error.required.country = Select a country
+error.invalid.portOfEntry = Enter a Port of entry
+error.invalid.countryOfOrigin = Enter a Country of origin
+error.invalid.desciptionOfGoods = Enter a Description of merchandise to import
+error.invalid.year = Enter a valid year
+error.invalid.month = Enter a valid month
+error.invalid.day = Enter a valid day
+
+#Select declaration page
+select.dec.header = Select the type of declaration?
 select.dec.radio1 = Import
 select.dec.radio2 = Export
 select.dec.type.error = Select a declaration type
-optional = (optional)
-day = Day
-month = Month
-year = Year
-daymonthyear = (Day/Month/Year)
-change = Change
-select.message = Please select…
 
 #page1
 import.journeydetails.header = Journey details
@@ -56,6 +75,8 @@ import.pricestaxes.header = Prices and taxes
 import.pricestaxes.purchasePrice = Purchase price
 import.pricestaxes.customsDuty = Customs Duty
 import.pricestaxes.importVat = Import VAT
+#Used for tax due page
+import.pricestaxes.total = Total
 
 #page6
 import.checkdetails.header =  Check import details
@@ -63,15 +84,17 @@ import.checkdetails.nameAddress = Trader name and address
 import.checkdetails.vrn = VAT registration number
 import.checkdetails.vehicleRegNo = Vehicle registration number
 
-error.invalid.addressline1 = Enter the first line of your address
-error.invalid.postcode = Enter a valid postcode
-error.required.postcode = Postcode is required
-error.required.country = Select a country
-error.invalid.portOfEntry = Enter a Port of entry
-error.invalid.countryOfOrigin = Enter a Country of origin
-error.invalid.desciptionOfGoods = Enter a Description of merchandise to import
-error.invalid.year = Enter a valid year
-error.invalid.month = Enter a valid month
-error.invalid.day = Enter a valid day
+#page7
+import.taxdue.header = Tax due on these goods
+
+#page8
+import.declare.header = Declare merchandise import
+import.declare.line1 = You must pay duty and tax on this merchandise if you bring them into the UK
+import.declare.line2 = You can only declare your merchandise online once. Go through the red channel at customs if you bring in goods or merchandise other than the ones you declare online.
+import.declare.line3 = You may have your merchandise seized or face prosecution and imprisonment if you provide false information or use the online service to deliberately avoid paying tax and duties on the merchandise you bring into the UK.
+import.declare.line4 = By making this declaration you are confirming that all the information in the declaration is correct and complete.
+import.declare.line5 = Once you declare your import you will not be able to make further changes.
+
+
 
 country-code.path = conf/country-codes-en.properties

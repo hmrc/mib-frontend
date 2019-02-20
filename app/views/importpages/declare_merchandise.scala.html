@@ -1,0 +1,67 @@
+@import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
+@import config.AppConfig
+@import controllers._
+@import model._
+@import views.helper.Helpers.titleMakerWithForm
+@(form: Form[Declare])(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
+
+@header = @{
+<legend>
+    <h1 class="heading-large">
+        { Messages("import.declare.header") }
+    </h1>
+</legend>
+}
+
+@views.html.main(
+appConfig = appConfig,
+contentHeader = None,
+bodyClasses = None,
+navTitle = Some(Messages("global.title")),
+backButtonUrl = Some(controllers.routes.ImportController.getImportPage("tax_due")),
+title = Some(Messages("global.title")),
+includeHmrcLogo = true) {
+
+
+@if(form.hasErrors) { @uiHelpers.errorSummary(Messages("global.error-header"), form) }
+
+@uiHelpers.form(
+action = controllers.routes.ImportController.submitImportPage(),
+'id -> "import_dec_type_form",
+'class -> "form js-form",
+'autocomplete -> "off",
+'novalidate -> "novalidate"
+) {
+<fieldset id="import-checkdetails">
+    @header
+
+
+
+    <div class="form-group @form.errors("import-checkdetails").map { e => form-group-error }">
+
+
+    @views.html.partial.error_message_form_input("import-declaration", form)
+    <input type="hidden" name="page" value="declare" />
+
+    <p>@Messages("import.declare.line1")</p>
+    <p>@Messages("import.declare.line2")</p>
+    <p>@Messages("import.declare.line3")</p>
+    <div class="notice">
+        <i class="icon icon-important">
+        <span class="visually-hidden">Warning</span>
+    </i>
+        <strong class="bold-small">@Messages("import.declare.line4")</strong>
+    </div>
+    <br>
+    <p>@Messages("import.declare.line5")</p>
+
+
+    </div>
+
+</fieldset>
+
+<div class="form-field">
+    <button id="next" type="submit" class="button">@Messages("global.declare.and.pay")</button>
+</div>
+}
+}

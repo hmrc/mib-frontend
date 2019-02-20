@@ -2,6 +2,8 @@
 GET        /assets/*file                           controllers.Assets.at(path="/public", file)
 
 GET        /start                                  controllers.MibController.getSelectDeclarationTypePage
+GET        /re-start                               controllers.MibController.getSelectDeclarationTypePageRestart
+
 POST       /submit-select-dec-type                 controllers.MibController.submitSelectDecTypePage
 
 GET        /import-page/:page                      controllers.ImportController.getImportPage(page: String)

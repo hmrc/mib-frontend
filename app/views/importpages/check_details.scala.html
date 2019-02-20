@@ -3,8 +3,7 @@
 @import controllers._
 @import model._
 @import views.helper.Helpers.titleMakerWithForm
-@(formAction: Call,
-form: Form[JourneyDetails],
+@(form: Form[JourneyDetails],
 traderForm: Form[TraderDetailsCheck],
 merchandiseForm: Form[MerchandiseDetails],
 arrivalDecForm: Form[ArrivalDecDates],
@@ -76,7 +75,7 @@ action = controllers.routes.ImportController.submitImportPage(),
                     }
                 </dd>
                 <dd class="app-check-your-answers__change">
-                    <a href="@routes.ImportController.getImportPage("journey_details")">@Messages("change")</a>
+                    <a href="@routes.ImportController.getImportPage("journey_details")">@Messages("global.change")</a>
                 </dd>
 
             </div>
@@ -104,7 +103,7 @@ action = controllers.routes.ImportController.submitImportPage(),
                       @traderForm(field).value }
                 </dd>
                 <dd class="app-check-your-answers__change">
-                    <a href="@routes.ImportController.getImportPage("trader_details")" id="@field">@Messages("change")</a>
+                    <a href="@routes.ImportController.getImportPage("trader_details")" id="@field">@Messages("global.change")</a>
                 </dd>
 
             </div>
@@ -127,7 +126,7 @@ action = controllers.routes.ImportController.submitImportPage(),
                     @merchandiseForm(field).value
                 </dd>
                 <dd class="app-check-your-answers__change">
-                    <a href="@routes.ImportController.getImportPage("merchandise_details")" id="@field">@Messages("change")</a>
+                    <a href="@routes.ImportController.getImportPage("merchandise_details")" id="@field">@Messages("global.change")</a>
                 </dd>
 
             </div>
@@ -146,7 +145,7 @@ action = controllers.routes.ImportController.submitImportPage(),
                 <dt class="cya-question">
                     @Messages("import.arrivaldecdates." + field)
                     <br>
-                    @Messages("daymonthyear")
+                    @Messages("global.day.month.year")
                 </dt>
                 <dd class="cya-answer">
                     @if(field == "arrivaldate") {
@@ -157,7 +156,7 @@ action = controllers.routes.ImportController.submitImportPage(),
                     }
                 </dd>
                 <dd class="app-check-your-answers__change">
-                    <a href="@routes.ImportController.getImportPage("arrivaldec_dates")" id="@field">@Messages("change")</a>
+                    <a href="@routes.ImportController.getImportPage("arrivaldec_dates")" id="@field">@Messages("global.change")</a>
                 </dd>
 
             </div>
@@ -180,7 +179,7 @@ action = controllers.routes.ImportController.submitImportPage(),
                     £@pricesTaxesForm(field).value.get.toDouble.formatted("%,1.2f")
                 </dd>
                 <dd class="app-check-your-answers__change">
-                    <a href="@routes.ImportController.getImportPage("prices_taxes")" id="@field">@Messages("change")</a>
+                    <a href="@routes.ImportController.getImportPage("prices_taxes")" id="@field">@Messages("global.change")</a>
                 </dd>
 
             </div>

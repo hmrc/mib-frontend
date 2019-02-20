@@ -21,6 +21,10 @@ class MibController @Inject() (val messagesApi: MessagesApi, countriesService: C
     Ok(select_declaration_type(controllers.routes.MibController.submitSelectDecTypePage(), selectDecType)).purgeSession
   }
 
+  def getSelectDeclarationTypePageRestart(): Action[AnyContent] = Action { implicit request =>
+    Ok(select_declaration_type(controllers.routes.MibController.submitSelectDecTypePage(), selectDecType.fill(SelectDecType.fromSession(request.session).get)))
+  }
+
   def submitSelectDecTypePage(): Action[AnyContent] = Action { implicit request =>
     Forms.selectDecType.bindFromRequest().fold(
       formWithErrors => Ok(select_declaration_type(
@@ -28,7 +32,9 @@ class MibController @Inject() (val messagesApi: MessagesApi, countriesService: C
         formWithErrors
       )),
       {
-        case SelectDecType(Some("1")) => Ok(journey_details(controllers.routes.MibController.getSelectDeclarationTypePage(), journeyDetails, countriesService.getCountries))
+
+        case SelectDecType(Some("1")) => Ok(journey_details(JourneyDetails.fromSession(request.session).fold(journeyDetails)(journeyDetails.fill(_)), countriesService.getCountries))
+          .addingToSession(SelectDecType.toSession(SelectDecType(Some("1"))): _*)
         case SelectDecType(Some("2")) => Redirect(routes.MibController.submitSelectDecTypePage()).purgeSession
       }
     )
