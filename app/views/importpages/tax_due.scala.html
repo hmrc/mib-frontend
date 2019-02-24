@@ -1,12 +1,14 @@
 @import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
 @import config.AppConfig
 @import controllers._
-@import model._
+@import model.imp._
 @import views.helper.Helpers.titleMakerWithForm
 
 
 
-@(form: Form[TaxDue])(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
+@(form: Form[TaxDueImp],
+currentPage: String,
+previousPage: String)(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
 
 @header = @{
 <legend>
@@ -21,7 +23,7 @@ appConfig = appConfig,
 contentHeader = None,
 bodyClasses = None,
 navTitle = Some(Messages("global.title")),
-backButtonUrl = Some(controllers.routes.ImportController.getImportPage("check_details")),
+backButtonUrl = Some(controllers.routes.ImportController.getImportPage(previousPage)),
 title = Some(Messages("global.title")),
 includeHmrcLogo = true) {
 
@@ -44,7 +46,7 @@ action = controllers.routes.ImportController.submitImportPage(),
 
 
     @views.html.partial.error_message_form_input("import-pricestaxes", form)
-    <input type="hidden" name="page" value="tax_due" />
+    <input type="hidden" name="page" value="@currentPage" />
     <table class="responsive-table" role="grid">
         <thead>
         <tr role="row">

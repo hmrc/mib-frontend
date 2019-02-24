@@ -1,12 +1,11 @@
 @import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
 @import config.AppConfig
 @import controllers._
-@import model._
+@import model.imp._
 @import views.helper.Helpers.titleMakerWithForm
 
-
-
-@(form: Form[JourneyDetails], countries: Seq[model.Country])(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
+@(form: Form[JourneyDetailsImp], countries: Seq[model.Country],
+currentPage: String)(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
 
 @header = @{
 <legend>
@@ -57,7 +56,7 @@ action = controllers.routes.ImportController.submitImportPage(),
         <input type="text" class="form-control @if(form.errors("portOfEntry").nonEmpty) { form-control-error }" name="portOfEntry" id="portOfEntry" value="@form("portOfEntry").value" />
     </div>
 
-    <input type="hidden" name="page" value="journey_details" />
+    <input type="hidden" name="page" value="@currentPage" />
 
     <div  id="countryOfOrigin-fieldset"  class="form-group @form.errors("countryOfOrigin").map { e => form-group-error }">
 
@@ -79,7 +78,7 @@ action = controllers.routes.ImportController.submitImportPage(),
 
 
     <div class="form-group">
-        <label for="eori" class="form-label">@Messages("import.journeydetails.eori") @if(form.errors("eori").nonEmpty) { @for(error <- form.errors("eori")) {
+        <label for="eori" class="form-label">@Messages("import.journeydetails.eori") @Messages("global.optional") @if(form.errors("eori").nonEmpty) { @for(error <- form.errors("eori")) {
             <span id="@error.message-eori" class="error-message">@Messages(error.message)</span>
             }
             }

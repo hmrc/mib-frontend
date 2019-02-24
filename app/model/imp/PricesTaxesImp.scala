@@ -1,26 +1,24 @@
-package model
+package model.imp
 
 import play.api.mvc.Session
 
-case class PricesTaxes(page: String = "prices_taxes", purchasePrice: Double, customsDuty: Double, importVat: Double)
+case class PricesTaxesImp(purchasePrice: Double, customsDuty: Double, importVat: Double)
 
-object PricesTaxes {
+object PricesTaxesImp {
 
   object Key {
-    val Page = "page"
-    val PurchasePrice = "purchasePrice"
-    val CustomsDuty = "customsDuty"
-    val ImportVat = "importVat"
+    val PurchasePrice = "purchasePriceImp"
+    val CustomsDuty = "customsDutyImp"
+    val ImportVat = "importVatImp"
   }
 
   def getKeys(): Seq[String] = {
     Seq(Key.CustomsDuty,
         Key.ImportVat,
-        Key.PurchasePrice,
-        Key.Page)
+        Key.PurchasePrice)
   }
 
-  def fromSession(session: Session): Option[PricesTaxes] = {
+  def fromSession(session: Session): Option[PricesTaxesImp] = {
       def optional(name: String): Option[String] = session.get(name) match {
         case Some("") => None
         case n        => n
@@ -33,17 +31,15 @@ object PricesTaxes {
     if (optional(Key.PurchasePrice).isEmpty)
       None
     else
-      Some(PricesTaxes(
-        mandatory(Key.Page),
+      Some(PricesTaxesImp(
         mandatoryDouble(Key.PurchasePrice),
         mandatoryDouble(Key.CustomsDuty),
         mandatoryDouble(Key.ImportVat)
       ))
   }
 
-  def toSession(page5: PricesTaxes): Seq[(String, String)] = {
+  def toSession(page5: PricesTaxesImp): Seq[(String, String)] = {
     Map(
-      Key.Page -> page5.page,
       Key.PurchasePrice -> page5.purchasePrice.toString,
       Key.CustomsDuty -> page5.customsDuty.toString,
       Key.ImportVat -> page5.importVat.toString

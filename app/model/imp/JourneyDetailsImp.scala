@@ -1,19 +1,18 @@
-package model
+package model.imp
 
 import play.api.mvc.Session
 
-case class JourneyDetails(page: String = "journey_details", portOfEntry: String, countryOfOrigin: String, eori: Option[String])
+case class JourneyDetailsImp(portOfEntry: String, countryOfOrigin: String, eori: Option[String])
 
-object JourneyDetails {
+object JourneyDetailsImp {
 
   object Key {
-    val Page = "page"
-    val PortOfEntry = "portOfEntry"
-    val CountryOfOrigin = "countryOfOrigin"
-    val Eori = "eori"
+    val PortOfEntry = "portOfEntryImp"
+    val CountryOfOrigin = "countryOfOriginImp"
+    val Eori = "eoriImp"
   }
 
-  def fromSession(session: Session): Option[JourneyDetails] = {
+  def fromSession(session: Session): Option[JourneyDetailsImp] = {
 
       def optional(name: String): Option[String] = session.get(name) match {
         case Some("") => None
@@ -25,23 +24,21 @@ object JourneyDetails {
     if (optional(Key.PortOfEntry).isEmpty)
       None
     else
-      Some(JourneyDetails(
-        mandatory(Key.Page),
+      Some(JourneyDetailsImp(
         mandatory(Key.PortOfEntry),
         mandatory(Key.CountryOfOrigin),
         optional(Key.Eori)))
   }
 
-  def toSession(page1: JourneyDetails): Seq[(String, String)] = {
+  def toSession(page1: JourneyDetailsImp): Seq[(String, String)] = {
     Map(
-      Key.Page -> page1.page,
       Key.PortOfEntry -> page1.portOfEntry,
       Key.CountryOfOrigin -> page1.countryOfOrigin,
       Key.Eori -> page1.eori.getOrElse("")).toSeq
   }
 
   def getKeys() = {
-    Seq(Key.Page, Key.CountryOfOrigin, Key.Eori, Key.PortOfEntry)
+    Seq(Key.CountryOfOrigin, Key.Eori, Key.PortOfEntry)
   }
 
 }

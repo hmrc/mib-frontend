@@ -1,20 +1,19 @@
-package model
+package model.imp
 
 import play.api.mvc.Session
 
-case class ArrivalDecDates(page: String = "arrivaldec_dates", arrivalDay: Int, arrivalMonth: Int, arrivalYear: Int,
-                           declarationDay: Int, declarationMonth: Int, declarationYear: Int)
+case class ArrivalDecDatesImp(arrivalDay: Int, arrivalMonth: Int, arrivalYear: Int,
+                              declarationDay: Int, declarationMonth: Int, declarationYear: Int)
 
-object ArrivalDecDates {
+object ArrivalDecDatesImp {
 
   object Key {
-    val Page = "page"
-    val ArrivalDay = "arrivalDay"
-    val ArrivalMonth = "arrivalMonth"
-    val ArrivalYear = "arrivalYear"
-    val DeclarationDay = "declarationDay"
-    val DeclarationMonth = "declarationMonth"
-    val DeclarationYear = "declarationYear"
+    val ArrivalDay = "arrivalDayImp"
+    val ArrivalMonth = "arrivalMonthImp"
+    val ArrivalYear = "arrivalYearImp"
+    val DeclarationDay = "declarationDayImp"
+    val DeclarationMonth = "declarationMonthImp"
+    val DeclarationYear = "declarationYearImp"
   }
 
   def getKeys(): Seq[String] = {
@@ -23,11 +22,10 @@ object ArrivalDecDates {
         Key.ArrivalYear,
         Key.DeclarationDay,
         Key.DeclarationMonth,
-        Key.DeclarationYear,
-        Key.Page)
+        Key.DeclarationYear)
   }
 
-  def fromSession(session: Session): Option[ArrivalDecDates] = {
+  def fromSession(session: Session): Option[ArrivalDecDatesImp] = {
       def optional(name: String): Option[String] = session.get(name) match {
         case Some("") => None
         case n        => n
@@ -40,8 +38,7 @@ object ArrivalDecDates {
     if (optional(Key.ArrivalDay).isEmpty)
       None
     else
-      Some(ArrivalDecDates(
-        mandatory(Key.Page),
+      Some(ArrivalDecDatesImp(
         mandatoryInt(Key.ArrivalDay),
         mandatoryInt(Key.ArrivalMonth),
         mandatoryInt(Key.ArrivalYear),
@@ -51,9 +48,8 @@ object ArrivalDecDates {
       ))
   }
 
-  def toSession(page4: ArrivalDecDates): Seq[(String, String)] = {
+  def toSession(page4: ArrivalDecDatesImp): Seq[(String, String)] = {
     Map(
-      Key.Page -> page4.page,
       Key.ArrivalDay -> page4.arrivalDay.toString,
       Key.ArrivalMonth -> page4.arrivalMonth.toString,
       Key.ArrivalYear -> page4.arrivalYear.toString,

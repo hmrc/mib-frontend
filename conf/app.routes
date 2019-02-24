@@ -8,3 +8,6 @@ POST       /submit-select-dec-type                 controllers.MibController.sub
 
 GET        /import-page/:page                      controllers.ImportController.getImportPage(page: String)
 POST       /import-page                            controllers.ImportController.submitImportPage
+
+GET        /export-page/:page                      controllers.ExportController.getExportPage(page: String)
+POST       /export-page                            controllers.ExportController.submitExportPage

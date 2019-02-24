@@ -1,19 +1,19 @@
 @import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
 @import config.AppConfig
 @import controllers._
-@import model.imp._
+@import model.exp._
 @import views.helper.Helpers.titleMakerWithForm
 
 
 
-@(form: Form[MerchandiseDetailsImp],
+@(form: Form[MerchandiseDetailsExp],
 currentPage: String,
 previousPage: String)(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
 
 @header = @{
 <legend>
     <h1 class="heading-large">
-        { Messages("import.merchandisedetails.header") }
+        { Messages("export.merchandisedetails.header") }
     </h1>
 </legend>
 }
@@ -23,7 +23,7 @@ appConfig = appConfig,
 contentHeader = None,
 bodyClasses = None,
 navTitle = Some(Messages("global.title")),
-backButtonUrl = Some(controllers.routes.ImportController.getImportPage(previousPage)),
+backButtonUrl = Some(controllers.routes.ExportController.getExportPage(previousPage)),
 title = Some(Messages("global.title")),
 includeHmrcLogo = true) {
 
@@ -31,24 +31,24 @@ includeHmrcLogo = true) {
 @if(form.hasErrors) { @uiHelpers.errorSummary(Messages("global.error-header"), form) }
 
 @uiHelpers.form(
-action = controllers.routes.ImportController.submitImportPage(),
+action = controllers.routes.ExportController.submitExportPage(),
 'id -> "import_dec_type_form",
 'class -> "form js-form",
 'autocomplete -> "off",
 'novalidate -> "novalidate"
 ) {
-<div id="import-merchandisedetails">
+<div id="export-merchandisedetails">
     @header
 
-    <div class="form-group @form.errors("import-merchandisedetails").map { e => form-group-error }">
+    <div class="form-group @form.errors("export-merchandisedetails").map { e => form-group-error }">
 
 
-    @views.html.partial.error_message_form_input("import-merchandisedetails", form)
+    @views.html.partial.error_message_form_input("export-merchandisedetails", form)
 
 
     <input type="hidden" name="page" value="@currentPage" />
     <div class="form-group">
-        <label for="invoiceNumber" class="form-label">@Messages("import.merchandisedetails.invoiceNumber") @Messages("global.optional")
+        <label for="invoiceNumber" class="form-label">@Messages("export.merchandisedetails.invoiceNumber") @Messages("global.optional")
             @if(form.errors("invoiceNumber").nonEmpty) {
             @for(error <- form.errors("invoiceNumber")) {
             <span id="@error.message-invoiceNumber" class="error-message">@Messages(error.message)</span>
@@ -61,7 +61,7 @@ action = controllers.routes.ImportController.submitImportPage(),
 
 
     <div class="form-group">
-        <label for="desciptionOfGoods" class="form-label">@Messages("import.merchandisedetails.desciptionOfGoods")
+        <label for="desciptionOfGoods" class="form-label">@Messages("export.merchandisedetails.desciptionOfGoods")
             @if(form.errors("desciptionOfGoods").nonEmpty) {
             @for(error <- form.errors("desciptionOfGoods")) {
             <span id="@error.message-desciptionOfGoods" class="error-message">@Messages(error.message)</span>
@@ -70,7 +70,7 @@ action = controllers.routes.ImportController.submitImportPage(),
         </label>
 
         <textarea
-                class="@{if(form("desciptionOfGoods").hasErrors) "error-field form-field--error" else ""}"
+                class="@{if(form("desciptionOfGoods").hasErrors) "error-field form-field-error" else ""}"
         rows="5"
         style="width: 75%; height: auto"
         name="@{form("desciptionOfGoods").name}"

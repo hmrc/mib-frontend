@@ -1,10 +1,9 @@
-package model
+package model.imp
 
-import Service.CountriesService
 import play.api.mvc.Session
 
-case class TraderDetails(page: String = "trader_details", trader: String, line1: String, line2: Option[String] = None, city: Option[String] = None, county: Option[String] = None,
-                         postcode: String, country: String, vrn: Option[String], vehicleRegNo: Option[String]) {
+case class TraderDetailsImp(trader: String, line1: String, line2: Option[String] = None, city: Option[String] = None, county: Option[String] = None,
+                            postcode: String, country: String, vrn: Option[String], vehicleRegNo: Option[String]) {
 
   val lineReturn = "<br>"
 
@@ -15,10 +14,9 @@ case class TraderDetails(page: String = "trader_details", trader: String, line1:
 
 }
 
-object TraderDetails {
+object TraderDetailsImp {
 
   object Key {
-    val Page = "page"
     val Trader = "trader"
     val Line1 = "line1"
     val Line2 = "line2"
@@ -35,14 +33,14 @@ object TraderDetails {
         Key.County,
         Key.Line1,
         Key.Line2,
-        Key.Page,
         Key.Postcode,
         Key.Trader,
         Key.VehicleRegNo,
         Key.Vrn)
   }
 
-  def fromSession(session: Session): Option[TraderDetails] = {
+  def fromSession(session: Session): Option[TraderDetailsImp] = {
+
       def optional(name: String): Option[String] = session.get(name) match {
         case Some("") => None
         case n        => n
@@ -53,8 +51,7 @@ object TraderDetails {
     if (optional(Key.Line1).isEmpty)
       None
     else
-      Some(TraderDetails(
-        mandatory(Key.Page),
+      Some(TraderDetailsImp(
         mandatory(Key.Trader),
         mandatory(Key.Line1),
         optional(Key.Line2),
@@ -66,9 +63,8 @@ object TraderDetails {
         optional(Key.VehicleRegNo)))
   }
 
-  def toSession(page2: TraderDetails): Seq[(String, String)] = {
+  def toSession(page2: TraderDetailsImp): Seq[(String, String)] = {
     Map(
-      Key.Page -> page2.page,
       Key.Trader -> page2.trader,
       Key.Line1 -> page2.line1,
       Key.Line2 -> page2.line2.getOrElse(""),

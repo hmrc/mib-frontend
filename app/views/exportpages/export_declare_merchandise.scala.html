@@ -1,16 +1,18 @@
 @import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
 @import config.AppConfig
 @import controllers._
-@import model.imp._
+@import model.exp._
 @import views.helper.Helpers.titleMakerWithForm
-@(form: Form[DeclareImp],
+
+@(form: Form[DeclareExp],
 currentPage: String,
-previousPage: String)(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
+previousPage: String
+)(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
 
 @header = @{
 <legend>
     <h1 class="heading-large">
-        { Messages("import.declare.header") }
+        { Messages("export.declare.header") }
     </h1>
 </legend>
 }
@@ -20,7 +22,7 @@ appConfig = appConfig,
 contentHeader = None,
 bodyClasses = None,
 navTitle = Some(Messages("global.title")),
-backButtonUrl = Some(controllers.routes.ImportController.getImportPage(previousPage)),
+backButtonUrl = Some(controllers.routes.ExportController.getExportPage(previousPage)),
 title = Some(Messages("global.title")),
 includeHmrcLogo = true) {
 
@@ -28,34 +30,34 @@ includeHmrcLogo = true) {
 @if(form.hasErrors) { @uiHelpers.errorSummary(Messages("global.error-header"), form) }
 
 @uiHelpers.form(
-action = controllers.routes.ImportController.submitImportPage(),
+action = controllers.routes.ExportController.submitExportPage(),
 'id -> "import_dec_type_form",
 'class -> "form js-form",
 'autocomplete -> "off",
 'novalidate -> "novalidate"
 ) {
-<fieldset id="import-checkdetails">
+<fieldset id="export-checkdetails">
     @header
 
 
 
-    <div class="form-group @form.errors("import-checkdetails").map { e => form-group-error }">
+    <div class="form-group @form.errors("export-checkdetails").map { e => form-group-error }">
 
 
-    @views.html.partial.error_message_form_input("import-declaration", form)
+    @views.html.partial.error_message_form_input("export-declaration", form)
     <input type="hidden" name="page" value="@currentPage" />
 
-    <p>@Messages("import.declare.line1")</p>
-    <p>@Messages("import.declare.line2")</p>
-    <p>@Messages("import.declare.line3")</p>
+    <p>@Messages("export.declare.line1")</p>
+    <p>@Messages("export.declare.line2")</p>
+    <p>@Messages("export.declare.line3")</p>
     <div class="notice">
         <i class="icon icon-important">
         <span class="visually-hidden">Warning</span>
     </i>
-        <strong class="bold-small">@Messages("import.declare.line4")</strong>
+        <strong class="bold-small">@Messages("export.declare.line4")</strong>
     </div>
     <br>
-    <p>@Messages("import.declare.line5")</p>
+    <p>@Messages("export.declare.line5")</p>
 
 
     </div>

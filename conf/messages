@@ -37,7 +37,7 @@ select.dec.type.error = Select a declaration type
 
 #page1
 import.journeydetails.header = Journey details
-import.journeydetails.eori = UK EORI number (optional)
+import.journeydetails.eori = UK EORI number
 import.journeydetails.eori.example = For example, GB123456789000
 import.journeydetails.portOfEntry = Where did the merchandise come from?
 import.journeydetails.countryOfOrigin = Where did the merchandise enter the UK?
@@ -59,9 +59,11 @@ import.traderDetails.vrn = VAT registration number
 import.traderDetails.vehicleRegNo = Vehicle registration number
 import.traderDetails.nameaddress = Trader name and address
 
+
+
 #page3
 import.merchandisedetails.header = Merchandise details
-import.merchandisedetails.invoiceNumber = Invoice number (optional)
+import.merchandisedetails.invoiceNumber = Invoice number
 import.merchandisedetails.desciptionOfGoods = Description of merchandise to import
 
 #page4
@@ -94,6 +96,63 @@ import.declare.line2 = You can only declare your merchandise online once. Go thr
 import.declare.line3 = You may have your merchandise seized or face prosecution and imprisonment if you provide false information or use the online service to deliberately avoid paying tax and duties on the merchandise you bring into the UK.
 import.declare.line4 = By making this declaration you are confirming that all the information in the declaration is correct and complete.
 import.declare.line5 = Once you declare your import you will not be able to make further changes.
+
+#-----------------------------------------
+#page1
+export.journeydetails.header = Journey details
+export.journeydetails.eori = UK EORI number
+export.journeydetails.eori.example = For example, GB123456789000
+export.journeydetails.portOfEntry = Port of exit
+export.journeydetails.details1 = Where to find the EORI number
+export.journeydetails.details2 = The business should have an EORI number if it imports merchandise from sellers outside the EU. Contact the
+export.journeydetails.details3 = EORI team at HMRC (opens in a new window or tab)
+export.journeydetails.details4 = if you cannot find your number.
+
+#page2
+export.traderDetails.header = Details of trader
+export.traderDetails.trader = Full Name
+export.traderDetails.line1 = Address line 1
+export.traderDetails.line2 = Address line 2
+export.traderDetails.city = Town or City
+export.traderDetails.county = County
+export.traderDetails.postcode = Postcode
+export.traderDetails.country = Country
+export.traderDetails.vrn = VAT registration number
+export.traderDetails.vehicleRegNo = Vehicle registration number
+export.traderDetails.nameaddress = Trader name and address
+
+
+#page3
+export.merchandisedetails.header = Merchandise details
+export.merchandisedetails.invoiceNumber = Invoice number
+export.merchandisedetails.desciptionOfGoods = Description of merchandise to export
+
+#page4
+export.departuredecdates.header = Departure and declaration dates
+export.departuredecdates.departuredate = Date of departure
+export.departuredecdates.departure.date.example = For example, 20 12 2018
+export.departuredecdates.declarationdate = Date of declaration
+
+#page5
+export.pricestaxes.header = Purchase price
+export.pricestaxes.purchasePrice = Purchase price
+
+#page6
+export.checkdetails.header =  Check export details
+export.checkdetails.nameAddress = Trader name and address
+export.checkdetails.vrn = VAT registration number
+export.checkdetails.vehicleRegNo = Vehicle registration number
+
+#page7
+export.taxdue.header = Tax due on these goods
+
+#page8
+export.declare.header = Declare merchandise import
+export.declare.line1 = You must pay duty and tax on this merchandise if you bring them into the UK
+export.declare.line2 = You can only declare your merchandise online once. Go through the red channel at customs if you bring in goods or merchandise other than the ones you declare online.
+export.declare.line3 = You may have your merchandise seized or face prosecution and imprisonment if you provide false information or use the online service to deliberately avoid paying tax and duties on the merchandise you bring into the UK.
+export.declare.line4 = By making this declaration you are confirming that all the information in the declaration is correct and complete.
+export.declare.line5 = Once you declare your import you will not be able to make further changes.
 
 
 

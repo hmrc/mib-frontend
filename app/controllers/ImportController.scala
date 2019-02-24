@@ -2,49 +2,62 @@ package controllers
 
 import Service.CountriesService
 import config.AppConfig
-import controllers.Forms.{merchandiseDetails, _}
+import controllers.FormsImp._
 import javax.inject.{Inject, Singleton}
-import model._
+import model.ImportPages
+import model.imp.{TraderDetailsImp, _}
 import play.api.Logger
-import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Request}
+import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.importpages._
 
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class ImportController @Inject() (val messagesApi: MessagesApi, countriesService: CountriesService)(implicit ec: ExecutionContext, appConfig: AppConfig) extends FrontendController with I18nSupport {
+class ImportController @Inject() (val messagesApi: MessagesApi, countriesService: CountriesService)
+  (implicit ec: ExecutionContext, appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   //------------------------------------------------------------------------------------------------------------------------------
   def getImportPage(page: String): Action[AnyContent] = Action { implicit request =>
     page match {
-      case "journey_details" => Ok(journey_details(journeyDetails.fill(JourneyDetails.fromSession(request.session).get),
-                                                   countriesService.getCountries))
+      case "journey_details" => Ok(journey_details(journeyDetailsImp.fill(JourneyDetailsImp.fromSession(request.session).get),
+                                                   countriesService.getCountries, ImportPages.journey_details.case_value))
       case "trader_details" =>
-        Ok(trader_details(traderDetails.fill(TraderDetails.fromSession(request.session).get), countriesService.getCountries))
-      case "merchandise_details" => Ok(merchandise_details(merchandiseDetails.fill(MerchandiseDetails.fromSession(request.session).get)))
-      case "arrivaldec_dates"    => Ok(arrivaldec_dates(arrivalDecDates.fill(ArrivalDecDates.fromSession(request.session).get)))
-      case "prices_taxes"        => Ok(prices_taxes(pricesTaxes.fill(PricesTaxes.fromSession(request.session).get)))
+        Ok(trader_details(traderDetailsImp.fill(TraderDetailsImp.fromSession(request.session).get), countriesService.getCountries,
+                          ImportPages.trader_details.case_value, ImportPages.journey_details.case_value))
+
+      case "merchandise_details" => Ok(merchandise_details(merchandiseDetailsImp.fill(MerchandiseDetailsImp.fromSession(request.session).get),
+                                                           ImportPages.merchandise_details.case_value, ImportPages.trader_details.case_value))
+
+      case "arrivaldec_dates" => Ok(arrivaldec_dates(arrivalDecDatesImp.fill(ArrivalDecDatesImp.fromSession(request.session).get),
+                                                     ImportPages.arrivaldec_dates.case_value, ImportPages.merchandise_details.case_value))
+
+      case "prices_taxes" => Ok(prices_taxes(pricesTaxesImp.fill(PricesTaxesImp.fromSession(request.session).get),
+                                             ImportPages.prices_taxes.case_value, ImportPages.arrivaldec_dates.case_value))
+
       case "check_details" => {
-        val journey = journeyDetails.fill(JourneyDetails.fromSession(request.session).get)
-        val traderFull = traderDetails.fill(TraderDetails.fromSession(request.session).get).get
-        val merchandise = merchandiseDetails.fill(MerchandiseDetails.fromSession(request.session).get)
-        val traderCheck = traderDetailsCheck.fill(TraderDetailsCheck(traderFull.getFormattedAddress(countriesService.getCountry(traderFull.country)), traderFull.vrn, traderFull.vehicleRegNo))
-        val arrival = arrivalDecDates.fill(ArrivalDecDates.fromSession(request.session).get)
-        val prices = pricesTaxes.fill(PricesTaxes.fromSession(request.session).get)
+        val journey = journeyDetailsImp.fill(JourneyDetailsImp.fromSession(request.session).get)
+        val traderFull = traderDetailsImp.fill(TraderDetailsImp.fromSession(request.session).get).get
+        val merchandise = merchandiseDetailsImp.fill(MerchandiseDetailsImp.fromSession(request.session).get)
+        val traderCheck = traderDetailsCheckImp.fill(TraderDetailsCheckImp(traderFull.getFormattedAddress(countriesService.getCountry(traderFull.country)), traderFull.vrn, traderFull.vehicleRegNo))
+        val arrival = arrivalDecDatesImp.fill(ArrivalDecDatesImp.fromSession(request.session).get)
+        val prices = pricesTaxesImp.fill(PricesTaxesImp.fromSession(request.session).get)
         Ok(check_details(journey,
                          traderCheck,
                          merchandise,
                          arrival,
                          prices,
-                         countriesService.getCountries))
+                         countriesService.getCountries,
+                         ImportPages.check_details.case_value,
+                         ImportPages.prices_taxes.case_value))
       }
+
       case "tax_due" => {
-        val prices = PricesTaxes.fromSession(request.session).get
-        val due = TaxDue("tax_due", prices.purchasePrice, prices.customsDuty, prices.importVat, prices.customsDuty + prices.importVat)
-        Ok(tax_due(taxDue.fill(due)))
+        val prices = PricesTaxesImp.fromSession(request.session).get
+        val due = TaxDueImp(prices.purchasePrice, prices.customsDuty, prices.importVat, prices.customsDuty + prices.importVat)
+        Ok(tax_due(taxDueImp.fill(due),
+                   ImportPages.tax_due.case_value, ImportPages.check_details.case_value))
       }
     }
   }
@@ -58,97 +71,110 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
       page.get.head
     })
     pageno match {
-      case Some("journey_details") => {
-        Forms.journeyDetails.bindFromRequest().fold(
+      case Some(ImportPages.journey_details.case_value) => {
+        journeyDetailsImp.bindFromRequest().fold(
           formWithErrors => Ok(journey_details(
-            formWithErrors, countriesService.getCountries
+            formWithErrors, countriesService.getCountries,
+            ImportPages.journey_details.case_value
           )),
           {
             valueInForm =>
               {
-                Ok(trader_details(TraderDetails.fromSession(request.session).fold(traderDetails)(traderDetails.fill(_)), countriesService.getCountries))
-                  .addingToSession(JourneyDetails.toSession(valueInForm): _*)
+                Ok(trader_details(TraderDetailsImp.fromSession(request.session).fold(traderDetailsImp)(traderDetailsImp.fill(_)),
+                                  countriesService.getCountries, ImportPages.trader_details.case_value, ImportPages.journey_details.case_value))
+                  .addingToSession(JourneyDetailsImp.toSession(valueInForm): _*)
               }
           }
         )
       }
       //------------
-      case Some("trader_details") => {
-        Forms.traderDetails.bindFromRequest().fold(
+      case Some(ImportPages.trader_details.case_value) => {
+        traderDetailsImp.bindFromRequest().fold(
           formWithErrors => Ok(trader_details(
-            formWithErrors, countriesService.getCountries
+            formWithErrors, countriesService.getCountries,
+            ImportPages.trader_details.case_value, ImportPages.journey_details.case_value
           )),
           {
             valueInForm =>
               {
 
                 Ok(merchandise_details(
-                  MerchandiseDetails.fromSession(request.session).fold(merchandiseDetails)(merchandiseDetails.fill(_)))).addingToSession(TraderDetails.toSession(valueInForm): _*)
+                  MerchandiseDetailsImp.fromSession(request.session).fold(merchandiseDetailsImp)(merchandiseDetailsImp.fill(_)),
+                  ImportPages.merchandise_details.case_value, ImportPages.trader_details.case_value)).addingToSession(TraderDetailsImp.toSession(valueInForm): _*)
               }
           }
         )
       }
       //------------
-      case Some("merchandise_details") => {
-        Forms.merchandiseDetails.bindFromRequest().fold(
+      case Some(ImportPages.merchandise_details.case_value) => {
+        merchandiseDetailsImp.bindFromRequest().fold(
           formWithErrors => Ok(merchandise_details(
-            formWithErrors
+            formWithErrors,
+            ImportPages.merchandise_details.case_value,
+            ImportPages.trader_details.case_value
           )),
           {
             valueInForm =>
               {
-                Ok(arrivaldec_dates(ArrivalDecDates.fromSession(request.session).fold(arrivalDecDates)(arrivalDecDates.fill(_)))).addingToSession(MerchandiseDetails.toSession(valueInForm): _*)
+                Ok(arrivaldec_dates(ArrivalDecDatesImp.fromSession(request.session).fold(arrivalDecDatesImp)(arrivalDecDatesImp.fill(_)),
+                                    ImportPages.arrivaldec_dates.case_value, ImportPages.merchandise_details.case_value)).addingToSession(MerchandiseDetailsImp.toSession(valueInForm): _*)
               }
           }
         )
       }
       //------------
-      case Some("arrivaldec_dates") => {
-        Forms.arrivalDecDates.bindFromRequest().fold(
+      case Some(ImportPages.arrivaldec_dates.case_value) => {
+        arrivalDecDatesImp.bindFromRequest().fold(
           formWithErrors => Ok(arrivaldec_dates(
-            formWithErrors
+            formWithErrors,
+            ImportPages.arrivaldec_dates.case_value,
+            ImportPages.merchandise_details.case_value
           )),
           {
             valueInForm =>
               {
-                Ok(prices_taxes(PricesTaxes.fromSession(request.session).fold(pricesTaxes)(pricesTaxes.fill(_)))).addingToSession(ArrivalDecDates.toSession(valueInForm): _*)
+                Ok(prices_taxes(PricesTaxesImp.fromSession(request.session).fold(pricesTaxesImp)(pricesTaxesImp.fill(_)),
+                                ImportPages.prices_taxes.case_value, ImportPages.arrivaldec_dates.case_value)).addingToSession(ArrivalDecDatesImp.toSession(valueInForm): _*)
               }
           }
         )
       }
       //------------
-      case Some("prices_taxes") => {
-        Forms.pricesTaxes.bindFromRequest().fold(
+      case Some(ImportPages.prices_taxes.case_value) => {
+        pricesTaxesImp.bindFromRequest().fold(
           formWithErrors => Ok(prices_taxes(
-            formWithErrors
+            formWithErrors,
+            ImportPages.prices_taxes.case_value,
+            ImportPages.arrivaldec_dates.case_value
           )),
           {
             valueInForm =>
               {
-                val journey = journeyDetails.fill(JourneyDetails.fromSession(request.session).get)
-                val traderFull = traderDetails.fill(TraderDetails.fromSession(request.session).get).get
-                val merchandise = merchandiseDetails.fill(MerchandiseDetails.fromSession(request.session).get)
-                val arrival = arrivalDecDates.fill(ArrivalDecDates.fromSession(request.session).get)
-                val traderCheck = traderDetailsCheck.fill(TraderDetailsCheck(traderFull.getFormattedAddress(countriesService.getCountry(traderFull.country)), traderFull.vrn, traderFull.vehicleRegNo))
+                val journey = journeyDetailsImp.fill(JourneyDetailsImp.fromSession(request.session).get)
+                val traderFull = traderDetailsImp.fill(TraderDetailsImp.fromSession(request.session).get).get
+                val merchandise = merchandiseDetailsImp.fill(MerchandiseDetailsImp.fromSession(request.session).get)
+                val arrival = arrivalDecDatesImp.fill(ArrivalDecDatesImp.fromSession(request.session).get)
+                val traderCheck = traderDetailsCheckImp.fill(TraderDetailsCheckImp(traderFull.getFormattedAddress(countriesService.getCountry(traderFull.country)), traderFull.vrn, traderFull.vehicleRegNo))
                 Ok(check_details(journey,
                                  traderCheck,
                                  merchandise,
                                  arrival,
-                                 pricesTaxes.fill(valueInForm),
-                                 countriesService.getCountries)).addingToSession(PricesTaxes.toSession(valueInForm): _*)
+                                 pricesTaxesImp.fill(valueInForm),
+                                 countriesService.getCountries,
+                                 ImportPages.check_details.case_value, ImportPages.prices_taxes.case_value)).addingToSession(PricesTaxesImp.toSession(valueInForm): _*)
               }
           }
         )
       }
       //------------
-      case Some("check_details") => {
-        val prices = PricesTaxes.fromSession(request.session).get
-        val due = TaxDue("tax_due", prices.purchasePrice, prices.customsDuty, prices.importVat, prices.customsDuty + prices.importVat)
-        Ok(tax_due(taxDue.fill(due)))
+      case Some(ImportPages.check_details.case_value) => {
+        val prices = PricesTaxesImp.fromSession(request.session).get
+        val due = TaxDueImp(prices.purchasePrice, prices.customsDuty, prices.importVat, prices.customsDuty + prices.importVat)
+        Ok(tax_due(taxDueImp.fill(due), ImportPages.tax_due.case_value, ImportPages.check_details.case_value))
       }
       //------------
-      case Some("tax_due") => {
-        Ok(declare_merchandise(declare))
+      case Some(ImportPages.tax_due.case_value) => {
+        Ok(declare_merchandise(declareImp, ImportPages.declare.case_value, ImportPages.tax_due.case_value))
       }
       //------------
     }

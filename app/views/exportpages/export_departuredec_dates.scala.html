@@ -1,19 +1,20 @@
 @import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
 @import config.AppConfig
 @import controllers._
-@import model.imp._
+@import model.exp._
 @import views.helper.Helpers.titleMakerWithForm
 
 
 
-@(form: Form[ArrivalDecDatesImp],
+@(form: Form[DepartureDecDatesExp],
 currentPage: String,
-previousPage: String)(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
+previousPage: String
+)(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
 
 @header = @{
 <legend>
     <h1 class="heading-large">
-        { Messages("import.arrivaldecdates.header") }
+        { Messages("export.departuredecdates.header") }
     </h1>
 </legend>
 }
@@ -23,7 +24,7 @@ appConfig = appConfig,
 contentHeader = None,
 bodyClasses = None,
 navTitle = Some(Messages("global.title")),
-backButtonUrl = Some(controllers.routes.ImportController.getImportPage(previousPage)),
+backButtonUrl = Some(controllers.routes.ExportController.getExportPage(previousPage)),
 title = Some(Messages("global.title")),
 includeHmrcLogo = true) {
 
@@ -31,59 +32,59 @@ includeHmrcLogo = true) {
 @if(form.hasErrors) { @uiHelpers.errorSummary(Messages("global.error-header"), form) }
 
 @uiHelpers.form(
-action = controllers.routes.ImportController.submitImportPage(),
+action = controllers.routes.ExportController.submitExportPage(),
 'id -> "import_dec_type_form",
 'class -> "form js-form",
 'autocomplete -> "off",
 'novalidate -> "novalidate"
 ) {
-<fieldset id="import-arrivaldecdates">
+<fieldset id="export-departuredecdates">
     @header
 
 
 
-    <div class="form-group @form.errors("import-arrivaldecdates").map { e => form-group-error }">
+    <div class="form-group @form.errors("export-departuredecdates").map { e => form-group-error }">
 
 
-    @views.html.partial.error_message_form_input("import-arrivaldecdates", form)
+    @views.html.partial.error_message_form_input("export-departuredecdates", form)
 
     <input type="hidden" name="page" value="@currentPage" />
 
-    <!-- -->
+    <!- ->
 
-    <div id="arrival-fieldset" class="form-group">
-        <h2 class="heading-medium">@Messages("import.arrivaldecdates.arrivaldate")</h2>
-        <span class="form-hint">@Messages("import.arrivaldecdates.arrival.date.example")</span>
-        <div class="form-date" id="arrivalDatesId">
-            <div class="form-group form-group-day" id="arrivaldaydiv">
-                <label for="arrivalDay" class="form-label">@Messages("global.day") @if(form.errors("arrivalDay").nonEmpty) { @for(error <- form.errors("arrivalDay")) {
-                    <span id="@error.message-arrivalDay" class="error-message">@Messages(error.message)</span>
+    <div id="departure-fieldset" class="form-group">
+        <h2 class="heading-medium">@Messages("export.departuredecdates.departuredate")</h2>
+        <span class="form-hint">@Messages("export.departuredecdates.departure.date.example")</span>
+        <div class="form-date" id="departureDatesId">
+            <div class="form-group form-group-day" id="departuredaydiv">
+                <label for="departureDay" class="form-label">@Messages("global.day") @if(form.errors("departureDay").nonEmpty) { @for(error <- form.errors("departureDay")) {
+                    <span id="@error.message-departureDay" class="error-message">@Messages(error.message)</span>
                     }
                     }
                 </label>
-                <input type="number" class="form-control @if(form.errors("arrivalDay").nonEmpty) { form-control-error }" name="arrivalDay" id="arrivalDay" value="@form("arrivalDay").value" />
+                <input type="number" class="form-control @if(form.errors("departureDay").nonEmpty) { form-control-error }" name="departureDay" id="departureDay" value="@form("departureDay").value" />
             </div>
-            <div class="form-group form-group-month" id="arrivalmonthdiv">
-                <label for="arrivalMonth" class="form-label">@Messages("global.month") @if(form.errors("arrivalMonth").nonEmpty) { @for(error <- form.errors("arrivalMonth")) {
-                    <span id="@error.message-arrivalMonth" class="error-message">@Messages(error.message)</span>
+            <div class="form-group form-group-month" id="departuremonthdiv">
+                <label for="departureMonth" class="form-label">@Messages("global.month") @if(form.errors("departureMonth").nonEmpty) { @for(error <- form.errors("departureMonth")) {
+                    <span id="@error.message-departureMonth" class="error-message">@Messages(error.message)</span>
                     }
                     }
                 </label>
-                <input type="number" class="form-control @if(form.errors("arrivalMonth").nonEmpty) { form-control-error }" name="arrivalMonth" id="arrivalMonth" value="@form("arrivalMonth").value" />
+                <input type="number" class="form-control @if(form.errors("departureMonth").nonEmpty) { form-control-error }" name="departureMonth" id="departureMonth" value="@form("departureMonth").value" />
             </div>
-            <div class="form-group form-group-year" id="arrivalyeardiv">
-                <label for="arrivalYear" class="form-label">@Messages("global.year") @if(form.errors("arrivalYear").nonEmpty) { @for(error <- form.errors("arrivalYear")) {
-                    <span id="@error.message-arrivalYear" class="error-message">@Messages(error.message)</span>
+            <div class="form-group form-group-year" id="departureyeardiv">
+                <label for="departureYear" class="form-label">@Messages("global.year") @if(form.errors("departureYear").nonEmpty) { @for(error <- form.errors("departureYear")) {
+                    <span id="@error.message-departureYear" class="error-message">@Messages(error.message)</span>
                     }
                     }
                 </label>
-                <input type="number" class="form-control @if(form.errors("arrivalYear").nonEmpty) { form-control-error }" name="arrivalYear" id="arrivalYear" value="@form("arrivalYear").value" />
+                <input type="number" class="form-control @if(form.errors("departureYear").nonEmpty) { form-control-error }" name="departureYear" id="departureYear" value="@form("departureYear").value" />
             </div>
 
         </div>
     </div>
     <div id="declaration-fieldset" class="form-group">
-        <h2 class="heading-medium">@Messages("import.arrivaldecdates.declarationdate")</h2>
+        <h2 class="heading-medium">@Messages("export.departuredecdates.declarationdate")</h2>
         <div class="form-date" id="decDatesId">
             <div class="form-group form-group-day" id="decdaydiv">
                 <label for="declarationDay" class="form-label">@Messages("global.day") @if(form.errors("declarationDay").nonEmpty) { @for(error <- form.errors("declarationDay")) {
@@ -113,7 +114,7 @@ action = controllers.routes.ImportController.submitImportPage(),
         </div>
     </div>
 
-    <!-- -->
+    <!- ->
 
 
 

@@ -1,0 +1,89 @@
+@import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
+@import config.AppConfig
+@import controllers._
+@import model.exp._
+@import views.helper.Helpers.titleMakerWithForm
+
+
+@(form: Form[JourneyDetailsExp], countries: Seq[model.Country],
+currentPage: String)(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
+
+@header = @{
+<legend>
+    <h1 class="heading-large">
+        { Messages("export.journeydetails.header") }
+    </h1>
+</legend>
+}
+
+@views.html.main(
+appConfig = appConfig,
+contentHeader = None,
+bodyClasses = None,
+navTitle = Some(Messages("global.title")),
+backButtonUrl = Some(controllers.routes.MibController.getSelectDeclarationTypePageRestart()),
+title = Some(Messages("global.title")),
+includeHmrcLogo = true) {
+
+
+@if(form.hasErrors) { @uiHelpers.errorSummary(Messages("global.error-header"), form) }
+
+@uiHelpers.form(
+action = controllers.routes.ExportController.submitExportPage(),
+'id -> "import_dec_type_form",
+'class -> "form js-form",
+'autocomplete -> "off",
+'novalidate -> "novalidate"
+) {
+<fieldset id="export-journeydetails">
+    @header
+
+
+
+    <div class="form-group @form.errors("export-journeydetails").map { e => form-group-error }">
+
+
+    @views.html.partial.error_message_form_input("export-journeydetails", form)
+
+
+    <div class="form-group">
+        <label for="portOfEntry" class="form-label">@Messages("export.journeydetails.portOfEntry")
+            @if(form.errors("portOfEntry").nonEmpty) {
+            @for(error <- form.errors("portOfEntry")) {
+            <span id="@error.message-portOfEntry" class="error-message">@Messages(error.message)</span>
+            }
+            }
+        </label>
+        <input type="text" class="form-control @if(form.errors("portOfEntry").nonEmpty) { form-control-error }" name="portOfEntry" id="portOfEntry" value="@form("portOfEntry").value" />
+    </div>
+
+    <input type="hidden" name="page" value="@currentPage" />
+
+    <div class="form-group">
+        <label for="eori" class="form-label">@Messages("export.journeydetails.eori") @Messages("global.optional") @if(form.errors("eori").nonEmpty) { @for(error <- form.errors("eori")) {
+            <span id="@error.message-eori" class="error-message">@Messages(error.message)</span>
+            }
+            }
+            <span class="form-hint">@Messages("export.journeydetails.eori.example")</span>
+        </label>
+
+        <input type="text" class="form-control @if(form.errors("eori").nonEmpty) { form-control-error }" name="eori" id="eori" value="@form("eori").value" />
+    </div>
+
+    <details>
+        <summary><span class="summary">@Messages("export.journeydetails.details1")</span></summary>
+        <div class="panel panel-border-narrow">
+            <p>@Messages("export.journeydetails.details2") <a href="https://www.tax.service.gov.uk/shortforms/form/EORIContact" target="_blank">@Messages("export.journeydetails.details3")</a> @Messages("export.journeydetails.details4")
+        </div>
+    </details>
+
+    </div>
+
+
+</fieldset>
+
+<div class="form-field">
+    <button id="next" type="submit" class="button">@Messages("global.continue")</button>
+</div>
+}
+}

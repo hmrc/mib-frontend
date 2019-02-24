@@ -1,13 +1,14 @@
 @import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
 @import config.AppConfig
 @import controllers._
-@import model.imp._
+@import model.exp._
 @import views.helper.Helpers.titleMakerWithForm
-@(form: Form[JourneyDetailsImp],
-traderForm: Form[TraderDetailsCheckImp],
-merchandiseForm: Form[MerchandiseDetailsImp],
-arrivalDecForm: Form[ArrivalDecDatesImp],
-pricesTaxesForm: Form[PricesTaxesImp],
+
+@(form: Form[JourneyDetailsExp],
+traderForm: Form[TraderDetailsCheckExp],
+merchandiseForm: Form[MerchandiseDetailsExp],
+departureDecForm: Form[DepartureDecDatesExp],
+pricesTaxesForm: Form[PricesTaxesExp],
 countries: Seq[model.Country],
 currentPage: String,
 previousPage: String
@@ -16,7 +17,7 @@ previousPage: String
 @header = @{
 <legend>
     <h1 class="heading-large">
-        { Messages("import.checkdetails.header") }
+        { Messages("export.checkdetails.header") }
     </h1>
 </legend>
 }
@@ -26,7 +27,7 @@ appConfig = appConfig,
 contentHeader = None,
 bodyClasses = None,
 navTitle = Some(Messages("global.title")),
-backButtonUrl = Some(controllers.routes.ImportController.getImportPage(previousPage)),
+backButtonUrl = Some(controllers.routes.ExportController.getExportPage(previousPage)),
 title = Some(Messages("global.title")),
 includeHmrcLogo = true) {
 
@@ -34,60 +35,52 @@ includeHmrcLogo = true) {
 @if(form.hasErrors) { @uiHelpers.errorSummary(Messages("global.error-header"), form) }
 
 @uiHelpers.form(
-action = controllers.routes.ImportController.submitImportPage(),
+action = controllers.routes.ExportController.submitExportPage(),
 'id -> "import_dec_type_form",
 'class -> "form js-form",
 'autocomplete -> "off",
 'novalidate -> "novalidate"
 ) {
-<fieldset id="import-checkdetails">
+<fieldset id="export-checkdetails">
     @header
 
 
 
-    <div class="form-group @form.errors("import-checkdetails").map { e => form-group-error }">
+    <div class="form-group @form.errors("export-checkdetails").map { e => form-group-error }">
 
 
-    @views.html.partial.error_message_form_input("import-checkdetails", form)
+    @views.html.partial.error_message_form_input("export-checkdetails", form)
     <input type="hidden" name="page" value="@currentPage" />
 
 
         <dl class="govuk-check-your-answers cya-questions-long">
 
-            <!--  -->
+            <!-  ->
             <h2 class="heading-medium">
-                @Messages("import.journeydetails.header")
+                @Messages("export.journeydetails.header")
             </h2>
             <br>
 
-            @for(field <- Seq("portOfEntry","countryOfOrigin", "eori")) {
+            @for(field <- Seq("portOfEntry","eori")) {
             <div id="@field-fieldset">
 
                 <dt class="cya-question">
-                    @Messages("import.journeydetails." + field)
+                    @Messages("export.journeydetails." + field)
                 </dt>
-                <dd class="cya-answer">
-                    @if(field == "countryOfOrigin") {
-                    @for(country <- countries) {
-                    @if(form("countryOfOrigin").value.getOrElse("") == country.code){
-                    @country.name } } }
-
-                    @if(field != "countryOfOrigin") {
-                    @form(field).value
-                    }
+                <dd class="cya-answer"> @form(field).value
                 </dd>
                 <dd class="app-check-your-answers__change">
-                    <a href="@routes.ImportController.getImportPage("journey_details")">@Messages("global.change")</a>
+                    <a href="@routes.ExportController.getExportPage("journey_details")">@Messages("global.change")</a>
                 </dd>
 
             </div>
             }
 
-            <!--  -->
+            <!-  ->
             <br>
             <br>
             <h2 class="heading-medium">
-                @Messages("import.traderDetails.header")
+                @Messages("export.traderDetails.header")
             </h2>
             <br>
 
@@ -95,7 +88,7 @@ action = controllers.routes.ImportController.submitImportPage(),
             <div id="@field-fieldset">
 
                 <dt class="cya-question">
-                    @Messages("import.checkdetails." + field)
+                    @Messages("export.checkdetails." + field)
                 </dt>
                 <dd class="cya-answer">
                      @if(field == "nameAddress") {
@@ -105,16 +98,16 @@ action = controllers.routes.ImportController.submitImportPage(),
                       @traderForm(field).value }
                 </dd>
                 <dd class="app-check-your-answers__change">
-                    <a href="@routes.ImportController.getImportPage("trader_details")" id="@field">@Messages("global.change")</a>
+                    <a href="@routes.ExportController.getExportPage("trader_details")" id="@field">@Messages("global.change")</a>
                 </dd>
 
             </div>
             }
-            <!--  -->
+            <!-  ->
             <br>
             <br>
             <h2 class="heading-medium">
-                @Messages("import.merchandisedetails.header")
+                @Messages("export.merchandisedetails.header")
             </h2>
             <br>
 
@@ -122,71 +115,71 @@ action = controllers.routes.ImportController.submitImportPage(),
             <div id="@field-fieldset">
 
                 <dt class="cya-question">
-                    @Messages("import.merchandisedetails." + field)
+                    @Messages("export.merchandisedetails." + field)
                 </dt>
                 <dd class="cya-answer">
                     @merchandiseForm(field).value
                 </dd>
                 <dd class="app-check-your-answers__change">
-                    <a href="@routes.ImportController.getImportPage("merchandise_details")" id="@field">@Messages("global.change")</a>
+                    <a href="@routes.ExportController.getExportPage("merchandise_details")" id="@field">@Messages("global.change")</a>
                 </dd>
 
             </div>
             }
-            <!--  -->
+            <!-  ->
             <br>
             <br>
             <h2 class="heading-medium">
-                @Messages("import.arrivaldecdates.header")
+                @Messages("export.departuredecdates.header")
             </h2>
             <br>
 
-            @for(field <- Seq("arrivaldate", "declarationdate")) {
+            @for(field <- Seq("departuredate", "declarationdate")) {
             <div id="@field-fieldset">
 
                 <dt class="cya-question">
-                    @Messages("import.arrivaldecdates." + field)
+                    @Messages("export.departuredecdates." + field)
                     <br>
                     @Messages("global.day.month.year")
                 </dt>
                 <dd class="cya-answer">
-                    @if(field == "arrivaldate") {
-                    @arrivalDecForm("arrivalDay").value/@arrivalDecForm("arrivalMonth").value/@arrivalDecForm("arrivalYear").value
+                    @if(field == "departuredate") {
+                    @departureDecForm("departureDay").value/@departureDecForm("departureMonth").value/@departureDecForm("departureYear").value
                     }
                     @if(field == "declarationdate") {
-                    @arrivalDecForm("declarationDay").value/@arrivalDecForm("declarationMonth").value/@arrivalDecForm("declarationYear").value
+                    @departureDecForm("declarationDay").value/@departureDecForm("declarationMonth").value/@departureDecForm("declarationYear").value
                     }
                 </dd>
                 <dd class="app-check-your-answers__change">
-                    <a href="@routes.ImportController.getImportPage("arrivaldec_dates")" id="@field">@Messages("global.change")</a>
+                    <a href="@routes.ExportController.getExportPage("departuredec_dates")" id="@field">@Messages("global.change")</a>
                 </dd>
 
             </div>
             }
-            <!--  -->
+            <!-  ->
             <br>
             <br>
             <h2 class="heading-medium">
-                @Messages("import.pricestaxes.header")
+                @Messages("export.pricestaxes.header")
             </h2>
             <br>
 
-            @for(field <- Seq("purchasePrice","customsDuty", "importVat")) {
+            @for(field <- Seq("purchasePrice")) {
             <div id="@field-fieldset">
 
                 <dt class="cya-question">
-                    @Messages("import.pricestaxes." + field)
+                    @Messages("export.pricestaxes." + field)
                 </dt>
                 <dd class="cya-answer">
                     £@pricesTaxesForm(field).value.get.toDouble.formatted("%,1.2f")
                 </dd>
                 <dd class="app-check-your-answers__change">
-                    <a href="@routes.ImportController.getImportPage("prices_taxes")" id="@field">@Messages("global.change")</a>
+                    <a href="@routes.ExportController.getExportPage("prices_taxes")" id="@field">@Messages("global.change")</a>
                 </dd>
 
             </div>
             }
-            <!--  -->
+            <!-  ->
 
         </dl>
 
