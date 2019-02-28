@@ -7,7 +7,7 @@ case class PricesTaxesImp(purchasePrice: Double, customsDuty: Double, importVat:
 object PricesTaxesImp {
 
   object Key {
-    val PurchasePrice = "purchasePriceImp"
+    val PurchasePrice = "purchasePriceTaxesImp"
     val CustomsDuty = "customsDutyImp"
     val ImportVat = "importVatImp"
   }

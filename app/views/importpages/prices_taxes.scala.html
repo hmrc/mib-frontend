@@ -8,7 +8,8 @@
 
 @(form: Form[PricesTaxesImp],
 currentPage: String,
-previousPage: String)(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
+previousPage: String,
+purchasePrice : String)(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
 
 @header = @{
 <legend>
@@ -55,13 +56,16 @@ action = controllers.routes.ImportController.submitImportPage(),
             @Messages("import.pricestaxes." + field)
             @views.html.partial.error_message_form_input(field,form)
         </label>
-
-        <input type="number" class="form-control @if(form.errors(field).nonEmpty) { form-control-error }" name="@field" id="@field" value="@form(field).value" />
-
+        @if(field != "purchasePrice"){
+         <input type="number" class="form-control @if(form.errors(field).nonEmpty) { form-control-error }" name="@field" id="@field" value="@form(field).value" />
+        }
+        @if(field == "purchasePrice"){
+        <input type="number" readonly class="form-control @if(form.errors(field).nonEmpty) { form-control-error }" name="@field" id="@field" value="@purchasePrice" />
+        }
     </div>
     }
 
-</div>
+    </div>
 
 </fieldset>
 

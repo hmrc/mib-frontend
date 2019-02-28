@@ -2,13 +2,14 @@
 @import config.AppConfig
 @import controllers._
 @import model.exp._
+@import model.shared._
 @import views.helper.Helpers.titleMakerWithForm
 
 @(form: Form[JourneyDetailsExp],
 traderForm: Form[TraderDetailsCheckExp],
-merchandiseForm: Form[MerchandiseDetailsExp],
-departureDecForm: Form[DepartureDecDatesExp],
-pricesTaxesForm: Form[PricesTaxesExp],
+merchandiseForm: Form[MerchandiseDetails],
+exportDateForm: Form[ImportExportDate],
+pricesForm: Form[Prices],
 countries: Seq[model.Country],
 currentPage: String,
 previousPage: String
@@ -61,6 +62,25 @@ action = controllers.routes.ExportController.submitExportPage(),
             </h2>
             <br>
 
+
+            @for(field <- Seq("departuredate")) {
+            <div id="@field-fieldset">
+
+                <dt class="cya-question">
+                    @Messages("export.checkdetails.date")
+                    <br>
+                    @Messages("global.day.month.year")
+                </dt>
+                <dd class="cya-answer">
+                    @exportDateForm("importExportDay").value/@exportDateForm("importExportMonth").value/@exportDateForm("importExportYear").value
+                </dd>
+                <dd class="app-check-your-answers__change">
+                    <a href="@routes.ExportController.getExportPage("export_date")" id="@field">@Messages("global.change")</a>
+                </dd>
+
+            </div>
+            }
+
             @for(field <- Seq("portOfEntry","eori")) {
             <div id="@field-fieldset">
 
@@ -80,7 +100,7 @@ action = controllers.routes.ExportController.submitExportPage(),
             <br>
             <br>
             <h2 class="heading-medium">
-                @Messages("export.traderDetails.header")
+                @Messages("shared.traderDetails")
             </h2>
             <br>
 
@@ -107,7 +127,7 @@ action = controllers.routes.ExportController.submitExportPage(),
             <br>
             <br>
             <h2 class="heading-medium">
-                @Messages("export.merchandisedetails.header")
+                @Messages("shared.merchandisedetails.header")
             </h2>
             <br>
 
@@ -115,7 +135,12 @@ action = controllers.routes.ExportController.submitExportPage(),
             <div id="@field-fieldset">
 
                 <dt class="cya-question">
+                    @if(field == "invoiceNumber") {
+                    @Messages("shared.merchandisedetails.invoiceNumber")
+                    }
+                    @if(field != "invoiceNumber") {
                     @Messages("export.merchandisedetails." + field)
+                    }
                 </dt>
                 <dd class="cya-answer">
                     @merchandiseForm(field).value
@@ -126,62 +151,25 @@ action = controllers.routes.ExportController.submitExportPage(),
 
             </div>
             }
-            <!-  ->
-            <br>
-            <br>
-            <h2 class="heading-medium">
-                @Messages("export.departuredecdates.header")
-            </h2>
-            <br>
-
-            @for(field <- Seq("departuredate", "declarationdate")) {
-            <div id="@field-fieldset">
-
-                <dt class="cya-question">
-                    @Messages("export.departuredecdates." + field)
-                    <br>
-                    @Messages("global.day.month.year")
-                </dt>
-                <dd class="cya-answer">
-                    @if(field == "departuredate") {
-                    @departureDecForm("departureDay").value/@departureDecForm("departureMonth").value/@departureDecForm("departureYear").value
-                    }
-                    @if(field == "declarationdate") {
-                    @departureDecForm("declarationDay").value/@departureDecForm("declarationMonth").value/@departureDecForm("declarationYear").value
-                    }
-                </dd>
-                <dd class="app-check-your-answers__change">
-                    <a href="@routes.ExportController.getExportPage("departuredec_dates")" id="@field">@Messages("global.change")</a>
-                </dd>
-
-            </div>
-            }
-            <!-  ->
-            <br>
-            <br>
-            <h2 class="heading-medium">
-                @Messages("export.pricestaxes.header")
-            </h2>
-            <br>
-
-            @for(field <- Seq("purchasePrice")) {
-            <div id="@field-fieldset">
-
-                <dt class="cya-question">
-                    @Messages("export.pricestaxes." + field)
-                </dt>
-                <dd class="cya-answer">
-                    £@pricesTaxesForm(field).value.get.toDouble.formatted("%,1.2f")
-                </dd>
-                <dd class="app-check-your-answers__change">
-                    <a href="@routes.ExportController.getExportPage("prices_taxes")" id="@field">@Messages("global.change")</a>
-                </dd>
-
-            </div>
-            }
-            <!-  ->
 
         </dl>
+
+        <br>
+        <br>
+        <h2 class="heading-medium">
+            @Messages("export.declare.header")
+        </h2>
+        <br>
+        <p>@Messages("export.declare.line1")</p>
+        <p>@Messages("export.declare.line2")</p>
+        <div class="notice">
+            <i class="icon icon-important">
+                <span class="visually-hidden">Warning</span>
+            </i>
+            <strong class="bold-small">@Messages("export.declare.line3")</strong>
+        </div>
+        <br>
+        <p>@Messages("export.declare.line4")</p>
 
 
     </div>
@@ -189,7 +177,7 @@ action = controllers.routes.ExportController.submitExportPage(),
 </fieldset>
 
 <div class="form-field">
-    <button id="next" type="submit" class="button">@Messages("global.calculate.tax")</button>
+    <button id="next" type="submit" class="button">@Messages("global.declare.merchandise")</button>
 </div>
 }
 }

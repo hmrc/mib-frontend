@@ -1,6 +1,6 @@
-@(field: Field, group: String, value: String, id: String, text: String, hint: Option[String], attributes: Option[String])(implicit m: Messages)
+@(field: Field, group: String, value: String, id: String, text: String, hint: Option[String], attributes: Option[String], dataTarget: String)(implicit m: Messages)
 
-<div class="multiple-choice" @attributes.fold(Html("")){ attributes => @attributes }>
+<div class="multiple-choice" data-target="@dataTarget" @attributes.fold(Html("")){ attributes => @attributes } >
     <input id="@id" type="radio" name="@group" value="@value" @{if(field.value.contains(value)) "checked"}>
     <label for="@id" id="@id-label">
         @text

@@ -1,0 +1,152 @@
+@import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
+@import config.AppConfig
+@import controllers._
+@import model.shared._
+@import model._
+@import views.helper.Helpers.titleMakerWithForm
+
+
+
+@(form: Form[TraderDetails], countries: Seq[model.Country],
+currentPage: String,
+previousPage: Call,
+submitPage: Call)(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
+
+@header = @{
+<legend>
+    <h1 class="heading-large">
+        { Messages("shared.traderDetails.header") }
+    </h1>
+</legend>
+}
+
+@views.html.main(
+appConfig = appConfig,
+contentHeader = None,
+bodyClasses = None,
+navTitle = Some(Messages("global.title")),
+backButtonUrl = Some(previousPage),
+title = Some(Messages("global.title")),
+includeHmrcLogo = true) {
+
+
+@if(form.hasErrors) { @uiHelpers.errorSummary(Messages("global.error-header"), form) }
+
+@uiHelpers.form(
+action = submitPage,
+'id -> "import_dec_type_form",
+'class -> "form js-form",
+'autocomplete -> "off",
+'novalidate -> "novalidate"
+) {
+<fieldset id="shared-traderDetails">
+    @header
+
+
+
+    <div class="form-group @form.errors("shared-traderDetails").map { e => form-group-error }">
+
+
+    @views.html.partial.error_message_form_input("shared-traderDetails", form)
+
+    <input type="hidden" name="page" value="@currentPage" />
+
+    @for(field <- Seq("trader")) {
+    <div id="@field-fieldset" class="form-group @form.errors(field).map { e => form-group-error }">
+
+        <label for="@field" class="form-label">
+            @Messages("shared.traderDetails." + field)
+            @views.html.partial.error_message_form_input(field,form)
+        </label>
+
+        <input type="text" class="form-control @if(form.errors(field).nonEmpty) { form-control-error }" name="@field" id="@field" value="@form(field).value" @if(field == "postcode") { style="width: 150px" }/>
+
+    </div>
+    }
+
+    <label class="form-label">@Messages("shared.traderDetails.has.address")</label>
+    <fieldset class="inline">
+        @views.html.partial.error_message_form_input("uk", form)
+        @views.html.partial.radio_option(form("uk"), "uk", Messages("global.yes"), Messages("global.yes"), Messages("global.yes"), None, None, "ukaddress")
+        @views.html.partial.radio_option(form("uk"), "uk", Messages("global.no"), Messages("global.no"), Messages("global.no"), None, None, "non-ukaddress")
+
+    </fieldset>
+    <br>
+
+
+
+    <div class="js-hidden" id="ukaddress">
+
+    @for(field <- Seq("buildingAndStreet", "line2", "city", "county", "postcode")) {
+    <div id="@field-fieldset" class="form-group @form.errors(field).map { e => form-group-error }">
+
+        <label for="@field" class="form-label">
+            @Messages("shared.traderDetails." + field) @if(field == "county" || field == "line2" || field == "city") { @Messages("global.optional") }
+            @views.html.partial.error_message_form_input(field,form)
+        </label>
+
+        <input type="text" class="form-control @if(form.errors(field).nonEmpty) { form-control-error }" name="@field" id="@field" value="@form(field).value" @if(field == "postcode") { style="width: 150px" }/>
+
+    </div>
+    }
+    </div>
+
+    <div class="js-hidden" id="non-ukaddress">
+
+        @for(field <- Seq("line1", "line2nonuk", "line3")) {
+        <div id="@field-fieldset" class="form-group @form.errors(field).map { e => form-group-error }">
+
+            <label for="@field" class="form-label">
+                @Messages("shared.traderDetails." + field) @if(field == "line2nonuk" || field == "line3") { @Messages("global.optional") }
+                @views.html.partial.error_message_form_input(field,form)
+            </label>
+
+            <input type="text" class="form-control @if(form.errors(field).nonEmpty) { form-control-error }" name="@field" id="@field" value="@form(field).value" />
+
+        </div>
+        }
+
+        <div  id="country-fieldset"  class="form-group @form.errors("country").map { e => form-group-error }">
+
+            <label for="country" class="form-label">@Messages("shared.traderDetails.country")
+                @if(form.errors("country").nonEmpty) {
+                @for(error <- form.errors("country")) {
+                <span id="@error.message-country" class="error-message">@Messages(error.message)</span>
+                }
+                }
+            </label>
+
+            <select id="country" class="form-control @if(form.errors("country").nonEmpty) { form-control-error }" name="country">
+            <option value="">@Messages("global.select.message")</option>
+            @for(country <- countries) {
+            <option value="@country.code" @if(form("country").value.getOrElse("") == country.code){ selected }>@country.name</option>
+            }
+            </select>
+        </div>
+
+    </div>
+
+
+    @for(field <- Seq("vrn","vehicleRegNo")) {
+    <div id="@field-fieldset" class="form-group @form.errors(field).map { e => form-group-error }">
+
+        <label for="@field" class="form-label">
+            @Messages("shared.traderDetails." + field) @if(field == "vrn" || field == "vehicleRegNo") { @Messages("global.optional") }
+            @views.html.partial.error_message_form_input(field,form)
+        </label>
+
+        <input type="text" class="form-control @if(form.errors(field).nonEmpty) { form-control-error }" name="@field" id="@field" value="@form(field).value"/>
+
+    </div>
+    }
+
+    </div>
+
+
+</fieldset>
+
+<div class="form-field">
+    <button id="next" type="submit" class="button">@Messages("global.continue")</button>
+</div>
+}
+} 

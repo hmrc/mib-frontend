@@ -18,12 +18,14 @@ class CountriesService @Inject() (val messagesApi: MessagesApi) extends I18nSupp
   def getCountries(implicit request: Request[AnyContent]): Seq[Country] = {
     val UK: (Country) => Boolean = c => c.code == "GBR"
     val countries = getCountriesListLang
-    countries.filter(UK) ++ countries.filterNot(UK).sortWith((x, y) => x.name.compareTo(y.name) < 0)
+    //countries.filter(UK) ++ countries.filterNot(UK).sortWith((x, y) => x.name.compareTo(y.name) < 0)
+    countries.filterNot(UK).sortWith((x, y) => x.name.compareTo(y.name) < 0)
   }
 
   def getCountry(countryCode: String)(implicit request: Request[AnyContent]): String =
     scala.io.Source.fromFile(Messages("country-code.path")).getLines().map {
       case pattern(code, name) => Country(name = name, code = code)
     }.toSeq.filter(c => c.code.equals(countryCode)).head.name
+
 }
 

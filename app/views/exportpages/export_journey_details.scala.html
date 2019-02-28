@@ -6,7 +6,8 @@
 
 
 @(form: Form[JourneyDetailsExp], countries: Seq[model.Country],
-currentPage: String)(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
+currentPage: String,
+previousPage: String)(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
 
 @header = @{
 <legend>
@@ -21,7 +22,7 @@ appConfig = appConfig,
 contentHeader = None,
 bodyClasses = None,
 navTitle = Some(Messages("global.title")),
-backButtonUrl = Some(controllers.routes.MibController.getSelectDeclarationTypePageRestart()),
+backButtonUrl = Some(controllers.routes.ExportController.getExportPage(previousPage)),
 title = Some(Messages("global.title")),
 includeHmrcLogo = true) {
 

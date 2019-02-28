@@ -16,6 +16,9 @@ global.accept.and.continue = Accept amount and continue
 global.day.month.year = (Day/Month/Year)
 global.select.message = Please select…
 global.declare.and.pay = Declare merchandise and pay online
+global.declare.merchandise = Declare merchandise
+global.yes = Yes
+global.no = No
 
 #errors
 error.invalid.addressline1 = Enter the first line of your address
@@ -28,51 +31,20 @@ error.invalid.desciptionOfGoods = Enter a Description of merchandise to import
 error.invalid.year = Enter a valid year
 error.invalid.month = Enter a valid month
 error.invalid.day = Enter a valid day
+error.max.purchase.value = Maximum purchase value allowed is £900
 
 #Select declaration page
-select.dec.header = Select the type of declaration?
+select.dec.header = Select the type of declaration
 select.dec.radio1 = Import
 select.dec.radio2 = Export
 select.dec.type.error = Select a declaration type
 
-#page1
-import.journeydetails.header = Journey details
-import.journeydetails.eori = UK EORI number
-import.journeydetails.eori.example = For example, GB123456789000
-import.journeydetails.portOfEntry = Where did the merchandise come from?
-import.journeydetails.countryOfOrigin = Where did the merchandise enter the UK?
-import.journeydetails.details1 = Where to find the EORI number
-import.journeydetails.details2 = The business should have an EORI number if it imports merchandise from sellers outside the EU. Contact the
-import.journeydetails.details3 = EORI team at HMRC (opens in a new window or tab)
-import.journeydetails.details4 = if you cannot find your number.
-
-#page2
-import.traderDetails.header = Details of trader
-import.traderDetails.trader = Full Name
-import.traderDetails.line1 = Address line 1
-import.traderDetails.line2 = Address line 2
-import.traderDetails.city = Town or City
-import.traderDetails.county = County
-import.traderDetails.postcode = Postcode
-import.traderDetails.country = Country
-import.traderDetails.vrn = VAT registration number
-import.traderDetails.vehicleRegNo = Vehicle registration number
-import.traderDetails.nameaddress = Trader name and address
 
 
+#New Page 2
+import.date.header = Import date
 
-#page3
-import.merchandisedetails.header = Merchandise details
-import.merchandisedetails.invoiceNumber = Invoice number
-import.merchandisedetails.desciptionOfGoods = Description of merchandise to import
-
-#page4
-import.arrivaldecdates.header = Arrival and declaration dates
-import.arrivaldecdates.arrivaldate = Date of arrival
-import.arrivaldecdates.arrival.date.example = For example, 20 12 2018
-import.arrivaldecdates.declarationdate = Date of declaration
-
-#page5
+#New Page 3
 import.pricestaxes.header = Prices and taxes
 import.pricestaxes.purchasePrice = Purchase price
 import.pricestaxes.customsDuty = Customs Duty
@@ -80,16 +52,32 @@ import.pricestaxes.importVat = Import VAT
 #Used for tax due page
 import.pricestaxes.total = Total
 
-#page6
+#New page4
+import.taxdue.header = Tax due
+
+#New page5
+import.journeydetails.header = Journey details
+import.journeydetails.eori = UK EORI number
+import.journeydetails.eori.example = For example, GB123456789000
+import.journeydetails.portOfEntry = Port of entry
+import.journeydetails.countryOfOrigin = Country of origin
+import.journeydetails.details1 = Where to find the EORI number
+import.journeydetails.details2 = The trader, or trader's business, should have an EORI number if it imports merchandise from sellers outside the EU. Contact the
+import.journeydetails.details3 = EORI team at HMRC (opens in a new window or tab)
+import.journeydetails.details4 = if you cannot find your number
+
+#page 7
+import.merchandisedetails.desciptionOfGoods = Description of merchandise to import
+
+#page8
 import.checkdetails.header =  Check import details
 import.checkdetails.nameAddress = Trader name and address
 import.checkdetails.vrn = VAT registration number
 import.checkdetails.vehicleRegNo = Vehicle registration number
 
-#page7
-import.taxdue.header = Tax due on these goods
 
-#page8
+
+#page9
 import.declare.header = Declare merchandise import
 import.declare.line1 = You must pay duty and tax on this merchandise if you bring them into the UK
 import.declare.line2 = You can only declare your merchandise online once. Go through the red channel at customs if you bring in goods or merchandise other than the ones you declare online.
@@ -98,7 +86,15 @@ import.declare.line4 = By making this declaration you are confirming that all th
 import.declare.line5 = Once you declare your import you will not be able to make further changes.
 
 #-----------------------------------------
-#page1
+
+#New page 1
+export.purchaseprice.header = What was the purchase prices ?
+
+
+#New Page 2
+export.date.header = Export date
+
+#page3
 export.journeydetails.header = Journey details
 export.journeydetails.eori = UK EORI number
 export.journeydetails.eori.example = For example, GB123456789000
@@ -108,51 +104,57 @@ export.journeydetails.details2 = The business should have an EORI number if it i
 export.journeydetails.details3 = EORI team at HMRC (opens in a new window or tab)
 export.journeydetails.details4 = if you cannot find your number.
 
-#page2
-export.traderDetails.header = Details of trader
-export.traderDetails.trader = Full Name
-export.traderDetails.line1 = Address line 1
-export.traderDetails.line2 = Address line 2
-export.traderDetails.city = Town or City
-export.traderDetails.county = County
-export.traderDetails.postcode = Postcode
-export.traderDetails.country = Country
-export.traderDetails.vrn = VAT registration number
-export.traderDetails.vehicleRegNo = Vehicle registration number
-export.traderDetails.nameaddress = Trader name and address
-
-
-#page3
-export.merchandisedetails.header = Merchandise details
-export.merchandisedetails.invoiceNumber = Invoice number
+#page 4
 export.merchandisedetails.desciptionOfGoods = Description of merchandise to export
 
-#page4
-export.departuredecdates.header = Departure and declaration dates
-export.departuredecdates.departuredate = Date of departure
-export.departuredecdates.departure.date.example = For example, 20 12 2018
-export.departuredecdates.declarationdate = Date of declaration
-
-#page5
-export.pricestaxes.header = Purchase price
-export.pricestaxes.purchasePrice = Purchase price
-
-#page6
+#page7
 export.checkdetails.header =  Check export details
 export.checkdetails.nameAddress = Trader name and address
 export.checkdetails.vrn = VAT registration number
 export.checkdetails.vehicleRegNo = Vehicle registration number
+export.checkdetails.date = Date of departure
 
-#page7
-export.taxdue.header = Tax due on these goods
 
 #page8
-export.declare.header = Declare merchandise import
-export.declare.line1 = You must pay duty and tax on this merchandise if you bring them into the UK
-export.declare.line2 = You can only declare your merchandise online once. Go through the red channel at customs if you bring in goods or merchandise other than the ones you declare online.
-export.declare.line3 = You may have your merchandise seized or face prosecution and imprisonment if you provide false information or use the online service to deliberately avoid paying tax and duties on the merchandise you bring into the UK.
-export.declare.line4 = By making this declaration you are confirming that all the information in the declaration is correct and complete.
-export.declare.line5 = Once you declare your import you will not be able to make further changes.
+export.declare.header = Declare merchandise export
+export.declare.line1 = You can only declare your export online once.
+export.declare.line2 = You may have your merchandise seized or face prosecution and imprisonment if you provide false information or use the online service to deliberately avoid paying tax and duties.
+export.declare.line3 = By making this declaration you are confirming that all the information in the declaration is correct and complete.
+export.declare.line4 = Once you declare your export you will not be able to make further changes.
+
+
+#Shared
+
+#New page 1
+shared.purchaseprice.header = What was the purchase prices ?
+
+#New Page 2
+shared.date.header = Import date
+shared.date.example = For example, 20 12 2018
+
+#page6 Import / page 4 export
+shared.traderDetails.header = Details of trader
+shared.traderDetails.trader = What is the name of the trader?
+shared.traderDetails.buildingAndStreet = Building and street
+shared.traderDetails.line1 = Address line 1
+shared.traderDetails.line2 = Address line 2
+shared.traderDetails.line2nonuk = Address line 2
+shared.traderDetails.line3 = Address line 3
+shared.traderDetails.city = Town or City
+shared.traderDetails.county = County
+shared.traderDetails.postcode = Postcode
+shared.traderDetails.country = Country
+shared.traderDetails.vrn = VAT registration number
+shared.traderDetails.vehicleRegNo = Vehicle registration number
+shared.traderDetails.nameaddress = Trader name and address
+shared.traderDetails.has.address = Does the trader have a UK address?
+shared.traderDetails = Trader details
+
+
+#page7 import / page 4 export
+shared.merchandisedetails.header = Merchandise details
+shared.merchandisedetails.invoiceNumber = Invoice number
+
 
 
 

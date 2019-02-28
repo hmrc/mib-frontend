@@ -37,5 +37,5 @@ class AppConfig @Inject() (override val runModeConfiguration: Configuration, env
   lazy val analyticsHost = loadConfig(s"google-analytics.host")
   lazy val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   lazy val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
-  lazy val tempFileLocation = loadConfig(s"temp-file-location")
+
 }

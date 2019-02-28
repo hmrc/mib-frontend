@@ -42,9 +42,9 @@ action = controllers.routes.MibController.submitSelectDecTypePage(),
 
 
     <div class="form-group @form.errors("select_dec_type").map { e => form-group-error }">
-    @views.html.partial.error_message_form_input("way_to_pay", form)
-    @views.html.partial.radio_option(form("select_dec_type"), "select_dec_type", "1", "import", Messages("select.dec.radio1"), None, None)
-    @views.html.partial.radio_option(form("select_dec_type"), "select_dec_type", "2", "export", Messages("select.dec.radio2"), None, None)
+    @views.html.partial.error_message_form_input("select_dec_type", form)
+    @views.html.partial.radio_option(form("select_dec_type"), "select_dec_type", "1", "import", Messages("select.dec.radio1"), None, None, "")
+    @views.html.partial.radio_option(form("select_dec_type"), "select_dec_type", "2", "export", Messages("select.dec.radio2"), None, None, "")
    </div>
 
 
