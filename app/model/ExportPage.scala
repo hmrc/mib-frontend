@@ -26,6 +26,9 @@ object ExportPages extends Enum[ExportPage] {
   case object check_details extends ExportPage {
     override val case_value: String = "check_details"
   }
+  case object dec_received extends ExportPage {
+    override val case_value: String = "dec_received"
+  }
 
   override def values = findValues
 }

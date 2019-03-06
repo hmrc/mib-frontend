@@ -21,7 +21,8 @@ object ResultWrapper {
         MerchandiseDetails.getKeys(MibTypes.mibImport) ++
         MerchandiseDetails.getKeys(MibTypes.mibExport) ++
         PricesTaxesImp.getKeys ++
-        JourneyDetailsExp.getKeys
+        JourneyDetailsExp.getKeys ++
+        DeclarationReceived.getKeys()
 
     def purgeSession: Result = keys.foldLeft(result) { (result, key) => result.removingFromSession(key) }
   }

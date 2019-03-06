@@ -1,8 +1,10 @@
 package controllers
 
 import model.exp._
+import model.imp.TaxDueImp
 import play.api.data.Forms.{optional, _}
 import play.api.data._
+import play.api.data.format.Formats.doubleFormat
 import play.api.data.validation.Constraints._
 
 object FormsExp {
@@ -20,6 +22,15 @@ object FormsExp {
       "vrn" -> optional(text),
       "vehicleRegNo" -> optional(text)
     )(TraderDetailsCheckExp.apply)(TraderDetailsCheckExp.unapply))
+  }
+
+  def declarationReceived: Form[DeclarationReceived] = {
+    Form(mapping(
+      "currentDate" -> text,
+      "traderNameAndAddress" -> text,
+      "description" -> text,
+      "mibReference" -> text
+    )(DeclarationReceived.apply)(DeclarationReceived.unapply))
   }
 
 }

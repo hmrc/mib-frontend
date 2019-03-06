@@ -19,6 +19,11 @@ global.declare.and.pay = Declare merchandise and pay online
 global.declare.merchandise = Declare merchandise
 global.yes = Yes
 global.no = No
+global.date = Date
+global.print = Print page
+global.download = Download page (PDF)
+global.logo.header = GOV.UK
+global.logo.organisation = HM Revenue & Customs
 
 #errors
 error.invalid.addressline1 = Enter the first line of your address
@@ -31,7 +36,18 @@ error.invalid.desciptionOfGoods = Enter a Description of merchandise to import
 error.invalid.year = Enter a valid year
 error.invalid.month = Enter a valid month
 error.invalid.day = Enter a valid day
-error.max.purchase.value = Maximum purchase value allowed is £900
+error.max.purchase.value = Amount must be less than £900
+error.max.purchase.full = This service is for declarations of less than £900.  Contact an agent or intermediary to make a full customs declaration
+error.import.date = You can only make a declaration within 5 working days from the import date
+error.real.date = Enter a real date
+error.import.date.in.past = Import date must not be in the past
+error.export.date.in.past = Export date must not be in the past
+error.invalid.import.date = Enter an import date
+error.invalid.export.date = Enter an export date
+#
+#error.real=Real number value expected
+error.real = Enter a real number
+
 
 #Select declaration page
 select.dec.header = Select the type of declaration
@@ -107,20 +123,25 @@ export.journeydetails.details4 = if you cannot find your number.
 #page 4
 export.merchandisedetails.desciptionOfGoods = Description of merchandise to export
 
-#page7
+#page 7
 export.checkdetails.header =  Check export details
 export.checkdetails.nameAddress = Trader name and address
 export.checkdetails.vrn = VAT registration number
 export.checkdetails.vehicleRegNo = Vehicle registration number
 export.checkdetails.date = Date of departure
-
-
-#page8
 export.declare.header = Declare merchandise export
 export.declare.line1 = You can only declare your export online once.
 export.declare.line2 = You may have your merchandise seized or face prosecution and imprisonment if you provide false information or use the online service to deliberately avoid paying tax and duties.
 export.declare.line3 = By making this declaration you are confirming that all the information in the declaration is correct and complete.
 export.declare.line4 = Once you declare your export you will not be able to make further changes.
+
+#page 8
+export.decref.line1 = Declaration received by HMRC
+export.decref.line2 = Declaration reference
+export.decref.line3 = Tax
+export.decref.line4 = Merchandise in Baggage
+export.decref.trader.details = Trader name and address
+export.decref.description = Description of merchandise exported
 
 
 #Shared

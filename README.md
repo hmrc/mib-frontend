@@ -11,3 +11,5 @@ page6 = check_details
 page7 = tax due
 page8 = declare
 
+sm --start PDF_GENERATOR_SERVICE -r 1.9.0 -f
+

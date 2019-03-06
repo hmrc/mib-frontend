@@ -1,10 +1,14 @@
 package controllers
 
-import model.shared.TraderDetails
+import java.time.{LocalDate, ZoneId}
+import java.time.temporal.ChronoUnit.DAYS
+
+import model.shared.{ImportExportDate, Prices, TraderDetails}
+import model.{MibType, MibTypes}
 import play.api.Logger
-import play.api.data.{Form, FormError}
 import play.api.data.format.Formatter
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
+import play.api.data.{Form, FormError}
 
 object FormsConstraints {
 
@@ -22,12 +26,66 @@ object FormsConstraints {
 
   }
 
-  object LocalConstraint {
+  def countryConstraint = Constraint[String]("constraint.country") { o =>
+    if (o == null) Invalid(ValidationError("error.required.country")) else if (o.trim.isEmpty) Invalid(ValidationError("error.required.country")) else Valid
+  }
 
-    def countryConstraint = Constraint[String]("constraint.country") { o =>
-      if (o == null) Invalid(ValidationError("error.required.country")) else if (o.trim.isEmpty) Invalid(ValidationError("error.required.country")) else Valid
+  def priceConstraint = Constraint[Double]("constraint.price") { o =>
+    val bigDec = BigDecimal(o).setScale(2, BigDecimal.RoundingMode.HALF_UP)
+
+    if (bigDec < 900)
+      Valid
+    else
+      Invalid(ValidationError("error.max.purchase.value"))
+  }
+
+  def validImportDate(form: Form[ImportExportDate]) = {
+
+    val format = new java.text.SimpleDateFormat("yyyy-MM-dd")
+    val importDt: LocalDate = format.parse(form("importExportYear").value.get + "-" + form("importExportMonth").value.get +
+      "-" + form("importExportDay").value.get).toInstant.atZone(ZoneId.systemDefault).toLocalDate
+    val currentDt: LocalDate = java.time.LocalDate.now
+    val importExportDate: ImportExportDate = ImportExportDate(form("importExportDay").value.get.toInt, form("importExportMonth").value.get.toInt, form("importExportYear").value.get.toInt)
+
+    if (!(importExportDate.isValidDate)) {
+      form.withError("", "error.real.date")
+    } else {
+      DAYS.between(currentDt, importDt) match {
+        case x if (0 <= x && x <= 5) => form
+        case x if (x < 0)            => form.withError("", "error.import.date.in.past")
+        case _                       => form.withError("", "error.import.date")
+      }
     }
 
+  }
+
+  def setImportExportDateSummaryError(form: Form[ImportExportDate], mibType: MibType) = {
+
+    val all = form("importExportYear").value.get + form("importExportMonth").value.get + form("importExportDay").value.get
+
+    all.length match {
+      case 0 => form.withError("", "error.real.date")
+      case _ => if (mibType == MibTypes.mibImport) form.withError("", "error.invalid.import.date") else form.withError("", "error.invalid.export.date")
+    }
+
+  }
+
+  def validExportDate(form: Form[ImportExportDate]) = {
+
+    val format = new java.text.SimpleDateFormat("yyyy-MM-dd")
+    val importDt: LocalDate = format.parse(form("importExportYear").value.get + "-" + form("importExportMonth").value.get +
+      "-" + form("importExportDay").value.get).toInstant.atZone(ZoneId.systemDefault).toLocalDate
+    val currentDt: LocalDate = java.time.LocalDate.now
+    val importExportDate: ImportExportDate = ImportExportDate(form("importExportDay").value.get.toInt, form("importExportMonth").value.get.toInt, form("importExportYear").value.get.toInt)
+
+    if (!(importExportDate.isValidDate)) {
+      form.withError("", "error.real.date")
+    } else {
+      DAYS.between(currentDt, importDt) match {
+        case x if (x < 0) => form.withError("", "error.export.date.in.past")
+        case _            => form
+      }
+    }
   }
 
   def validateTraderDetailsNoPostCodeOrCountry(form: Form[TraderDetails]) = {
@@ -67,3 +125,4 @@ object FormsConstraints {
   }
 
 }
+

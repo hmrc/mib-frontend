@@ -38,11 +38,11 @@ object PricesTaxesImp {
       ))
   }
 
-  def toSession(page5: PricesTaxesImp): Seq[(String, String)] = {
+  def toSession(page: PricesTaxesImp): Seq[(String, String)] = {
     Map(
-      Key.PurchasePrice -> page5.purchasePrice.toString,
-      Key.CustomsDuty -> page5.customsDuty.toString,
-      Key.ImportVat -> page5.importVat.toString
+      Key.PurchasePrice -> page.purchasePrice.toString,
+      Key.CustomsDuty -> page.customsDuty.toString,
+      Key.ImportVat -> page.importVat.toString
     ).toSeq
   }
 

@@ -28,10 +28,10 @@ object JourneyDetailsExp {
         optional(Key.Eori)))
   }
 
-  def toSession(page1: JourneyDetailsExp): Seq[(String, String)] = {
+  def toSession(page: JourneyDetailsExp): Seq[(String, String)] = {
     Map(
-      Key.PortOfEntry -> page1.portOfEntry,
-      Key.Eori -> page1.eori.getOrElse("")).toSeq
+      Key.PortOfEntry -> page.portOfEntry,
+      Key.Eori -> page.eori.getOrElse("")).toSeq
   }
 
   def getKeys() = {

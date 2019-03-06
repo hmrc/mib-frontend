@@ -11,7 +11,7 @@ object FormsShared {
 
   def prices: Form[Prices] = {
     Form(mapping(
-      "purchasePrice" -> of(doubleFormat).verifying("error.max.purchase.value", a => a <= 900)
+      "purchasePrice" -> of(doubleFormat).verifying(FormsConstraints.priceConstraint)
     )(Prices.apply)(Prices.unapply))
   }
 
@@ -23,9 +23,9 @@ object FormsShared {
   //TODO need better validation
   def importExportDate: Form[ImportExportDate] = {
     Form(mapping(
-      "importExportDay" -> number(min = 1, max = 31),
-      "importExportMonth" -> number(min = 1, max = 12),
-      "importExportYear" -> number(min = 1900, max = 2100)
+      "importExportDay" -> number,
+      "importExportMonth" -> number,
+      "importExportYear" -> number
     )(ImportExportDate.apply)(ImportExportDate.unapply))
   }
 
@@ -38,7 +38,7 @@ object FormsShared {
       "city" -> optional(text.transform[String](_.trim, identity).verifying(maxLength(60))),
       "county" -> optional(text.transform[String](_.trim, identity).verifying(maxLength(60))),
       "postcode" -> optional(of(FormsConstraints.postcodeFormatter)),
-      "country" -> optional(text.verifying(FormsConstraints.LocalConstraint.countryConstraint)),
+      "country" -> optional(text.verifying(FormsConstraints.countryConstraint)),
       "vrn" -> optional(text.transform[String](_.trim, identity).verifying(maxLength(60))),
       "vehicleRegNo" -> optional(text.transform[String](_.trim, identity).verifying(maxLength(60))),
       "line3" -> optional(text.transform[String](_.trim, identity).verifying(maxLength(100))),

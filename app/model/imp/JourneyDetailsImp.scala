@@ -30,11 +30,11 @@ object JourneyDetailsImp {
         optional(Key.Eori)))
   }
 
-  def toSession(page1: JourneyDetailsImp): Seq[(String, String)] = {
+  def toSession(page: JourneyDetailsImp): Seq[(String, String)] = {
     Map(
-      Key.PortOfEntry -> page1.portOfEntry,
-      Key.CountryOfOrigin -> page1.countryOfOrigin,
-      Key.Eori -> page1.eori.getOrElse("")).toSeq
+      Key.PortOfEntry -> page.portOfEntry,
+      Key.CountryOfOrigin -> page.countryOfOrigin,
+      Key.Eori -> page.eori.getOrElse("")).toSeq
   }
 
   def getKeys() = {

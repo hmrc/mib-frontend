@@ -1,0 +1,107 @@
+@import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
+@import config.AppConfig
+@import controllers._
+@import model.exp._
+@import views.helper.Helpers.titleMakerWithForm
+
+
+
+@(form: Form[DeclarationReceived],
+currentPage: String,
+previousPage: String)(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
+
+
+
+@views.html.main(
+appConfig = appConfig,
+contentHeader = None,
+bodyClasses = None,
+navTitle = Some(Messages("global.title")),
+backButtonUrl = Some(controllers.routes.ExportController.getExportPage(previousPage)),
+title = Some(Messages("global.title")),
+includeHmrcLogo = true) {
+
+
+@if(form.hasErrors) { @uiHelpers.errorSummary(Messages("global.error-header"), form) }
+
+@uiHelpers.form(
+action = controllers.routes.ExportController.submitExportPage(),
+'id -> "import_dec_type_form",
+'class -> "form js-form",
+'autocomplete -> "off",
+'novalidate -> "novalidate"
+) {
+
+<div class="grid-row">
+    <div class="govuk-box-highlight">
+        <h1 class="bold-xlarge">
+            @Messages("export.decref.line1")
+        </h1>
+        <h2 class="bold-medium">
+            @Messages("export.decref.line2")
+        </h2>
+        <h2 class="bold-large">
+            @form("mibReference").value
+        </h2>
+    </div>
+</div>
+
+<fieldset id="export-dec-received">
+
+    <dl class="govuk-check-your-answers cya-questions-short">
+        <div>
+            <dt class="cya-question">
+                @Messages("export.decref.line3")
+            </dt>
+            <dd class="cya-answer">
+                @Messages("global.title")
+            </dd>
+        </div>
+        <div>
+            <dt class="cya-question">
+                @Messages("global.date")
+            </dt>
+            <dd class="cya-answer">
+                @form("currentDate").value
+            </dd>
+        </div>
+        <div>
+            <dt class="cya-question">
+                @Messages("export.decref.trader.details")
+            </dt>
+            <dd class="cya-answer">@Html(form("traderNameAndAddress").value.get)</dd>
+        </div>
+        <div>
+            <dt class="cya-question">
+                @Messages("export.decref.description")
+            </dt>
+            <dd class="cya-answer">
+                @form("description").value
+            </dd>
+        </div>
+    </dl>
+
+
+
+    <div class="form-group @form.errors("export-dec-received").map { e => form-group-error }">
+
+
+    @views.html.partial.error_message_form_input("export-dec-received", form)
+    <input type="hidden" name="page" value="@currentPage" />
+
+
+
+    </div>
+
+</fieldset>
+<div class="form-group">
+    <a href="javascript:window.print()" class="print-link print-hidden js-visible">@Messages("global.print")</a>
+</div>
+
+<div class="form-group">
+    <a id="download-as-pdf"  class="print-hidden"
+       href="@{controllers.pdf.routes.DeclarationSuccessfulPDFController.downloadPDF().url}">@Messages("global.download")</a>
+</div>
+
+}
+}

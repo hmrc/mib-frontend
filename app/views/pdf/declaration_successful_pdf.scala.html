@@ -1,0 +1,128 @@
+@import java.time.LocalDateTime
+@import model.exp.DeclarationReceived
+
+@(currentDate: String, traderNameAndAddress: String, description:String, mibReference: String)(implicit request: play.api.mvc.Request[_], messages: Messages)
+
+@createLink(path: String)(implicit req: play.api.mvc.Request[_]) = @{
+val protocol = if(req.secure) "https" else "http"
+s"$protocol://${req.host}${routes.Assets.at(path)}"
+}
+
+<html>
+<head>
+    <link href="@createLink("css/application.min.css")" rel="stylesheet" type="text/css"/>
+
+    <style>
+                html {
+                    background: white !important;
+                    display: table-cell;
+                }
+
+                .service-info {
+                    border-top: 0px;
+                }
+
+                .header-logo {
+                    display: block;
+                    font-size: 36px;
+                    background: url("@createLink("images/gov.uk_logotype_crown_invert.gif")") center left no-repeat !important;
+                    padding-left: 76px;
+                    background-size: contain;
+                }
+
+                .transaction-banner__heading {
+                    color: white;
+                }
+
+                .info {
+                    color: white;
+                }
+
+                .organisation-logo {
+                    float: left;
+                    font-family: sans-serif;
+                    font-weight: 400;
+                    font-size: 18px;
+                    line-height: 40px;
+                    padding: 3px 0 2px 36px;
+                    /* PNG has much worse PDF generator performance than Gif for this image */
+                    background-image: url("@createLink("images/hmrc_crest_18px_x2.gif")");
+                    background-repeat: no-repeat;
+                    background-position: 6px center;
+                    background-size: auto 25px;
+                    border-left: 2px solid #009390;
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+                }
+
+                .transaction-banner--complete {
+                    background-color: #28a197;
+                    color: #fff;
+                    padding: 30px;
+                    margin-bottom: 30px;
+                    text-align: center
+                }
+        </style>
+
+</head>
+<body>
+
+<main id="wrapper" role="main">
+    <div class="centered-content">
+        <div class="service-info">
+            <div class="header-logo">@Messages("global.logo.header")</div>
+            <div class="organisation-logo">@Messages("global.logo.organisation")</div>
+        </div>
+    </div>
+
+    <div id="content">
+        <article class="content__body">
+
+            <div class="transaction-banner--complete">
+                <h1 class="transaction-banner__heading">@(mibReference)</h1>
+
+            </div>
+
+            <fieldset id="export-dec-received">
+
+                <dl class="govuk-check-your-answers cya-questions-short">
+                    <div>
+                        <dt class="cya-question">
+                            @Messages("export.decref.line3")
+                        </dt>
+                        <dd class="cya-answer">
+                            @Messages("global.title")
+                        </dd>
+                    </div>
+                    <div>
+                        <dt class="cya-question">
+                            @Messages("global.date")
+                        </dt>
+                        <dd class="cya-answer">
+                            @(currentDate)
+                        </dd>
+                    </div>
+                    <div>
+                        <dt class="cya-question">
+                            @Messages("export.decref.trader.details")
+                        </dt>
+                        <dd class="cya-answer">@Html(traderNameAndAddress)</dd>
+                    </div>
+                    <div>
+                        <dt class="cya-question">
+                            @Messages("export.decref.description")
+                        </dt>
+                        <dd class="cya-answer">
+                            @(description)
+                        </dd>
+                    </div>
+                </dl>
+            </fieldset>
+
+        </article>
+    </div>
+
+</main>
+
+</body>
+</html>

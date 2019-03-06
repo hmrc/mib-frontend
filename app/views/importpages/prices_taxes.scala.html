@@ -60,7 +60,8 @@ action = controllers.routes.ImportController.submitImportPage(),
          <input type="number" class="form-control @if(form.errors(field).nonEmpty) { form-control-error }" name="@field" id="@field" value="@form(field).value" />
         }
         @if(field == "purchasePrice"){
-        <input type="number" readonly class="form-control @if(form.errors(field).nonEmpty) { form-control-error }" name="@field" id="@field" value="@purchasePrice" />
+        <span class="table-heading" aria-hidden="true">£@purchasePrice.toDouble.formatted("%,1.2f")</span>
+        <input type="hidden" name="@field" id="@field" value="@purchasePrice" />
         }
     </div>
     }

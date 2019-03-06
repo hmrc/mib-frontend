@@ -7,6 +7,7 @@
 
 
 @(form: Form[Prices],
+errorForm : Form[Prices],
 currentPage: String,
 formAction: Call)(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
 
@@ -28,7 +29,7 @@ title = Some(Messages("global.title")),
 includeHmrcLogo = true) {
 
 
-@if(form.hasErrors) { @uiHelpers.errorSummary(Messages("global.error-header"), form) }
+@if(errorForm.hasErrors) { @uiHelpers.errorSummary(Messages("global.error-header"), errorForm) }
 
 @uiHelpers.form(
 action = formAction,
@@ -49,9 +50,14 @@ action = formAction,
     <input type="hidden" name="page" value="@currentPage" />
 
     @for(field <- Seq("purchasePrice")) {
+
     <div id="@field-fieldset" class="form-group @form.errors(field).map { e => form-group-error }">
 
-        £ <input type="number" class="form-control @if(form.errors(field).nonEmpty) { form-control-error }" name="@field" id="@field" value="@form(field).value" />
+        <label for="@field" class="form-label">
+            @views.html.partial.error_message_form_input(field,form)
+        </label>
+
+        <input type="text" class="form-control @if(form.errors(field).nonEmpty) { form-control-error }" name="@field" id="@field" value="@form(field).value" @if(field == "postcode") { style="width: 150px" }/>
 
     </div>
     }

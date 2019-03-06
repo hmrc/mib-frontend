@@ -34,11 +34,11 @@ class MibController @Inject() (val messagesApi: MessagesApi, countriesService: C
       )),
       {
 
-        case SelectDecType(Some("1")) => Ok(purchase_prices(Prices.fromSession(request.session, MibTypes.mibImport).fold(prices)(prices.fill(_)),
+        case SelectDecType(Some("1")) => Ok(purchase_prices(Prices.fromSession(request.session, MibTypes.mibImport).fold(prices)(prices.fill(_)), prices,
                                                             ImportPages.prices.case_value, controllers.routes.ImportController.submitImportPage()))
           .addingToSession(SelectDecType.toSession(SelectDecType(Some("1"))): _*)
         case SelectDecType(Some("2")) => Ok(purchase_prices(Prices
-          .fromSession(request.session, MibTypes.mibExport).fold(prices)(prices.fill(_)), ExportPages.prices.toString, controllers.routes.ExportController.submitExportPage()))
+          .fromSession(request.session, MibTypes.mibExport).fold(prices)(prices.fill(_)), prices, ExportPages.prices.toString, controllers.routes.ExportController.submitExportPage()))
           .addingToSession(SelectDecType.toSession(SelectDecType(Some("2"))): _*)
       }
     )

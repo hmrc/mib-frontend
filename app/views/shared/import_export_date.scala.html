@@ -7,6 +7,7 @@
 
 
 @(form: Form[ImportExportDate],
+errorSummaryForm: Form[ImportExportDate],
 currentPage: String,
 previousPage: Call,
 currentSubmit: Call,
@@ -30,7 +31,7 @@ title = Some(Messages("global.title")),
 includeHmrcLogo = true) {
 
 
-@if(form.hasErrors) { @uiHelpers.errorSummary(Messages("global.error-header"), form) }
+@if(errorSummaryForm.hasErrors) { @uiHelpers.errorSummary(Messages("global.error-header"), errorSummaryForm) }
 
 @uiHelpers.form(
 action = currentSubmit,
@@ -53,31 +54,35 @@ action = currentSubmit,
 
     <!-- -->
 
+    <label class="form-label">@if(form.errors("importExportDay").nonEmpty) { @for(error <- form.errors("importExportDay")) {
+        <span id="@error.message-importDay" class="error-message">@Messages(error.message)</span>
+        }
+        }
+    </label>
+    <label class="form-label">@if(form.errors("importExportMonth").nonEmpty) { @for(error <- form.errors("importExportMonth")) {
+        <span id="@error.message-importMonth" class="error-message">@Messages(error.message)</span>
+        }
+        }
+    </label>
+    <label class="form-label">@if(form.errors("importExportYear").nonEmpty) { @for(error <- form.errors("importExportYear")) {
+        <span id="@error.message-importYear" class="error-message">@Messages(error.message)</span>
+        }
+        }
+    </label>
+
     <div id="arrival-fieldset" class="form-group">
         <span class="form-hint">@Messages("shared.date.example")</span>
         <div class="form-date" id="arrivalDatesId">
             <div class="form-group form-group-day" id="arrivaldaydiv">
-                <label for="importExportDay" class="form-label">@Messages("global.day") @if(form.errors("importExportDay").nonEmpty) { @for(error <- form.errors("importExportDay")) {
-                    <span id="@error.message-importDay" class="error-message">@Messages(error.message)</span>
-                    }
-                    }
-                </label>
+                <label for="importExportDay" class="form-label">@Messages("global.day")</label>
                 <input type="number" class="form-control @if(form.errors("importExportDay").nonEmpty) { form-control-error }" name="importExportDay" id="importExportDay" value="@form("importExportDay").value" />
             </div>
             <div class="form-group form-group-month" id="arrivalmonthdiv">
-                <label for="importExportMonth" class="form-label">@Messages("global.month") @if(form.errors("importExportMonth").nonEmpty) { @for(error <- form.errors("importExportMonth")) {
-                    <span id="@error.message-importMonth" class="error-message">@Messages(error.message)</span>
-                    }
-                    }
-                </label>
+                <label for="importExportMonth" class="form-label">@Messages("global.month")</label>
                 <input type="number" class="form-control @if(form.errors("importExportMonth").nonEmpty) { form-control-error }" name="importExportMonth" id="importExportMonth" value="@form("importExportMonth").value" />
             </div>
             <div class="form-group form-group-year" id="arrivalyeardiv">
-                <label for="importExportYear" class="form-label">@Messages("global.year") @if(form.errors("importExportYear").nonEmpty) { @for(error <- form.errors("importExportYear")) {
-                    <span id="@error.message-importYear" class="error-message">@Messages(error.message)</span>
-                    }
-                    }
-                </label>
+                <label for="importExportYear" class="form-label">@Messages("global.year")</label>
                 <input type="number" class="form-control @if(form.errors("importExportYear").nonEmpty) { form-control-error }" name="importExportYear" id="importYear" value="@form("importExportYear").value" />
             </div>
 
