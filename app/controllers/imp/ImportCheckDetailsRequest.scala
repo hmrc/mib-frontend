@@ -7,7 +7,7 @@ import controllers.FormsShared.{importExportDate, merchandiseDetails, traderDeta
 import exceptions.MibException
 import javax.inject.{Inject, Singleton}
 import model.imp.{JourneyDetailsImp, PricesTaxesImp, TaxDueImp, TraderDetailsCheckImp}
-import model.shared.{ImportExportDate, MerchandiseDetails, TraderDetails}
+import model.shared.{ImportExportDate, MerchandiseDetails, Prices, TraderDetails}
 import model.{ImportPages, MibTypes}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{AnyContent, Request, Results}
@@ -29,7 +29,8 @@ class ImportCheckDetailsRequest @Inject() (val messagesApi: MessagesApi, countri
     val traderCheck = traderDetailsCheckImp.fill(TraderDetailsCheckImp(traderFull.getFormattedAddress(traderFull.country.fold("")(countriesService.getCountry(_))), traderFull.vrn, traderFull.vehicleRegNo))
     val arrival = importExportDate.fill(ImportExportDate.fromSession(request.session, MibTypes.mibImport).getOrElse(throw new MibException("ImportExport date Details not found")))
     val prices = PricesTaxesImp.fromSession(request.session).getOrElse(throw new MibException("Prices Details not found"))
-    val due = taxDueImp.fill(TaxDueImp(prices.purchasePrice, prices.customsDuty, prices.importVat, prices.customsDuty + prices.importVat))
+    val pricesVal = Prices.fromSession(request.session, MibTypes.mibImport).getOrElse(throw new MibException("Prices details not found"))
+    val due = taxDueImp.fill(TaxDueImp(pricesVal.purchasePrice, prices.customsDuty, prices.importVat, prices.customsDuty + prices.importVat))
     Ok(check_details(journey,
                      traderCheck,
                      merchandise,

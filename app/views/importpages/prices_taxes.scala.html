@@ -49,20 +49,16 @@ action = controllers.routes.ImportController.submitImportPage(),
     @views.html.partial.error_message_form_input("import-pricestaxes", form)
     <input type="hidden" name="page" value="@currentPage" />
 
-    @for(field <- Seq("purchasePrice","customsDuty", "importVat")) {
+    @for(field <- Seq("customsDuty", "importVat")) {
     <div id="@field-fieldset" class="form-group @form.errors(field).map { e => form-group-error }">
 
         <label for="@field" class="form-label">
             @Messages("import.pricestaxes." + field)
             @views.html.partial.error_message_form_input(field,form)
         </label>
-        @if(field != "purchasePrice"){
-         <input type="number" class="form-control @if(form.errors(field).nonEmpty) { form-control-error }" name="@field" id="@field" value="@form(field).value" />
-        }
-        @if(field == "purchasePrice"){
-        <span class="table-heading" aria-hidden="true">£@purchasePrice.toDouble.formatted("%,1.2f")</span>
-        <input type="hidden" name="@field" id="@field" value="@purchasePrice" />
-        }
+        <input type="number" class="form-control @if(form.errors(field).nonEmpty) { form-control-error }" name="@field" id="@field" value="@form(field).value" />
+
+
     </div>
     }
 

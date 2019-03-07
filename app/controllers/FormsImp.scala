@@ -18,7 +18,6 @@ object FormsImp {
 
   def pricesTaxesImp: Form[PricesTaxesImp] = {
     Form(mapping(
-      "purchasePrice" -> of(doubleFormat),
       "customsDuty" -> of(doubleFormat),
       "importVat" -> of(doubleFormat)
     )(PricesTaxesImp.apply)(PricesTaxesImp.unapply))

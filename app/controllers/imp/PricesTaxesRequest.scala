@@ -32,7 +32,8 @@ class PricesTaxesRequest @Inject() (val messagesApi: MessagesApi)(implicit ec: E
       {
         valueInForm =>
           {
-            val due = TaxDueImp(valueInForm.purchasePrice, valueInForm.customsDuty, valueInForm.importVat, valueInForm.customsDuty + valueInForm.importVat)
+            val pricesVal = Prices.fromSession(request.session, MibTypes.mibImport).getOrElse(throw new MibException("Prices details not found"))
+            val due = TaxDueImp(pricesVal.purchasePrice, valueInForm.customsDuty, valueInForm.importVat, valueInForm.customsDuty + valueInForm.importVat)
             Ok(tax_due(taxDueImp.fill(due), ImportPages.tax_due.case_value, ImportPages.prices_taxes.case_value)).addingToSession(PricesTaxesImp.toSession(valueInForm): _*)
           }
       }

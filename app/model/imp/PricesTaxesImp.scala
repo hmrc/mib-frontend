@@ -2,20 +2,18 @@ package model.imp
 
 import play.api.mvc.Session
 
-final case class PricesTaxesImp(purchasePrice: Double, customsDuty: Double, importVat: Double)
+final case class PricesTaxesImp(customsDuty: Double, importVat: Double)
 
 object PricesTaxesImp {
 
   object Key {
-    val PurchasePrice = "purchasePriceTaxesImp"
     val CustomsDuty = "customsDutyImp"
     val ImportVat = "importVatImp"
   }
 
   def getKeys(): Seq[String] = {
     Seq(Key.CustomsDuty,
-        Key.ImportVat,
-        Key.PurchasePrice)
+        Key.ImportVat)
   }
 
   def fromSession(session: Session): Option[PricesTaxesImp] = {
@@ -28,11 +26,10 @@ object PricesTaxesImp {
 
       def mandatoryDouble(name: String): Double = session.get(name).getOrElse("").toDouble
 
-    if (optional(Key.PurchasePrice).isEmpty)
+    if (optional(Key.CustomsDuty).isEmpty)
       None
     else
       Some(PricesTaxesImp(
-        mandatoryDouble(Key.PurchasePrice),
         mandatoryDouble(Key.CustomsDuty),
         mandatoryDouble(Key.ImportVat)
       ))
@@ -40,7 +37,6 @@ object PricesTaxesImp {
 
   def toSession(page: PricesTaxesImp): Seq[(String, String)] = {
     Map(
-      Key.PurchasePrice -> page.purchasePrice.toString,
       Key.CustomsDuty -> page.customsDuty.toString,
       Key.ImportVat -> page.importVat.toString
     ).toSeq

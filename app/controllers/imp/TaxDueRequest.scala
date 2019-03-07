@@ -5,8 +5,9 @@ import config.AppConfig
 import controllers.FormsImp.{journeyDetailsImp, taxDueImp}
 import exceptions.MibException
 import javax.inject.{Inject, Singleton}
-import model.ImportPages
+import model.{ImportPages, MibTypes}
 import model.imp.{JourneyDetailsImp, PricesTaxesImp, TaxDueImp}
+import model.shared.Prices
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{AnyContent, Request, Results}
 import views.html.importpages.{journey_details, tax_due}
@@ -23,7 +24,8 @@ class TaxDueRequest @Inject() (val messagesApi: MessagesApi, countriesService: C
 
   def get(implicit request: Request[AnyContent]) = {
     val prices = PricesTaxesImp.fromSession(request.session).getOrElse(throw new MibException("Prices Details not found"))
-    val due = TaxDueImp(prices.purchasePrice, prices.customsDuty, prices.importVat, prices.customsDuty + prices.importVat)
+    val pricesVal = Prices.fromSession(request.session, MibTypes.mibImport).getOrElse(throw new MibException("Prices details not found"))
+    val due = TaxDueImp(pricesVal.purchasePrice, prices.customsDuty, prices.importVat, prices.customsDuty + prices.importVat)
     Ok(tax_due(taxDueImp.fill(due),
                ImportPages.tax_due.case_value, ImportPages.prices_taxes.case_value))
   }

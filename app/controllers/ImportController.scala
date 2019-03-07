@@ -9,7 +9,7 @@ import exceptions.MibException
 import javax.inject.{Inject, Singleton}
 import model.imp.PricesTaxesImp
 import model.payapi.SpjRequest
-import model.shared.{MerchandiseDetails, TraderDetails}
+import model.shared.{MerchandiseDetails, Prices, TraderDetails}
 import model.{ImportPages, MibTypes}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
@@ -89,7 +89,7 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
     val traderFull = traderDetails.fill(TraderDetails.fromSession(request.session, MibTypes.mibImport).getOrElse(throw new MibException("Trader Details not found"))).get
     val address = traderFull.getFormattedAddress(traderFull.country.fold("")(countriesService.getCountry(_)))
     val mibRefernce = refService.importRef
-    val amtInPence = PricesTaxesImp.fromSession(request.session).getOrElse(throw new MibException("Prices Details not found")).purchasePrice * 100
+    val amtInPence = Prices.fromSession(request.session, MibTypes.mibImport).getOrElse(throw new MibException("Prices details not found")).purchasePrice * 100
     val description = MerchandiseDetails.fromSession(request.session, MibTypes.mibImport).getOrElse(throw new MibException("Merchandise Details not found")).desciptionOfGoods
 
     val journeyRequest = SpjRequest(mibRef                 = mibRefernce,
