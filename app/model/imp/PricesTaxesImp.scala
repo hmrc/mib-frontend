@@ -2,7 +2,7 @@ package model.imp
 
 import play.api.mvc.Session
 
-case class PricesTaxesImp(purchasePrice: Double, customsDuty: Double, importVat: Double)
+final case class PricesTaxesImp(purchasePrice: Double, customsDuty: Double, importVat: Double)
 
 object PricesTaxesImp {
 

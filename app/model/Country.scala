@@ -1,3 +1,3 @@
 package model
 
-case class Country(name: String, code: String)
+final case class Country(name: String, code: String)

@@ -1,7 +1,6 @@
 package controllers
 
 import model.imp._
-import model.shared.{MerchandiseDetails, TraderDetails}
 import play.api.data.Forms.{optional, _}
 import play.api.data._
 import play.api.data.format.Formats._

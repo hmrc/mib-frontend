@@ -37,6 +37,7 @@ class ExportJourneyDetailsRequest @Inject() (val messagesApi: MessagesApi, count
     )
 
   }
+
   def get(implicit request: Request[AnyContent]) = {
     Ok(export_journey_details(journeyDetailsExp.fill(JourneyDetailsExp.fromSession(request.session).getOrElse(throw new MibException("Journey Details not found"))),
                               countriesService.getCountries, ExportPages.journey_details.toString, ExportPages.export_date.case_value))

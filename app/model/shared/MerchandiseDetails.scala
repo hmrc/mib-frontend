@@ -3,7 +3,7 @@ package model.shared
 import model.MibType
 import play.api.mvc.Session
 
-case class MerchandiseDetails(invoiceNumber: Option[String], desciptionOfGoods: String)
+final case class MerchandiseDetails(invoiceNumber: Option[String], desciptionOfGoods: String)
 
 object MerchandiseDetails extends Shared {
 

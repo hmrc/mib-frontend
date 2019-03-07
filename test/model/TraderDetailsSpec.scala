@@ -1,15 +1,7 @@
 package model
 
-import java.text.SimpleDateFormat
-import java.time.{LocalDate, ZoneId}
-import java.util.Calendar
-
-import uk.gov.hmrc.play.test.UnitSpec
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{Matchers, WordSpec}
-import play.api.Logger
-import play.api.data.format
-import play.api.mvc.Session
 
 class TraderDetailsSpec extends WordSpec with Matchers with ScalaFutures {
   //

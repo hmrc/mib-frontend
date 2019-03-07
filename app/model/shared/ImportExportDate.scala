@@ -3,10 +3,9 @@ package model.shared
 import java.time.{LocalDate, ZoneId}
 
 import model.MibType
-import play.api.Logger
 import play.api.mvc.Session
 
-case class ImportExportDate(importExportDay: Int, importExportMonth: Int, importExportYear: Int) {
+final case class ImportExportDate(importExportDay: Int, importExportMonth: Int, importExportYear: Int) {
 
   def isValidDate: Boolean = {
 
@@ -40,7 +39,7 @@ object ImportExportDate extends Shared {
   object Key {
     val ImportExportDay = "importExportDay"
     val ImportExportMonth = "importExportMonth"
-    val ImportExportYear = "importExportYearImp"
+    val ImportExportYear = "importExportYear"
   }
 
   def getKeys(mibType: MibType): Seq[String] = {

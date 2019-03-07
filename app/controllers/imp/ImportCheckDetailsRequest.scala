@@ -11,6 +11,7 @@ import model.shared.{ImportExportDate, MerchandiseDetails, TraderDetails}
 import model.{ImportPages, MibTypes}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{AnyContent, Request, Results}
+import uk.gov.hmrc.http.HeaderCarrier
 import views.html.importpages.check_details
 
 import scala.concurrent.ExecutionContext
@@ -18,9 +19,7 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class ImportCheckDetailsRequest @Inject() (val messagesApi: MessagesApi, countriesService: CountriesService)(implicit ec: ExecutionContext, appConfig: AppConfig) extends I18nSupport with Results {
 
-  def post(implicit request: Request[AnyContent]) = {
-    Ok
-  }
+  private implicit val hc: HeaderCarrier = HeaderCarrier()
 
   def get(implicit request: Request[AnyContent]) = {
     val journey = journeyDetailsImp.fill(JourneyDetailsImp.fromSession(request.session).getOrElse(throw new MibException("Journey Details not found")))

@@ -9,7 +9,6 @@ import javax.inject.{Inject, Singleton}
 import model.imp.PricesTaxesImp
 import model.shared.{ImportExportDate, Prices}
 import model.{ImportPages, MibTypes}
-import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{AnyContent, Request, Results}
 import views.html.importpages.prices_taxes

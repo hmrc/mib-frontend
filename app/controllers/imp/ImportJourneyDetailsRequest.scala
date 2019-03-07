@@ -3,18 +3,18 @@ package controllers.imp
 import Service.CountriesService
 import config.AppConfig
 import controllers.FormsImp.journeyDetailsImp
-import controllers.FormsShared.{importExportDate, prices, traderDetails}
+import controllers.FormsShared.traderDetails
 import exceptions.MibException
-import model.{ImportPages, MibTypes}
-import model.shared.{ImportExportDate, Prices, TraderDetails}
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{AnyContent, Request, Results}
-import views.html.shared.{import_export_date, purchase_prices, trader_details}
-
-import scala.concurrent.ExecutionContext
 import javax.inject.{Inject, Singleton}
 import model.imp.JourneyDetailsImp
+import model.shared.TraderDetails
+import model.{ImportPages, MibTypes}
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{AnyContent, Request, Results}
 import views.html.importpages.journey_details
+import views.html.shared.trader_details
+
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class ImportJourneyDetailsRequest @Inject() (val messagesApi: MessagesApi, countriesService: CountriesService)(implicit ec: ExecutionContext, appConfig: AppConfig) extends I18nSupport with Results {
@@ -39,6 +39,7 @@ class ImportJourneyDetailsRequest @Inject() (val messagesApi: MessagesApi, count
     )
 
   }
+
   def get(implicit request: Request[AnyContent]) = {
     Ok(journey_details(journeyDetailsImp.fill(JourneyDetailsImp.fromSession(request.session).getOrElse(throw new MibException("Journey Details not found"))),
                        countriesService.getCountries, ImportPages.journey_details.case_value, ImportPages.tax_due.case_value))

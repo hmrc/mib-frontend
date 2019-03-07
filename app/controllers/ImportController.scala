@@ -1,10 +1,16 @@
 package controllers
 
-import Service.CountriesService
+import Service.{CountriesService, RefService}
 import config.AppConfig
+import connector.PayApiConnector
+import controllers.FormsShared.traderDetails
 import controllers.imp._
+import exceptions.MibException
 import javax.inject.{Inject, Singleton}
-import model.ImportPages
+import model.imp.PricesTaxesImp
+import model.payapi.SpjRequest
+import model.shared.{MerchandiseDetails, TraderDetails}
+import model.{ImportPages, MibTypes}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -17,7 +23,8 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
                                   pricesRequest: ImportPricesRequest, importDateRequest: ImportDateRequest,
                                   pricesTaxesRequest: PricesTaxesRequest, importJourneyDetailsRequest: ImportJourneyDetailsRequest,
                                   importTraderDetailsRequest: ImportTraderDetailsRequest, importMerchandiseDetails: ImportMerchandiseDetails,
-                                  taxDueRequest: TaxDueRequest, importCheckDetailsRequest: ImportCheckDetailsRequest)
+                                  taxDueRequest: TaxDueRequest, importCheckDetailsRequest: ImportCheckDetailsRequest, payApiConnector: PayApiConnector,
+                                  refService: RefService)
   (implicit ec: ExecutionContext, appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   //------------------------------------------------------------------------------------------------------------------------------
@@ -72,12 +79,23 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
 
       case Some(ImportPages.merchandise_details.case_value) => importMerchandiseDetails.post
 
-      case Some(ImportPages.check_details.case_value)       => importCheckDetailsRequest.post
-
       case _ => {
         Ok(error_template("Merchandise in Baggage", "Merchandise in Baggage", "Page not found"))
       }
     }
+  }
+
+  def startJourney: Action[AnyContent] = Action.async { implicit request =>
+    val traderFull = traderDetails.fill(TraderDetails.fromSession(request.session, MibTypes.mibImport).getOrElse(throw new MibException("Trader Details not found"))).get
+    val address = traderFull.getFormattedAddress(traderFull.country.fold("")(countriesService.getCountry(_)))
+    val mibRefernce = refService.importRef
+    val amtInPence = PricesTaxesImp.fromSession(request.session).getOrElse(throw new MibException("Prices Details not found")).purchasePrice * 100
+    val description = MerchandiseDetails.fromSession(request.session, MibTypes.mibImport).getOrElse(throw new MibException("Merchandise Details not found")).desciptionOfGoods
+
+    val journeyRequest = SpjRequest(mibRef                 = mibRefernce,
+                                    amountInPence          = amtInPence.intValue(), traderAddress = address, descriptionMerchandise = description)
+
+    payApiConnector.createJourney(journeyRequest).map(response => Redirect(response.nextUrl))
   }
 
 }

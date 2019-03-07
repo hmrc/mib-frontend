@@ -14,6 +14,7 @@ class Module() extends AbstractModule {
   @Singleton
   def serviceConfig(environment: Environment, configuration: Configuration): ServicesConfig = new ServicesConfig {
     def mode: Mode = environment.mode
+
     def runModeConfiguration: Configuration = configuration
   }
 }

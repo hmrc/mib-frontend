@@ -2,7 +2,7 @@ package model.exp
 
 import play.api.mvc.Session
 
-case class DeclarationReceived(currentDate: String, traderNameAndAddress: String, description: String, mibReference: String)
+final case class DeclarationReceived(currentDate: String, traderNameAndAddress: String, description: String, mibReference: String)
 
 object DeclarationReceived {
 

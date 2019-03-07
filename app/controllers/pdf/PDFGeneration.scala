@@ -31,4 +31,5 @@ trait PDFGeneration extends I18nSupport {
       s"$taxType payment $formattedDate.pdf"
     }
   }
+
 }

@@ -13,3 +13,6 @@ GET        /export-page/:page                      controllers.ExportController.
 POST       /export-page                            controllers.ExportController.submitExportPage
 
 GET         /export-page/declaration/successful/download-pdf   controllers.pdf.DeclarationSuccessfulPDFController.downloadPDF
+
+
+POST       /start-journey                           controllers.ImportController.startJourney

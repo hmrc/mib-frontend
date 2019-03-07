@@ -3,7 +3,7 @@ package model.shared
 import model.MibType
 import play.api.mvc.Session
 
-case class Prices(purchasePrice: Double)
+final case class Prices(purchasePrice: Double)
 
 object Prices extends Shared {
 

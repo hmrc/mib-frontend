@@ -3,10 +3,10 @@ package model.shared
 import model.MibType
 import play.api.mvc.Session
 
-case class TraderDetails(uk: String = "Yes", trader: String, line1: Option[String], line2: Option[String] = None,
-                         city: Option[String] = None, county: Option[String] = None,
-                         postcode: Option[String] = None, country: Option[String] = None, vrn: Option[String] = None,
-                         vehicleRegNo: Option[String] = None, line3: Option[String] = None, buildingAndStreet: Option[String], line2nonuk: Option[String]) {
+final case class TraderDetails(uk: String = "Yes", trader: String, line1: Option[String], line2: Option[String] = None,
+                               city: Option[String] = None, county: Option[String] = None,
+                               postcode: Option[String] = None, country: Option[String] = None, vrn: Option[String] = None,
+                               vehicleRegNo: Option[String] = None, line3: Option[String] = None, buildingAndStreet: Option[String], line2nonuk: Option[String]) {
 
   val lineReturn = "<br>"
 
@@ -14,7 +14,7 @@ case class TraderDetails(uk: String = "Yes", trader: String, line1: Option[Strin
 
     uk match {
       case "Yes" => trader + lineReturn + buildingAndStreet.fold("")(_ + lineReturn) + line2.fold("")(_ + lineReturn) + city.fold("")(_ + lineReturn) +
-        county.fold("")(_ + lineReturn) + postcode.fold("")(_ + lineReturn)
+        county.fold("")(_ + lineReturn) + postcode
       case "No" => trader + lineReturn + line1.fold("")(_ + lineReturn) + line2nonuk.fold("")(_ + lineReturn) + line3.fold("")(_ + lineReturn) + countryName
     }
 
@@ -38,6 +38,7 @@ object TraderDetails extends Shared {
     val BuildingAndStreet = "buildingAndStreet"
     val Line2nonuk = "line2nonuk"
   }
+
   def getKeys(mibType: MibType): Seq[String] = {
     Seq(Key.City + mibType.caseValue,
       Key.Country + mibType.caseValue,

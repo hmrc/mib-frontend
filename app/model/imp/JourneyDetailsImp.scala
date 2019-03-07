@@ -2,7 +2,7 @@ package model.imp
 
 import play.api.mvc.Session
 
-case class JourneyDetailsImp(portOfEntry: String, countryOfOrigin: String, eori: Option[String])
+final case class JourneyDetailsImp(portOfEntry: String, countryOfOrigin: String, eori: Option[String])
 
 object JourneyDetailsImp {
 

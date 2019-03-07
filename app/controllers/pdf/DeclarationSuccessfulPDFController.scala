@@ -1,13 +1,11 @@
 package controllers.pdf
 
 import connector.PdfGeneratorConnector
-import controllers.FormsExp.declarationReceived
 import exceptions.MibException
 import javax.inject.{Inject, Singleton}
 import model.exp.DeclarationReceived
-import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Request}
+import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.http.BadRequestException
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.pdf.declaration_successful_pdf
@@ -30,10 +28,9 @@ class DeclarationSuccessfulPDFController @Inject() (
         case OK => Ok(response.bodyAsBytes.toArray).as("application/pdf")
           .withHeaders(
             "Content-Disposition" -> s"""attachment; filename="${FileName("reference".toString)}"""").as("application/pdf")
-        case _ =>
-          {
-            throw new BadRequestException(s"""PDF Generation Failed with Body: ${response.body}""")
-          }
+        case _ => {
+          throw new BadRequestException(s"""PDF Generation Failed with Body: ${response.body}""")
+        }
       }
     }
   }

@@ -11,13 +11,13 @@ class RefService {
   def exportRef =
     "MIBE" + getUniqueNumber
 
-  def getUniqueNumber = {
+  private def getUniqueNumber = {
 
     /**
-     *  As of 4/3/2019 MS = 1551716551179  (x)
-     *  There are 86400000 ms in a day  (y)
-     *  x/y = 17960
-     *  we take the first 4 ms in (x) meaning this is a max of 10 days value
+     * As of 4/3/2019 MS = 1551716551179  (x)
+     * There are 86400000 ms in a day  (y)
+     * x/y = 17960
+     * we take the first 4 ms in (x) meaning this is a max of 10 days value
      *
      */
 

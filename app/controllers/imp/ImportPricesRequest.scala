@@ -3,14 +3,14 @@ package controllers.imp
 import config.AppConfig
 import controllers.FormsShared.{importExportDate, prices}
 import exceptions.MibException
-import model.{ImportPages, MibTypes}
+import javax.inject.{Inject, Singleton}
 import model.shared.{ImportExportDate, Prices}
+import model.{ImportPages, MibTypes}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{AnyContent, Request, Results}
 import views.html.shared.{import_export_date, purchase_prices}
 
 import scala.concurrent.ExecutionContext
-import javax.inject.{Inject, Singleton}
 
 @Singleton
 class ImportPricesRequest @Inject() (val messagesApi: MessagesApi)(implicit ec: ExecutionContext, appConfig: AppConfig) extends I18nSupport with Results {

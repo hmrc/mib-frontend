@@ -1,11 +1,10 @@
 package controllers
 
-import java.time.{LocalDate, ZoneId}
 import java.time.temporal.ChronoUnit.DAYS
+import java.time.{LocalDate, ZoneId}
 
-import model.shared.{ImportExportDate, Prices, TraderDetails}
+import model.shared.{ImportExportDate, TraderDetails}
 import model.{MibType, MibTypes}
-import play.api.Logger
 import play.api.data.format.Formatter
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 import play.api.data.{Form, FormError}

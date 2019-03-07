@@ -35,7 +35,7 @@ includeHmrcLogo = true) {
 @if(form.hasErrors) { @uiHelpers.errorSummary(Messages("global.error-header"), form) }
 
 @uiHelpers.form(
-action = controllers.routes.ImportController.submitImportPage(),
+action = controllers.routes.ImportController.startJourney(),
 'id -> "import_dec_type_form",
 'class -> "form js-form",
 'autocomplete -> "off",

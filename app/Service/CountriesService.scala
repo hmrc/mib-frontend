@@ -1,10 +1,10 @@
 package Service
 
 import javax.inject.{Inject, Singleton}
-import play.api.i18n.{I18nSupport, Messages, MessagesApi}
-import play.api.mvc.{AnyContent, Request}
 import model.Country
 import play.api.Environment
+import play.api.i18n.{I18nSupport, Messages, MessagesApi}
+import play.api.mvc.{AnyContent, Request}
 
 import scala.io.Source
 

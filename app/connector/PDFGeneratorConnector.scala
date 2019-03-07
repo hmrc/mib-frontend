@@ -1,7 +1,6 @@
 package connector
 
 import javax.inject.{Inject, Singleton}
-import play.api.Logger
 import play.api.libs.ws.{WSClient, WSResponse}
 import uk.gov.hmrc.play.config.ServicesConfig
 

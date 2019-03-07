@@ -2,7 +2,7 @@ package model.exp
 
 import play.api.mvc.Session
 
-case class JourneyDetailsExp(portOfEntry: String, eori: Option[String])
+final case class JourneyDetailsExp(portOfEntry: String, eori: Option[String])
 
 object JourneyDetailsExp {
 
