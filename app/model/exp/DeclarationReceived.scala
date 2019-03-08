@@ -7,10 +7,10 @@ final case class DeclarationReceived(currentDate: String, traderNameAndAddress: 
 object DeclarationReceived {
 
   object Key {
-    val CurrentDate = "currentDateExp"
-    val TraderNameAndAddress = "traderNameAndAddressExp"
-    val Description = "descriptionExp"
-    val MibReference = "mibReferenceExp"
+    val CurrentDate = "currentDate"
+    val TraderNameAndAddress = "traderNameAndAddress"
+    val Description = "description"
+    val MibReference = "mibReference"
   }
 
   def fromSession(session: Session): Option[DeclarationReceived] = {

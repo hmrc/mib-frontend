@@ -6,15 +6,16 @@ import play.api.mvc.Session
 final case class TraderDetails(uk: String = "Yes", trader: String, line1: Option[String], line2: Option[String] = None,
                                city: Option[String] = None, county: Option[String] = None,
                                postcode: Option[String] = None, country: Option[String] = None, vrn: Option[String] = None,
-                               vehicleRegNo: Option[String] = None, line3: Option[String] = None, buildingAndStreet: Option[String], line2nonuk: Option[String]) {
+                               vehicleRegNo: Option[String] = None, line3: Option[String] = None, buildingAndStreet: Option[String],
+                               line2nonuk: Option[String]) {
 
   val lineReturn = "<br>"
 
-  def getFormattedAddress(countryName: String) = {
+  def getFormattedAddress(countryName: String): String = {
 
     uk match {
       case "Yes" => trader + lineReturn + buildingAndStreet.fold("")(_ + lineReturn) + line2.fold("")(_ + lineReturn) + city.fold("")(_ + lineReturn) +
-        county.fold("")(_ + lineReturn) + postcode
+        county.fold("")(_ + lineReturn) + postcode.fold("")(_ + "")
       case "No" => trader + lineReturn + line1.fold("")(_ + lineReturn) + line2nonuk.fold("")(_ + lineReturn) + line3.fold("")(_ + lineReturn) + countryName
     }
 
@@ -40,19 +41,19 @@ object TraderDetails extends Shared {
   }
 
   def getKeys(mibType: MibType): Seq[String] = {
-    Seq(Key.City + mibType.caseValue,
-      Key.Country + mibType.caseValue,
-      Key.County + mibType.caseValue,
-      Key.Line1 + mibType.caseValue,
-      Key.Line2 + mibType.caseValue,
-      Key.Line3 + mibType.caseValue,
-      Key.Postcode + mibType.caseValue,
-      Key.Trader + mibType.caseValue,
-      Key.VehicleRegNo + mibType.caseValue,
-      Key.Vrn + mibType.caseValue,
-      Key.Uk + mibType.caseValue,
-      Key.BuildingAndStreet + mibType.caseValue,
-      Key.Line2nonuk + mibType.caseValue)
+    Seq(Key.City + appendVal(mibType),
+      Key.Country + appendVal(mibType),
+      Key.County + appendVal(mibType),
+      Key.Line1 + appendVal(mibType),
+      Key.Line2 + appendVal(mibType),
+      Key.Line3 + appendVal(mibType),
+      Key.Postcode + appendVal(mibType),
+      Key.Trader + appendVal(mibType),
+      Key.VehicleRegNo + appendVal(mibType),
+      Key.Vrn + appendVal(mibType),
+      Key.Uk + appendVal(mibType),
+      Key.BuildingAndStreet + appendVal(mibType),
+      Key.Line2nonuk + appendVal(mibType))
   }
 
   def fromSession(session: Session, mibType: MibType): Option[TraderDetails] = {
@@ -64,40 +65,40 @@ object TraderDetails extends Shared {
 
       def mandatory(name: String): String = session.get(name).getOrElse("")
 
-    if (optional(Key.Uk + mibType.caseValue).isEmpty)
+    if (optional(Key.Uk + appendVal(mibType)).isEmpty)
       None
     else
       Some(TraderDetails(
-        mandatory(Key.Uk + mibType.caseValue),
-        mandatory(Key.Trader + mibType.caseValue),
-        optional(Key.Line1 + mibType.caseValue),
-        optional(Key.Line2 + mibType.caseValue),
-        optional(Key.City + mibType.caseValue),
-        optional(Key.County + mibType.caseValue),
-        optional(Key.Postcode + mibType.caseValue),
-        optional(Key.Country + mibType.caseValue),
-        optional(Key.Vrn + mibType.caseValue),
-        optional(Key.VehicleRegNo + mibType.caseValue),
-        optional(Key.Line3 + mibType.caseValue),
-        optional(Key.BuildingAndStreet + mibType.caseValue),
-        optional(Key.Line2nonuk + mibType.caseValue)))
+        mandatory(Key.Uk + appendVal(mibType)),
+        mandatory(Key.Trader + appendVal(mibType)),
+        optional(Key.Line1 + appendVal(mibType)),
+        optional(Key.Line2 + appendVal(mibType)),
+        optional(Key.City + appendVal(mibType)),
+        optional(Key.County + appendVal(mibType)),
+        optional(Key.Postcode + appendVal(mibType)),
+        optional(Key.Country + appendVal(mibType)),
+        optional(Key.Vrn + appendVal(mibType)),
+        optional(Key.VehicleRegNo + appendVal(mibType)),
+        optional(Key.Line3 + appendVal(mibType)),
+        optional(Key.BuildingAndStreet + appendVal(mibType)),
+        optional(Key.Line2nonuk + appendVal(mibType))))
   }
 
   def toSession(page: TraderDetails, mibType: MibType): Seq[(String, String)] = {
     Map(
-      Key.Uk + mibType.caseValue -> page.uk,
-      Key.Trader + mibType.caseValue -> page.trader,
-      Key.Line1 + mibType.caseValue -> page.line1.getOrElse(""),
-      Key.Line2 + mibType.caseValue -> page.line2.getOrElse(""),
-      Key.City + mibType.caseValue -> page.city.getOrElse(""),
-      Key.County + mibType.caseValue -> page.county.getOrElse(""),
-      Key.Postcode + mibType.caseValue -> page.postcode.getOrElse(""),
-      Key.Country + mibType.caseValue -> page.country.getOrElse(""),
-      Key.Vrn + mibType.caseValue -> page.vrn.getOrElse(""),
-      Key.VehicleRegNo + mibType.caseValue -> page.vehicleRegNo.getOrElse(""),
-      Key.Line3 + mibType.caseValue -> page.line3.getOrElse(""),
-      Key.BuildingAndStreet + mibType.caseValue -> page.buildingAndStreet.getOrElse(""),
-      Key.Line2nonuk + mibType.caseValue -> page.line2nonuk.getOrElse("")
+      Key.Uk + appendVal(mibType) -> page.uk,
+      Key.Trader + appendVal(mibType) -> page.trader,
+      Key.Line1 + appendVal(mibType) -> page.line1.getOrElse(""),
+      Key.Line2 + appendVal(mibType) -> page.line2.getOrElse(""),
+      Key.City + appendVal(mibType) -> page.city.getOrElse(""),
+      Key.County + appendVal(mibType) -> page.county.getOrElse(""),
+      Key.Postcode + appendVal(mibType) -> page.postcode.getOrElse(""),
+      Key.Country + appendVal(mibType) -> page.country.getOrElse(""),
+      Key.Vrn + appendVal(mibType) -> page.vrn.getOrElse(""),
+      Key.VehicleRegNo + appendVal(mibType) -> page.vehicleRegNo.getOrElse(""),
+      Key.Line3 + appendVal(mibType) -> page.line3.getOrElse(""),
+      Key.BuildingAndStreet + appendVal(mibType) -> page.buildingAndStreet.getOrElse(""),
+      Key.Line2nonuk + appendVal(mibType) -> page.line2nonuk.getOrElse("")
     ).toSeq
   }
 
