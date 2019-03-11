@@ -14,7 +14,8 @@ class PricesTaxesImpSpec extends WordSpec with Matchers with ScalaFutures {
     }
 
     "from-session " in {
-      PricesTaxesImp.fromSession(Session(Map("customsDutyImp" -> "1.01", "importVatImp" -> "1.02"))) shouldBe Some(PricesTaxesImp(1.01,1.02))}
+      PricesTaxesImp.fromSession(Session(Map("customsDutyImp" -> "1.01", "importVatImp" -> "1.02"))) shouldBe Some(PricesTaxesImp(1.01, 1.02))
+    }
 
   }
   "getkeys " in {

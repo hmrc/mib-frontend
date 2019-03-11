@@ -15,12 +15,13 @@ class DeclarationReceivedSpec extends WordSpec with Matchers with ScalaFutures {
 
     "from-session " in {
       DeclarationReceived.fromSession(Session(Map("currentDate" -> "currentDate", "traderNameAndAddress" -> "traderNameAndAddress",
-        "description" -> "description", "mibReference" -> "mibReference"))) shouldBe Some(DeclarationReceived("currentDate", "traderNameAndAddress", "description", "mibReference"))}
+        "description" -> "description", "mibReference" -> "mibReference"))) shouldBe Some(DeclarationReceived("currentDate", "traderNameAndAddress", "description", "mibReference"))
+    }
 
   }
   "getkeys " in {
 
-      DeclarationReceived.getKeys shouldBe Seq("traderNameAndAddress", "currentDate", "description", "mibReference")
+    DeclarationReceived.getKeys shouldBe Seq("traderNameAndAddress", "currentDate", "description", "mibReference")
 
   }
 

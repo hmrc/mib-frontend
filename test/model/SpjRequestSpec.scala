@@ -5,9 +5,9 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{Matchers, WordSpec}
 import play.api.libs.json._
 
-class JourneyRequestSpec extends WordSpec with Matchers with ScalaFutures {
+class SpjRequestSpec extends WordSpec with Matchers with ScalaFutures {
 
-  "JourneyRequest " should {
+  "SpjRequest " should {
     "create valid json" in {
 
       val j: SpjRequest = SpjRequest(mibRef                 = "MIBI1234567890", amountInPence = 9700000,

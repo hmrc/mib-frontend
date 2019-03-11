@@ -14,7 +14,8 @@ class JourneyDetailsImpSpec extends WordSpec with Matchers with ScalaFutures {
     }
 
     "from-session " in {
-      JourneyDetailsImp.fromSession(Session(Map("portOfEntryImp" -> "portOfEntryImp", "countryOfOriginImp" -> "countryOfOriginImp", "eoriImp" -> "eoriImp"))) shouldBe Some(JourneyDetailsImp("portOfEntryImp","countryOfOriginImp", Some("eoriImp")))}
+      JourneyDetailsImp.fromSession(Session(Map("portOfEntryImp" -> "portOfEntryImp", "countryOfOriginImp" -> "countryOfOriginImp", "eoriImp" -> "eoriImp"))) shouldBe Some(JourneyDetailsImp("portOfEntryImp", "countryOfOriginImp", Some("eoriImp")))
+    }
 
   }
   "getkeys " in {

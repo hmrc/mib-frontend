@@ -14,7 +14,8 @@ class JourneyDetailsExpSpec extends WordSpec with Matchers with ScalaFutures {
     }
 
     "from-session " in {
-      JourneyDetailsExp.fromSession(Session(Map("portOfEntryExp" -> "portOfEntryExp", "eoriExp" -> "eoriExp"))) shouldBe Some(JourneyDetailsExp("portOfEntryExp", Some("eoriExp")))}
+      JourneyDetailsExp.fromSession(Session(Map("portOfEntryExp" -> "portOfEntryExp", "eoriExp" -> "eoriExp"))) shouldBe Some(JourneyDetailsExp("portOfEntryExp", Some("eoriExp")))
+    }
 
   }
   "getkeys " in {

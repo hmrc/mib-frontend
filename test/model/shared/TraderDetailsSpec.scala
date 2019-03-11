@@ -72,17 +72,17 @@ class TraderDetailsSpec extends WordSpec with Matchers with ScalaFutures {
 
     "getAddress" should {
 
-      val trader : TraderDetails = TraderDetails(trader            = "trader", line1 = Some("line1"), line2 = Some("line2"),
-                                 city              = Some("city"), county = Some("county"), postcode = Some("postcode"), country = Some("country"),
-                                 vrn               = Some("vrn"), vehicleRegNo = Some("vehicleRegNo"), line3 = Some("line3"),
-                                 buildingAndStreet = Some("buildingAndStreet"), line2nonuk = Some("line2nonuk"))
+      val trader: TraderDetails = TraderDetails(trader            = "trader", line1 = Some("line1"), line2 = Some("line2"),
+                                                city              = Some("city"), county = Some("county"), postcode = Some("postcode"), country = Some("country"),
+                                                vrn               = Some("vrn"), vehicleRegNo = Some("vehicleRegNo"), line3 = Some("line3"),
+                                                buildingAndStreet = Some("buildingAndStreet"), line2nonuk = Some("line2nonuk"))
 
       "UK" in {
         trader.getFormattedAddress("") shouldBe "trader<br>buildingAndStreet<br>line2<br>city<br>county<br>postcode"
       }
 
       "Non-UK" in {
-        val tradernonuk : TraderDetails = trader.copy(uk = "No")
+        val tradernonuk: TraderDetails = trader.copy(uk = "No")
         tradernonuk.getFormattedAddress("Angola") shouldBe "trader<br>line1<br>line2nonuk<br>line3<br>Angola"
       }
     }
