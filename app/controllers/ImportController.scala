@@ -11,6 +11,7 @@ import model.imp.PricesTaxesImp
 import model.payapi.SpjRequest
 import model.shared.{MerchandiseDetails, Prices, TraderDetails}
 import model.{ImportPages, MibTypes}
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -89,7 +90,9 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
     val traderFull = traderDetails.fill(TraderDetails.fromSession(request.session, MibTypes.mibImport).getOrElse(throw new MibException("Trader Details not found"))).get
     val address = traderFull.getFormattedAddress(traderFull.country.fold("")(countriesService.getCountry(_)))
     val mibRefernce = refService.importRef
-    val amtInPence = Prices.fromSession(request.session, MibTypes.mibImport).getOrElse(throw new MibException("Prices details not found")).purchasePrice * 100
+    val pTax = PricesTaxesImp.fromSession(request.session).getOrElse(throw new MibException("PricesTaxesImp details not found"))
+    val amtInPence = (pTax.customsDuty + pTax.importVat) * 100
+
     val description = MerchandiseDetails.fromSession(request.session, MibTypes.mibImport).getOrElse(throw new MibException("Merchandise Details not found")).desciptionOfGoods
 
     val journeyRequest = SpjRequest(mibRef                 = mibRefernce,
