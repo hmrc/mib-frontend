@@ -74,3 +74,31 @@
 .margin-bottom-20{
     margin-bottom: 20px;
 }
+
+
+
+@media (min-width: 641px) {
+    /* line 46, assets/scss/layouts/_page.scss */
+    .content__body {
+        float:left;
+        width: 66.666667%
+    }
+    .report-error {
+        margin-top: 0;
+    }
+
+
+}
+
+#import_dec_type_form .grid-row{
+    padding:0 15px;
+}
+
+.govuk-box-highlight h1,
+.govuk-box-highlight h2{
+    margin-top:0;
+}
+
+.govuk-box-highlight h2{
+    margin-bottom:0;
+}

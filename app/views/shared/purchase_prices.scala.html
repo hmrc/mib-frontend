@@ -56,8 +56,8 @@ action = formAction,
         <label for="@field" class="form-label">
             @views.html.partial.error_message_form_input(field,form)
         </label>
-
-        <input type="text" class="form-control @if(form.errors(field).nonEmpty) { form-control-error }" name="@field" id="@field" value="@form(field).value" @if(field == "postcode") { style="width: 150px" }/>
+        <span>&pound;</span>
+        <input type="text" class="form-control form-control-1-4 @if(form.errors(field).nonEmpty) { form-control-error }" name="@field" id="@field" value="@form(field).value" @if(field == "postcode") { style="width: 150px" }/>
 
     </div>
     }
@@ -65,7 +65,7 @@ action = formAction,
     </div>
 
 </fieldset>
-
+<br>
 <div class="form-field">
     <button id="next" type="submit" class="button">@Messages("global.continue")</button>
 </div>

@@ -57,7 +57,7 @@ action = submitPage,
             }
             }
         </label>
-        <input type="text" class="form-control @if(form.errors("invoiceNumber").nonEmpty) { form-control-error }" name="invoiceNumber" id="invoiceNumber" value="@form("invoiceNumber").value" />
+        <input type="text" class="form-control form-control-3-4 @if(form.errors("invoiceNumber").nonEmpty) { form-control-error }" name="invoiceNumber" id="invoiceNumber" value="@form("invoiceNumber").value" />
     </div>
 
 
@@ -72,9 +72,9 @@ action = submitPage,
         </label>
 
         <textarea
-                class="@{if(form("desciptionOfGoods").hasErrors) "error-field form-field--error" else ""}"
+                class=" form-control @{if(form("desciptionOfGoods").hasErrors) "error-field form-field--error" else ""}"
         rows="5"
-        style="width: 75%; height: auto"
+        style="width:100%; height: auto"
         name="@{form("desciptionOfGoods").name}"
         id="@{form("desciptionOfGoods").id}"
         >@form("desciptionOfGoods").value.getOrElse("")</textarea>

@@ -40,7 +40,7 @@ action = controllers.routes.ImportController.submitImportPage(),
 
 
 
-    <div class="form-group @form.errors("import-journeydetails").map { e => form-group-error }">
+    <div class=" @form.errors("import-journeydetails").map { e => form-group-error }">
 
 
     @views.html.partial.error_message_form_input("import-journeydetails", form)
@@ -79,7 +79,7 @@ action = controllers.routes.ImportController.submitImportPage(),
 
 
     <div class="form-group">
-        <label for="eori" class="form-label">@Messages("import.journeydetails.eori") @Messages("global.optional") @if(form.errors("eori").nonEmpty) { @for(error <- form.errors("eori")) {
+        <label for="eori" class="form-label">@Messages("import.journeydetails.eori") @if(form.errors("eori").nonEmpty) { @for(error <- form.errors("eori")) {
             <span id="@error.message-eori" class="error-message">@Messages(error.message)</span>
             }
             }
@@ -92,7 +92,7 @@ action = controllers.routes.ImportController.submitImportPage(),
     <details>
         <summary><span class="summary">@Messages("import.journeydetails.details1")</span></summary>
         <div class="panel panel-border-narrow">
-            <p>@Messages("import.journeydetails.details2") <a href="https://www.tax.service.gov.uk/shortforms/form/EORIContact" target="_blank">@Messages("import.journeydetails.details3")</a> @Messages("import.journeydetails.details4")
+            <p>@Messages("import.journeydetails.details2")<br>@Messages("import.journeydetails.details2a") <a href="https://www.tax.service.gov.uk/shortforms/form/EORIContact" target="_blank">@Messages("import.journeydetails.details3")</a> @Messages("import.journeydetails.details4")
         </div>
     </details>
 
@@ -100,7 +100,7 @@ action = controllers.routes.ImportController.submitImportPage(),
 
 
 </fieldset>
-
+<br>
 <div class="form-field">
     <button id="next" type="submit" class="button">@Messages("global.continue")</button>
 </div>

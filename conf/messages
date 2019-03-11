@@ -12,9 +12,9 @@ global.total = Total
 global.change = Change
 global.item = Item
 global.amount = Amount
-global.accept.and.continue = Accept amount and continue
+global.accept.and.continue = Continue
 global.day.month.year = (Day/Month/Year)
-global.select.message = Please select…
+global.select.message = Select country…
 global.declare.and.pay = Declare merchandise and pay online
 global.declare.merchandise = Declare merchandise
 global.yes = Yes
@@ -61,7 +61,7 @@ select.dec.type.error = Select a declaration type
 import.date.header = Import date
 
 #New Page 3
-import.pricestaxes.header = Prices and taxes
+import.pricestaxes.header = Price and taxes
 import.pricestaxes.purchasePrice = Purchase price
 import.pricestaxes.customsDuty = Customs Duty
 import.pricestaxes.importVat = Import VAT
@@ -78,7 +78,8 @@ import.journeydetails.eori.example = For example, GB123456789000
 import.journeydetails.portOfEntry = Port of entry
 import.journeydetails.countryOfOrigin = Country of origin
 import.journeydetails.details1 = Where to find the EORI number
-import.journeydetails.details2 = The trader, or trader's business, should have an EORI number if it imports merchandise from sellers outside the EU. Contact the
+import.journeydetails.details2 = The trader, or trader's business, should have an EORI number if it imports merchandise from sellers outside the EU.
+import.journeydetails.details2a = Contact the
 import.journeydetails.details3 = EORI team at HMRC (opens in a new window or tab)
 import.journeydetails.details4 = if you cannot find your number
 
@@ -104,7 +105,7 @@ import.declare.line5 = Once you declare your import you will not be able to make
 #-----------------------------------------
 
 #New page 1
-export.purchaseprice.header = What was the purchase prices ?
+export.purchaseprice.header = What was the purchase price?
 
 
 #New Page 2
@@ -147,7 +148,7 @@ export.decref.description = Description of merchandise exported
 #Shared
 
 #New page 1
-shared.purchaseprice.header = What was the purchase prices ?
+shared.purchaseprice.header = What was the purchase price?
 
 #New Page 2
 shared.date.header = Import date
