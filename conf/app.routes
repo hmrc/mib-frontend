@@ -12,7 +12,7 @@ POST       /import-page                            controllers.ImportController.
 GET        /export-page/:page                      controllers.ExportController.getExportPage(page: String)
 POST       /export-page                            controllers.ExportController.submitExportPage
 
-GET         /export-page/declaration/successful/download-pdf   controllers.pdf.DeclarationSuccessfulPDFController.downloadPDF
+GET        /export-page/declaration/successful/download-pdf   controllers.pdf.DeclarationSuccessfulPDFController.downloadPDF
 
 
 POST       /start-journey                           controllers.ImportController.startJourney

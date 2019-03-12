@@ -5,7 +5,7 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{Matchers, WordSpec}
 import play.api.mvc.Session
 
-class MerchandiseDetailsSpec extends WordSpec with Matchers with ScalaFutures {
+class MerchandiseDetailsPageSpec extends WordSpec with Matchers with ScalaFutures {
 
   "session " should {
     "to-session imp" in {
