@@ -9,7 +9,7 @@ object SelectDeclarationPage extends CommonPage {
 
   def assertPageIsDisplayed()(implicit webDriver: WebDriver): Assertion = {
     currentPath shouldBe path
-    getPageHeader shouldBe "Declare merchandise import"
+    getPageHeader shouldBe "Select the type of declaration"
   }
   def clickImport()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("import")).click())
   def clickExport()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("export")).click())

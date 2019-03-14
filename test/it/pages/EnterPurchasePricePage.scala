@@ -9,7 +9,7 @@ object EnterPurchasePricePage extends CommonPage {
 
   def assertPageIsDisplayed()(implicit webDriver: WebDriver): Assertion = {
     currentPath shouldBe path
-    getPageHeader shouldBe "What was the purchase prices ?"
+    getPageHeader shouldBe "What was the purchase price?"
   }
 
   def enterIntoPurchasePrice(value: String)(implicit driver: WebDriver): Unit = {

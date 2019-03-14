@@ -9,7 +9,7 @@ object PricesAndTaxesImportPage extends CommonPage {
 
   def assertPageIsDisplayed()(implicit webDriver: WebDriver): Assertion = {
     currentPath shouldBe path
-    getPageHeader shouldBe "Prices and taxes"
+    getPageHeader shouldBe "Price and taxes"
   }
 
   def enterDetails(customsDuty: String, importVat: String)(implicit driver: WebDriver): Unit = {
