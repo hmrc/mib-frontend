@@ -39,6 +39,7 @@ error.invalid.day = Enter a valid day
 error.max.purchase.value = Amount must be less than or equal to £900
 error.max.purchase.full = This service is for declarations of less than £900.  Contact an agent or intermediary to make a full customs declaration
 error.import.date = You can only make a declaration within 5 working days from the import date
+error.export.date = You can only make a declaration within 5 working days from the export date
 error.real.date = Enter a real date
 error.import.date.in.past = Import date must not be in the past
 error.export.date.in.past = Export date must not be in the past

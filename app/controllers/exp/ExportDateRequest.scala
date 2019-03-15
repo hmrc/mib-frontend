@@ -41,7 +41,7 @@ class ExportDateRequest @Inject() (val messagesApi: MessagesApi, countriesServic
         valueInForm =>
           {
 
-            val exportDateValidate = FormsConstraints.validExportDate(importExportDate.fill(valueInForm))
+            val exportDateValidate = FormsConstraints.validDate(importExportDate.fill(valueInForm), false)
 
             if (exportDateValidate.errors.size == 0) {
 

@@ -41,7 +41,7 @@ class ImportDateRequest @Inject() (val messagesApi: MessagesApi)(implicit ec: Ex
         valueInForm =>
           {
 
-            val importDateValidate = FormsConstraints.validImportDate(importExportDate.fill(valueInForm))
+            val importDateValidate = FormsConstraints.validDate(importExportDate.fill(valueInForm), true)
 
             if (importDateValidate.errors.size == 0) {
 

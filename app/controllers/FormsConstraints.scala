@@ -38,7 +38,7 @@ object FormsConstraints {
       Invalid(ValidationError("error.max.purchase.value"))
   }
 
-  def validImportDate(form: Form[ImportExportDate]) = {
+  def validDate(form: Form[ImportExportDate], isImport: Boolean) = {
 
     val format = new java.text.SimpleDateFormat("yyyy-MM-dd")
     val importDt: LocalDate = format.parse(form("importExportYear").value.get + "-" + form("importExportMonth").value.get +
@@ -51,8 +51,8 @@ object FormsConstraints {
     } else {
       DAYS.between(currentDt, importDt) match {
         case x if (0 <= x && x <= 5) => form
-        case x if (x < 0)            => form.withError("", "error.import.date.in.past")
-        case _                       => form.withError("", "error.import.date")
+        case x if (x < 0)            => form.withError("", if (isImport) { "error.import.date.in.past" } else { "error.export.date.in.past" })
+        case _                       => form.withError("", if (isImport) { "error.import.date" } else { "error.export.date" })
       }
     }
 
@@ -67,24 +67,6 @@ object FormsConstraints {
       case _ => if (mibType == MibTypes.mibImport) form.withError("", "error.invalid.import.date") else form.withError("", "error.invalid.export.date")
     }
 
-  }
-
-  def validExportDate(form: Form[ImportExportDate]) = {
-
-    val format = new java.text.SimpleDateFormat("yyyy-MM-dd")
-    val importDt: LocalDate = format.parse(form("importExportYear").value.get + "-" + form("importExportMonth").value.get +
-      "-" + form("importExportDay").value.get).toInstant.atZone(ZoneId.systemDefault).toLocalDate
-    val currentDt: LocalDate = java.time.LocalDate.now
-    val importExportDate: ImportExportDate = ImportExportDate(form("importExportDay").value.get.toInt, form("importExportMonth").value.get.toInt, form("importExportYear").value.get.toInt)
-
-    if (!(importExportDate.isValidDate)) {
-      form.withError("", "error.real.date")
-    } else {
-      DAYS.between(currentDt, importDt) match {
-        case x if (x < 0) => form.withError("", "error.export.date.in.past")
-        case _            => form
-      }
-    }
   }
 
   def validateTraderDetailsNoPostCodeOrCountry(form: Form[TraderDetails]) = {
