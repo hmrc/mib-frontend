@@ -98,7 +98,10 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
     val journeyRequest = SpjRequest(mibRef                 = mibRefernce,
                                     amountInPence          = amtInPence.intValue(), traderAddress = address, descriptionMerchandise = description)
 
-    payApiConnector.createJourney(journeyRequest).map(response => Redirect(response.nextUrl))
+    payApiConnector.createJourney(journeyRequest).map(response => {
+      Logger.debug("redirecting to " + response.nextUrl)
+      Redirect(response.nextUrl)
+    })
   }
 
 }

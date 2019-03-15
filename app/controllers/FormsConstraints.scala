@@ -32,7 +32,7 @@ object FormsConstraints {
   def priceConstraint = Constraint[Double]("constraint.price") { o =>
     val bigDec = BigDecimal(o).setScale(2, BigDecimal.RoundingMode.HALF_UP)
 
-    if (bigDec < 900)
+    if (bigDec <= 900)
       Valid
     else
       Invalid(ValidationError("error.max.purchase.value"))
