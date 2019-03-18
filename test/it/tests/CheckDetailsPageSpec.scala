@@ -46,7 +46,7 @@ class CheckDetailsPageSpec extends BrowserSpec {
         JourneyDetailsPage.enterDetailsImport(testPortOfEntry, testEoriNumber, testCountry)
         JourneyDetailsPage.clickContinue()
       } else {
-        JourneyDetailsPage.enterDetailsExport(testPortOfEntry, None, testCountry)
+        JourneyDetailsPage.enterDetailsExport(testPortOfExit, None, testCountry)
         JourneyDetailsPage.clickContinue()
       }
       DetailsOfTraderPage.enterDetails(testUkTraderDetails)

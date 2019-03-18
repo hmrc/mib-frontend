@@ -1,10 +1,11 @@
 package it.tests
 
 import it.pages._
-import it.testdata.TestData.{testPortOfEntry, purchasePriceExample}
+import it.testdata.TestData.{testPortOfExit, purchasePriceExample}
 import it.testsupport.BrowserSpec
 import org.openqa.selenium.WebDriver
-import it.testdata.TestData.testUkTraderDetails
+import it.testdata.TestData.{testUkTraderDetails, testCountry}
+
 class DetailsOfTraderPageSpec extends BrowserSpec {
 
   "show the Details of trader page " in new SetUp {
@@ -33,7 +34,7 @@ class DetailsOfTraderPageSpec extends BrowserSpec {
       EnterPurchasePricePage.clickContinue()
       EnterDatePage.enterDate()
       EnterDatePage.clickContinue()
-      JourneyDetailsPage.enterDetailsExport(testPortOfEntry, None, testCountry)
+      JourneyDetailsPage.enterDetailsExport(testPortOfExit, None, testCountry)
       JourneyDetailsPage.clickContinue()
     }
   }

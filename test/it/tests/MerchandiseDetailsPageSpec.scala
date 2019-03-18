@@ -1,7 +1,7 @@
 package it.tests
 
 import it.pages._
-import it.testdata.TestData.{testPortOfEntry, purchasePriceExample, testUkTraderDetails}
+import it.testdata.TestData.{testPortOfExit, purchasePriceExample, testUkTraderDetails}
 import it.testsupport.BrowserSpec
 import org.openqa.selenium.WebDriver
 import it.testdata.TestData._
@@ -46,7 +46,7 @@ class MerchandiseDetailsPageSpec extends BrowserSpec {
         JourneyDetailsPage.enterDetailsImport(testPortOfEntry, testEoriNumber, testCountry)
         JourneyDetailsPage.clickContinue()
       } else {
-        JourneyDetailsPage.enterDetailsExport(testPortOfEntry, None, testCountry)
+        JourneyDetailsPage.enterDetailsExport(testPortOfExit, None, testCountry)
         JourneyDetailsPage.clickContinue()
       }
       DetailsOfTraderPage.enterDetails(testUkTraderDetails)
