@@ -10,18 +10,16 @@ class SpjRequestSpec extends WordSpec with Matchers with ScalaFutures {
   "SpjRequest " should {
     "create valid json" in {
 
-      val j: SpjRequest = SpjRequest(mibRef                 = "MIBI1234567890", amountInPence = 9700000,
-                                     traderAddress          = "Microsoft<br>2390<br>Old Street Ber<br>Germany<br>EC1V 9EY",
-                                     descriptionMerchandise = "Parts and technical crew for the forest moon.")
+      val j: SpjRequest = SpjRequest(mibReference       = "MIBI1234567890", amountInPence = 9700000,
+                                     traderDetails      = "Microsoft<br>2390<br>Old Street Ber<br>Germany<br>EC1V 9EY",
+                                     merchandiseDetails = "Parts and technical crew for the forest moon.")
 
       val expectedJson = Json.parse(
         s"""{
-  "mibRef": "MIBI1234567890",
+  "mibReference": "MIBI1234567890",
   "amountInPence" : 9700000,
-  "returnUrl" : "http://www.gov.uk",
-   "backUrl" : "http://www.gov.uk",
-   "traderAddress" : "Microsoft<br>2390<br>Old Street Ber<br>Germany<br>EC1V 9EY",
-   "descriptionMerchandise": "Parts and technical crew for the forest moon."
+   "traderDetails" : "Microsoft<br>2390<br>Old Street Ber<br>Germany<br>EC1V 9EY",
+   "merchandiseDetails": "Parts and technical crew for the forest moon."
 }""")
 
       Json.toJson(j) shouldBe expectedJson

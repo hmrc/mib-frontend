@@ -95,8 +95,10 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
 
     val description = MerchandiseDetails.fromSession(request.session, MibTypes.mibImport).getOrElse(throw new MibException("Merchandise Details not found")).desciptionOfGoods
 
-    val journeyRequest = SpjRequest(mibRef                 = mibRefernce,
-                                    amountInPence          = amtInPence.intValue(), traderAddress = address, descriptionMerchandise = description)
+    val journeyRequest = SpjRequest(mibReference       = mibRefernce,
+                                    amountInPence      = amtInPence.intValue(),
+                                    traderDetails      = address,
+                                    merchandiseDetails = description)
 
     payApiConnector.createJourney(journeyRequest).map(response => {
       Logger.debug("redirecting to " + response.nextUrl)
