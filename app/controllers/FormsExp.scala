@@ -9,8 +9,9 @@ object FormsExp {
 
   def journeyDetailsExp: Form[JourneyDetailsExp] = {
     Form(mapping(
-      "portOfEntry" -> text.transform[String](_.trim, identity).verifying("error.invalid.portOfEntry", s => s.length > 0).verifying(maxLength(100)),
-      "eori" -> optional(text.transform[String](_.trim, identity).verifying(maxLength(20)))
+      "portOfExit" -> text.transform[String](_.trim, identity).verifying("error.invalid.portOfExit", s => s.length > 0).verifying(maxLength(100)),
+      "eori" -> optional(text.transform[String](_.trim, identity).verifying(maxLength(20))),
+      "destinationCountry" -> text.transform[String](_.trim, identity).verifying("error.invalid.destinationCountry", s => s.length > 0).verifying(maxLength(100))
     )(JourneyDetailsExp.apply)(JourneyDetailsExp.unapply))
   }
 

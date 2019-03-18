@@ -31,7 +31,9 @@ error.invalid.postcode = Enter a valid postcode
 error.required.postcode = Postcode is required
 error.required.country = Select a country
 error.invalid.portOfEntry = Enter a Port of entry
+error.invalid.portOfExit = Enter a Port of exit
 error.invalid.countryOfOrigin = Enter a Country of origin
+error.invalid.destinationCountry = Enter a Country of destination
 error.invalid.desciptionOfGoods = Enter a Description of merchandise to import
 error.invalid.year = Enter a valid year
 error.invalid.month = Enter a valid month
@@ -56,12 +58,10 @@ select.dec.radio1 = Import
 select.dec.radio2 = Export
 select.dec.type.error = Select a declaration type
 
-
-
-#New Page 2
+#Page 2
 import.date.header = Import date
 
-#New Page 3
+#Page 3
 import.pricestaxes.header = Price and taxes
 import.pricestaxes.purchasePrice = Purchase price
 import.pricestaxes.customsDuty = Customs Duty
@@ -69,10 +69,10 @@ import.pricestaxes.importVat = Import VAT
 #Used for tax due page
 import.pricestaxes.total = Total
 
-#New page4
+#page4
 import.taxdue.header = Tax due
 
-#New page5
+#page5
 import.journeydetails.header = Journey details
 import.journeydetails.eori = UK EORI number
 import.journeydetails.eori.example = For example, GB123456789000
@@ -93,8 +93,6 @@ import.checkdetails.nameAddress = Trader name and address
 import.checkdetails.vrn = VAT registration number
 import.checkdetails.vehicleRegNo = Vehicle registration number
 
-
-
 #page9
 import.declare.header = Declare merchandise import
 import.declare.line1 = You must pay duty and tax on this merchandise if you bring them into the UK
@@ -105,18 +103,18 @@ import.declare.line5 = Once you declare your import you will not be able to make
 
 #-----------------------------------------
 
-#New page 1
+#page 1
 export.purchaseprice.header = What was the purchase price?
 
-
-#New Page 2
+#Page 2
 export.date.header = Export date
 
 #page3
 export.journeydetails.header = Journey details
 export.journeydetails.eori = UK EORI number
 export.journeydetails.eori.example = For example, GB123456789000
-export.journeydetails.portOfEntry = Port of exit
+export.journeydetails.portOfExit = Port of exit
+export.journeydetails.destinationCountry = Destination Country
 export.journeydetails.details1 = Where to find the EORI number
 export.journeydetails.details2 = The business should have an EORI number if it imports merchandise from sellers outside the EU. Contact the
 export.journeydetails.details3 = EORI team at HMRC (opens in a new window or tab)
@@ -145,13 +143,12 @@ export.decref.line4 = Merchandise in Baggage
 export.decref.trader.details = Trader name and address
 export.decref.description = Description of merchandise exported
 
-
 #Shared
 
-#New page 1
+#page 1
 shared.purchaseprice.header = What was the purchase price?
 
-#New Page 2
+#Page 2
 shared.date.header = Import date
 shared.date.example = For example, 20 12 2018
 
@@ -173,12 +170,8 @@ shared.traderDetails.nameaddress = Trader name and address
 shared.traderDetails.has.address = Does the trader have a UK address?
 shared.traderDetails = Trader details
 
-
 #page7 import / page 4 export
 shared.merchandisedetails.header = Merchandise details
 shared.merchandisedetails.invoiceNumber = Invoice number
-
-
-
 
 country-code.path = conf/country-codes-en.properties

@@ -24,7 +24,7 @@ class JourneyDetailsPageSpec extends BrowserSpec {
   }
   "show the next page for export " in new SetUp {
     goToPageVia(asImport = false)
-    JourneyDetailsPage.enterDetailsExport(testPortOfEntry, Some(testCountry))
+    JourneyDetailsPage.enterDetailsExport(testPortOfExit, None, testCountry)
     JourneyDetailsPage.clickContinue()
     DetailsOfTraderPage.assertExportPageIsDisplayed()
   }

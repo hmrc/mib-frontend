@@ -48,17 +48,35 @@ action = controllers.routes.ExportController.submitExportPage(),
 
 
     <div class="form-group">
-        <label for="portOfEntry" class="form-label">@Messages("export.journeydetails.portOfEntry")
-            @if(form.errors("portOfEntry").nonEmpty) {
-            @for(error <- form.errors("portOfEntry")) {
-            <span id="@error.message-portOfEntry" class="error-message">@Messages(error.message)</span>
+        <label for="portOfExit" class="form-label">@Messages("export.journeydetails.portOfExit")
+            @if(form.errors("portOfExit").nonEmpty) {
+            @for(error <- form.errors("portOfExit")) {
+            <span id="@error.message-portOfExit" class="error-message">@Messages(error.message)</span>
             }
             }
         </label>
-        <input type="text" class="form-control @if(form.errors("portOfEntry").nonEmpty) { form-control-error }" name="portOfEntry" id="portOfEntry" value="@form("portOfEntry").value" />
+        <input type="text" class="form-control @if(form.errors("portOfExit").nonEmpty) { form-control-error }" name="portOfExit" id="portOfExit" value="@form("portOfExit").value" />
     </div>
 
     <input type="hidden" name="page" value="@currentPage" />
+
+    <div  id="destinationCountry-fieldset"  class="form-group @form.errors("destinationCountry").map { e => form-group-error }">
+
+    <label for="destinationCountry" class="form-label">@Messages("export.journeydetails.destinationCountry")
+        @if(form.errors("destinationCountry").nonEmpty) {
+        @for(error <- form.errors("destinationCountry")) {
+        <span id="@error.message-destinationCountry" class="error-message">@Messages(error.message)</span>
+        }
+        }
+    </label>
+
+    <select id="destinationCountry" class="form-control @if(form.errors("destinationCountry").nonEmpty) { form-control-error }" name="destinationCountry">
+    <option value="">@Messages("global.select.message")</option>
+    @for(country <- countries) {
+    <option value="@country.code" @if(form("destinationCountry").value.getOrElse("") == country.code){ selected }>@country.name</option>
+    }
+    </select>
+    </div>
 
     <div class="form-group">
         <label for="eori" class="form-label">@Messages("export.journeydetails.eori") @if(form.errors("eori").nonEmpty) { @for(error <- form.errors("eori")) {

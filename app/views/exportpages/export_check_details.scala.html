@@ -81,13 +81,21 @@ action = controllers.routes.ExportController.submitExportPage(),
             </div>
             }
 
-            @for(field <- Seq("portOfEntry","eori")) {
+            @for(field <- Seq("portOfExit","destinationCountry", "eori")) {
             <div id="@field-fieldset">
 
                 <dt class="cya-question">
                     @Messages("export.journeydetails." + field)
                 </dt>
-                <dd class="cya-answer"> @form(field).value
+                <dd class="cya-answer">
+                    @if(field == "destinationCountry") {
+                    @for(country <- countries) {
+                    @if(form("destinationCountry").value.getOrElse("") == country.code){
+                    @country.name } } }
+
+                    @if(field != "destinationCountry") {
+                    @form(field).value
+                    }
                 </dd>
                 <dd class="app-check-your-answers__change">
                     <a href="@routes.ExportController.getExportPage("journey_details")">@Messages("global.change")</a>

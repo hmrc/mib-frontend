@@ -18,9 +18,10 @@ object JourneyDetailsPage extends CommonPage {
     getPageHeader shouldBe "Journey details"
   }
 
-  def enterDetailsExport(portOfEntry: String, eori: Option[String] = None)(implicit driver: WebDriver): Unit = {
-    textField("portOfEntry").value = portOfEntry
+  def enterDetailsExport(portOfExit: String, eori: Option[String] = None, country: String)(implicit driver: WebDriver): Unit = {
+    textField("portOfExit").value = portOfExit
     eori.foreach(a => numberField("eori").value = a)
+    singleSel("destinationCountry").value = country
   }
 
   def enterDetailsImport(portOfEntry: String, eori: String, country: String)(implicit driver: WebDriver): Unit = {

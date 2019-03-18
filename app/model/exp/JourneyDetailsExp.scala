@@ -2,13 +2,14 @@ package model.exp
 
 import play.api.mvc.Session
 
-final case class JourneyDetailsExp(portOfEntry: String, eori: Option[String])
+final case class JourneyDetailsExp(portOfExit: String, eori: Option[String], destinationCountry: String)
 
 object JourneyDetailsExp {
 
   object Key {
-    val PortOfEntry = "portOfEntryExp"
+    val PortOfExit = "portOfExitExp"
     val Eori = "eoriExp"
+    val DestinationCountry = "destinationCountryExp"
   }
 
   def fromSession(session: Session): Option[JourneyDetailsExp] = {
@@ -20,22 +21,24 @@ object JourneyDetailsExp {
 
       def mandatory(name: String): String = session.get(name).getOrElse("")
 
-    if (optional(Key.PortOfEntry).isEmpty)
+    if (optional(Key.PortOfExit).isEmpty)
       None
     else
       Some(JourneyDetailsExp(
-        mandatory(Key.PortOfEntry),
-        optional(Key.Eori)))
+        mandatory(Key.PortOfExit),
+        optional(Key.Eori),
+        mandatory(Key.DestinationCountry)))
   }
 
   def toSession(page: JourneyDetailsExp): Seq[(String, String)] = {
     Map(
-      Key.PortOfEntry -> page.portOfEntry,
-      Key.Eori -> page.eori.getOrElse("")).toSeq
+      Key.PortOfExit -> page.portOfExit,
+      Key.Eori -> page.eori.getOrElse(""),
+      Key.DestinationCountry -> page.destinationCountry).toSeq
   }
 
   def getKeys() = {
-    Seq(Key.Eori, Key.PortOfEntry)
+    Seq(Key.Eori, Key.PortOfExit, Key.DestinationCountry)
   }
 
 }
