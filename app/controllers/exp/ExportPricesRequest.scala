@@ -18,7 +18,7 @@ class ExportPricesRequest @Inject() (val messagesApi: MessagesApi)(implicit ec: 
   def post(implicit request: Request[AnyContent]) = {
     prices.bindFromRequest().fold(
       formWithErrors => Ok(purchase_prices(
-        formWithErrors, prices.withError("", "error.max.purchase.full"), ExportPages.prices.case_value,
+        formWithErrors, prices.withError("", if (formWithErrors.errors.find(_.message == "error.real").isDefined) "error.max.purchase.blank" else "error.max.purchase.full"), ExportPages.prices.case_value,
         controllers.routes.ExportController.submitExportPage()
       )),
       {
