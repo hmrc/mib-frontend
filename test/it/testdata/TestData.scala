@@ -6,7 +6,7 @@ object TestData {
 
   val purchasePriceExample = "125.00"
   val testPortOfEntry = "Port of Colm"
-  val testPortOfExit = "Exit Port of Colm"
+  val testPortOfExit = "Port of ColmExit"
   val testEoriNumber = "GB123456789000"
   val testCountry = "IRL"
   val testCustomsDuty = "12345"

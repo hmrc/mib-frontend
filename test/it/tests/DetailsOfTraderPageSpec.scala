@@ -5,7 +5,6 @@ import it.testdata.TestData.{testPortOfEntry, purchasePriceExample}
 import it.testsupport.BrowserSpec
 import org.openqa.selenium.WebDriver
 import it.testdata.TestData.testUkTraderDetails
-import it.testdata.TestData.testCountry
 class DetailsOfTraderPageSpec extends BrowserSpec {
 
   "show the Details of trader page " in new SetUp {

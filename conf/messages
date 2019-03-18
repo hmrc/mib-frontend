@@ -26,6 +26,8 @@ global.logo.header = GOV.UK
 global.logo.organisation = HM Revenue & Customs
 
 #errors
+
+error.required.trader = What is the name of the trader?
 error.invalid.addressline1 = Enter the first line of your address
 error.invalid.postcode = Enter a valid postcode
 error.required.postcode = Postcode is required
@@ -35,6 +37,7 @@ error.invalid.portOfExit = Enter a Port of exit
 error.invalid.countryOfOrigin = Enter a Country of origin
 error.invalid.destinationCountry = Enter a Country of destination
 error.invalid.desciptionOfGoods = Enter a Description of merchandise to import
+error.invalid.desciptionOfGoodsExp = Enter a Description of merchandise to import
 error.invalid.year = Enter a valid year
 error.invalid.month = Enter a valid month
 error.invalid.day = Enter a valid day
@@ -66,6 +69,10 @@ import.pricestaxes.header = Price and taxes
 import.pricestaxes.purchasePrice = Purchase price
 import.pricestaxes.customsDuty = Customs Duty
 import.pricestaxes.importVat = Import VAT
+import.pricestaxes.dutycalc.details1 = How to work out the duty
+import.pricestaxes.dutycalc.details2 = This link gives
+import.pricestaxes.dutycalc.details3 = more information to work out the duty
+import.pricestaxes.dutycalc.details4 = and see how to calculate it
 #Used for tax due page
 import.pricestaxes.total = Total
 
@@ -114,6 +121,7 @@ export.journeydetails.header = Journey details
 export.journeydetails.eori = UK EORI number
 export.journeydetails.eori.example = For example, GB123456789000
 export.journeydetails.portOfExit = Port of exit
+export.journeydetails.portOfExit = Port of exit
 export.journeydetails.destinationCountry = Destination Country
 export.journeydetails.details1 = Where to find the EORI number
 export.journeydetails.details2 = The business should have an EORI number if it imports merchandise from sellers outside the EU. Contact the
@@ -142,6 +150,7 @@ export.decref.line3 = Tax
 export.decref.line4 = Merchandise in Baggage
 export.decref.trader.details = Trader name and address
 export.decref.description = Description of merchandise exported
+export.decref.printnotice = Print (or keep) this page as you will need to show this to officials at the border on request
 
 #Shared
 
