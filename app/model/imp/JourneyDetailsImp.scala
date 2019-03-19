@@ -1,5 +1,6 @@
 package model.imp
 
+import play.api.libs.json.{Json, OFormat}
 import play.api.mvc.Session
 
 final case class JourneyDetailsImp(portOfEntry: String, countryOfOrigin: String, eori: Option[String])
@@ -40,5 +41,7 @@ object JourneyDetailsImp {
   def getKeys() = {
     Seq(Key.CountryOfOrigin, Key.Eori, Key.PortOfEntry)
   }
+
+  implicit val journeyDetailsImpFormat: OFormat[JourneyDetailsImp] = Json.format[JourneyDetailsImp]
 
 }

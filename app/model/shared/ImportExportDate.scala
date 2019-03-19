@@ -32,6 +32,8 @@ final case class ImportExportDate(importExportDay: Int, importExportMonth: Int, 
       case _ => true
     }
   }
+
+  def stringValue = importExportYear + "-" + importExportMonth + "-" + importExportDay
 }
 
 object ImportExportDate extends Shared {

@@ -1,6 +1,7 @@
 package model.exp
 
 import play.api.mvc.Session
+import play.api.libs.json._
 
 final case class JourneyDetailsExp(portOfExit: String, eori: Option[String], destinationCountry: String)
 
@@ -40,5 +41,7 @@ object JourneyDetailsExp {
   def getKeys() = {
     Seq(Key.Eori, Key.PortOfExit, Key.DestinationCountry)
   }
+
+  implicit val journeyDetailsExpFormat: OFormat[JourneyDetailsExp] = Json.format[JourneyDetailsExp]
 
 }

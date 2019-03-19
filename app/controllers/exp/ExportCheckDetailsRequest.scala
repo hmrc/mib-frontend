@@ -4,31 +4,66 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 
 import Service.{CountriesService, RefService}
+import audit.exp.ExportDeclarationCreateAudit
+import audit._
 import config.AppConfig
 import controllers.FormsExp._
 import controllers.FormsShared._
 import exceptions.MibException
 import javax.inject.{Inject, Singleton}
 import model.exp.{DeclarationReceived, JourneyDetailsExp, TraderDetailsCheckExp}
-import model.shared.{ImportExportDate, MerchandiseDetails, Prices, TraderDetails}
+import model.shared._
 import model.{ExportPages, MibTypes}
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{AnyContent, Request, Results}
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.HeaderCarrierConverter
 import views.html.exportpages.{declaration_received, export_check_details}
 
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class ExportCheckDetailsRequest @Inject() (val messagesApi: MessagesApi, countriesService: CountriesService, refService: RefService)(implicit ec: ExecutionContext, appConfig: AppConfig) extends I18nSupport with Results {
+class ExportCheckDetailsRequest @Inject() (val messagesApi: MessagesApi, countriesService: CountriesService, refService: RefService, auditor: Auditor)
+  (implicit ec: ExecutionContext, appConfig: AppConfig) extends I18nSupport with Results {
 
   def post(implicit request: Request[AnyContent]) = {
-    val traderFull = traderDetails.fill(TraderDetails.fromSession(request.session, MibTypes.mibExport)
-      .getOrElse(throw new MibException("Trader Details not found"))).get
+
+    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
+
+    val traderDetail = TraderDetails.fromSession(request.session, MibTypes.mibExport).getOrElse(throw new MibException("Trader Details not found"))
     val merchDetails = MerchandiseDetails.fromSession(request.session, MibTypes.mibExport).getOrElse(throw new MibException("Merchant details not found"))
-    val dateTime = Calendar.getInstance.getTime
+    val pricesVal = Prices.fromSession(request.session, MibTypes.mibExport).getOrElse(throw new MibException("Prices Details not found"))
+    val departure = ImportExportDate.fromSession(request.session, MibTypes.mibExport).getOrElse(throw new MibException("ImportExport details not found"))
+    val journey = JourneyDetailsExp.fromSession(request.session).getOrElse(throw new MibException("Journey Details not found"))
+
     val dateFormat = new SimpleDateFormat("dd LLLL yyyy")
+    val dateTime = Calendar.getInstance.getTime
+
     val decRecd = DeclarationReceived(dateFormat.format(dateTime),
-                                      traderFull.getFormattedAddress(traderFull.country.fold("")(countriesService.getCountry(_))), merchDetails.desciptionOfGoods, refService.exportRef)
+                                      traderDetail.getFormattedAddress(traderDetail.country.fold("")(countriesService.getCountry(_))), merchDetails.desciptionOfGoods, refService.exportRef)
+
+    //Auditor
+    val journeyWithCountryFull = journey.copy(destinationCountry = countriesService.getCountry(journey.destinationCountry))
+    val declarationCreate: ExportDeclarationCreateAudit = ExportDeclarationCreateAudit(purchasePriceInPence = pricesVal.purchasePrice.toInt * 100, exportDate = departure.stringValue)
+
+    val traderDetailsForAudit = traderDetail.uk match {
+      case "Yes" => {
+        TraderDetailsForAudit(NameOfTrader(traderDetail.trader),
+                              Option(traderDetail.getAddressObjectUk()), None,
+                              traderDetail.vrn, traderDetail.vehicleRegNo)
+      }
+      case "No" => {
+        TraderDetailsForAudit(NameOfTrader(traderDetail.trader),
+                              None, Option(traderDetail.getAddressObjectNonUk(traderDetail.country.fold("")(countriesService.getCountry(_)))),
+                              traderDetail.vrn, traderDetail.vehicleRegNo)
+      }
+    }
+
+    val auditData: ExportAuditData = ExportAuditData(submissionRef = SubmissionRef(decRecd.mibReference), declarationCreate, journeyWithCountryFull, merchDetails, traderDetailsForAudit)
+
+    auditor(auditData, MibTypes.mibExport, "merchandiseDeclaration")
+
     Ok(declaration_received(declarationReceived.fill(decRecd),
                             ExportPages.dec_received.case_value, ExportPages.check_details.case_value)).addingToSession(DeclarationReceived.toSession(decRecd): _*)
   }

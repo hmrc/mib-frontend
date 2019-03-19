@@ -19,8 +19,6 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class ImportCheckDetailsRequest @Inject() (val messagesApi: MessagesApi, countriesService: CountriesService)(implicit ec: ExecutionContext, appConfig: AppConfig) extends I18nSupport with Results {
 
-  private implicit val hc: HeaderCarrier = HeaderCarrier()
-
   def get(implicit request: Request[AnyContent]) = {
     val journey = journeyDetailsImp.fill(JourneyDetailsImp.fromSession(request.session).getOrElse(throw new MibException("Journey Details not found")))
     val traderFull = traderDetails.fill(TraderDetails.fromSession(request.session, MibTypes.mibImport).getOrElse(throw new MibException("Trader Details not found"))).get

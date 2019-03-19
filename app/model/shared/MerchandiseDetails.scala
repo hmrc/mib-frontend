@@ -1,6 +1,7 @@
 package model.shared
 
 import model.MibType
+import play.api.libs.json.{Json, OFormat}
 import play.api.mvc.Session
 
 final case class MerchandiseDetails(invoiceNumber: Option[String], desciptionOfGoods: String)
@@ -38,6 +39,8 @@ object MerchandiseDetails extends Shared {
       Key.InvoiceNumber + appendVal(mibType) -> page.invoiceNumber.getOrElse(""),
       Key.DesciptionOfGoods + appendVal(mibType) -> page.desciptionOfGoods).toSeq
   }
+
+  implicit val merchandiseDetailsFormat: OFormat[MerchandiseDetails] = Json.format[MerchandiseDetails]
 
 }
 

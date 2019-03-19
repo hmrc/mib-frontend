@@ -16,7 +16,8 @@ import scala.concurrent.ExecutionContext
 class ExportController @Inject() (val messagesApi: MessagesApi, countriesService: CountriesService,
                                   exportPricesRequest: ExportPricesRequest, exportDateRequest: ExportDateRequest,
                                   exportJourneyDetails: ExportJourneyDetailsRequest, exportTraderDetailsRequest: ExportTraderDetailsRequest,
-                                  exportMerchandiseDetailsRequest: ExportMerchandiseDetailsRequest, exportCheckDetailsRequest: ExportCheckDetailsRequest)
+                                  exportMerchandiseDetailsRequest: ExportMerchandiseDetailsRequest,
+                                  exportCheckDetailsRequest:       ExportCheckDetailsRequest)
   (implicit ec: ExecutionContext, appConfig: AppConfig, refService: RefService) extends FrontendController with I18nSupport {
 
   //------------------------------------------------------------------------------------------------------------------------------

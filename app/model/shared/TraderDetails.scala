@@ -1,5 +1,6 @@
 package model.shared
 
+import audit.{NonUkAddress, UkAddress}
 import model.MibType
 import play.api.mvc.Session
 
@@ -19,6 +20,14 @@ final case class TraderDetails(uk: String = "Yes", trader: String, line1: Option
       case "No" => trader + lineReturn + line1.fold("")(_ + lineReturn) + line2nonuk.fold("")(_ + lineReturn) + line3.fold("")(_ + lineReturn) + countryName
     }
 
+  }
+
+  def getAddressObjectNonUk(countryName: String): NonUkAddress = {
+    NonUkAddress(line1.get, line2nonuk, line3, countryName)
+  }
+
+  def getAddressObjectUk(): UkAddress = {
+    UkAddress(buildingAndStreet.get, line2, city, county, postcode.get)
   }
 }
 

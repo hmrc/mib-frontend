@@ -1,15 +1,17 @@
 package controllers
 
 import Service.{CountriesService, RefService}
+import audit._
+import audit.imp.{ImportDeclarationCreateAudit, PricesTaxesAudit}
 import config.AppConfig
 import connector.PayApiConnector
 import controllers.FormsShared.traderDetails
 import controllers.imp._
 import exceptions.MibException
 import javax.inject.{Inject, Singleton}
-import model.imp.PricesTaxesImp
+import model.imp.{JourneyDetailsImp, PricesTaxesImp}
 import model.payapi.SpjRequest
-import model.shared.{MerchandiseDetails, Prices, TraderDetails}
+import model.shared.{ImportExportDate, MerchandiseDetails, Prices, TraderDetails}
 import model.{ImportPages, MibTypes}
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -25,7 +27,7 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
                                   pricesTaxesRequest: PricesTaxesRequest, importJourneyDetailsRequest: ImportJourneyDetailsRequest,
                                   importTraderDetailsRequest: ImportTraderDetailsRequest, importMerchandiseDetails: ImportMerchandiseDetails,
                                   taxDueRequest: TaxDueRequest, importCheckDetailsRequest: ImportCheckDetailsRequest, payApiConnector: PayApiConnector,
-                                  refService: RefService)
+                                  refService: RefService, auditor: Auditor)
   (implicit ec: ExecutionContext, appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   //------------------------------------------------------------------------------------------------------------------------------
@@ -87,7 +89,8 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
   }
 
   def startJourney: Action[AnyContent] = Action.async { implicit request =>
-    val traderFull = traderDetails.fill(TraderDetails.fromSession(request.session, MibTypes.mibImport).getOrElse(throw new MibException("Trader Details not found"))).get
+    val traderDetail = TraderDetails.fromSession(request.session, MibTypes.mibImport).getOrElse(throw new MibException("Trader Details not found"))
+    val traderFull = traderDetails.fill(traderDetail).get
     val address = traderFull.getFormattedAddress(traderFull.country.fold("")(countriesService.getCountry(_)))
     val mibRefernce = refService.importRef
     val pTax = PricesTaxesImp.fromSession(request.session).getOrElse(throw new MibException("PricesTaxesImp details not found"))
@@ -95,12 +98,41 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
 
     val description = MerchandiseDetails.fromSession(request.session, MibTypes.mibImport).getOrElse(throw new MibException("Merchandise Details not found")).desciptionOfGoods
 
-    val journeyRequest = SpjRequest(mibReference       = mibRefernce,
-                                    amountInPence      = amtInPence.intValue(),
-                                    traderDetails      = address,
-                                    merchandiseDetails = description)
+    //Auditor
+    val journey = JourneyDetailsImp.fromSession(request.session).getOrElse(throw new MibException("Journey Details not found"))
+    val journeyWithCountryFull = journey.copy(countryOfOrigin = countriesService.getCountry(journey.countryOfOrigin))
+    val pricesVal = Prices.fromSession(request.session, MibTypes.mibImport).getOrElse(throw new MibException("Prices Details not found"))
+    val departure = ImportExportDate.fromSession(request.session, MibTypes.mibImport).getOrElse(throw new MibException("ImportExport details not found"))
+    val merchDetails = MerchandiseDetails.fromSession(request.session, MibTypes.mibImport).getOrElse(throw new MibException("Merchant details not found"))
 
-    payApiConnector.createJourney(journeyRequest).map(response => {
+    val priceTaxesAudit: PricesTaxesAudit = new PricesTaxesAudit(pTax.customsDuty.toInt * 100, pTax.importVat.toInt * 100)
+
+    val declarationCreate: ImportDeclarationCreateAudit = ImportDeclarationCreateAudit(purchasePriceInPence = pricesVal.purchasePrice.toInt * 100, importDate = departure.stringValue)
+
+    val traderDetailsForAudit = traderDetail.uk match {
+      case "Yes" => {
+        TraderDetailsForAudit(NameOfTrader(traderDetail.trader),
+                              Option(traderDetail.getAddressObjectUk()), None,
+                              traderDetail.vrn, traderDetail.vehicleRegNo)
+      }
+      case "No" => {
+        TraderDetailsForAudit(NameOfTrader(traderDetail.trader),
+                              None, Option(traderDetail.getAddressObjectNonUk(traderDetail.country.fold("")(countriesService.getCountry(_)))),
+                              traderDetail.vrn, traderDetail.vehicleRegNo)
+      }
+    }
+
+    val auditData: ImportAuditData = ImportAuditData(submissionRef = SubmissionRef(mibRefernce), declarationCreate, priceTaxesAudit, journeyWithCountryFull, merchDetails, traderDetailsForAudit)
+
+    auditor(auditData, MibTypes.mibImport, "merchandiseDeclaration")
+    //End Audit
+
+    val spjRequest = SpjRequest(mibReference       = mibRefernce,
+                                amountInPence      = amtInPence.intValue(),
+                                traderDetails      = address,
+                                merchandiseDetails = description)
+
+    payApiConnector.createJourney(spjRequest).map(response => {
       Logger.debug("redirecting to " + response.nextUrl)
       Redirect(response.nextUrl)
     })
