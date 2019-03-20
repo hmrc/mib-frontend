@@ -1,6 +1,6 @@
 package controllers
 
-import Service.{CountriesService, RefService}
+import service.{CountriesService, RefService}
 import config.AppConfig
 import controllers.exp._
 import javax.inject.{Inject, Singleton}
@@ -38,7 +38,7 @@ class ExportController @Inject() (val messagesApi: MessagesApi, countriesService
       case ExportPages.check_details.case_value       => exportCheckDetailsRequest.get
 
       case _ => {
-        Ok(error_template("Merchandise in Baggage", "Merchandise in Baggage", "Page not found"))
+        BadRequest(error_template("Merchandise in Baggage", "Merchandise in Baggage", "Page not found"))
       }
     }
   }

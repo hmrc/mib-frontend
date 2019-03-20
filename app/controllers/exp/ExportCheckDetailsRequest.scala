@@ -3,9 +3,8 @@ package controllers.exp
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
-import Service.{CountriesService, RefService}
-import audit.exp.ExportDeclarationCreateAudit
 import audit._
+import audit.exp.ExportDeclarationCreateAudit
 import config.AppConfig
 import controllers.FormsExp._
 import controllers.FormsShared._
@@ -14,9 +13,9 @@ import javax.inject.{Inject, Singleton}
 import model.exp.{DeclarationReceived, JourneyDetailsExp, TraderDetailsCheckExp}
 import model.shared._
 import model.{ExportPages, MibTypes, YesNoValues}
-import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{AnyContent, Request, Results}
+import service.{CountriesService, RefService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
 import views.html.exportpages.{declaration_received, export_check_details}

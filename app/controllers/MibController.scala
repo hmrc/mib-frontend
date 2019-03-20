@@ -1,6 +1,6 @@
 package controllers
 
-import Service.CountriesService
+import service.CountriesService
 import config.AppConfig
 import controllers.FormsShared._
 import controllers.ResultWrapper._

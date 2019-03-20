@@ -1,4 +1,4 @@
-package Service
+package service
 
 import javax.inject.{Inject, Singleton}
 import model.Country

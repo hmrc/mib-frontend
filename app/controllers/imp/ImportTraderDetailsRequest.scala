@@ -1,6 +1,6 @@
 package controllers.imp
 
-import Service.CountriesService
+import service.CountriesService
 import config.AppConfig
 import controllers.FormsConstraints
 import controllers.FormsShared.{merchandiseDetails, traderDetails}

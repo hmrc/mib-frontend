@@ -1,6 +1,6 @@
 package service
 
-import Service.RefService
+import service.RefService
 import support.ITSpec
 
 class RefServiceSpec extends ITSpec {

@@ -1,6 +1,5 @@
 package controllers
 
-import Service.{CountriesService, RefService}
 import audit._
 import audit.imp.{ImportDeclarationCreateAudit, PricesTaxesAudit}
 import config.AppConfig
@@ -16,6 +15,7 @@ import model.{ImportPages, MibTypes, YesNoValues}
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
+import service.{CountriesService, RefService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.error_template
 
@@ -52,7 +52,7 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
       case ImportPages.check_details.case_value       => importCheckDetailsRequest.get
 
       case _ => {
-        Ok(error_template("Merchandise in Baggage", "Merchandise in Baggage", "Page not found"))
+        BadRequest(error_template("Merchandise in Baggage", "Merchandise in Baggage", "Page not found"))
       }
 
     }

@@ -1,6 +1,7 @@
 package support
 
 import com.google.inject.AbstractModule
+import it.testsupport.WireMockSupport
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{BeforeAndAfterEach, FreeSpecLike, Matchers}
 import org.scalatestplus.play.guice.GuiceOneServerPerTest
@@ -15,16 +16,19 @@ trait ITSpec
   with MockitoSugar
   with BeforeAndAfterEach
   with GuiceOneServerPerTest
-  with Matchers {
+  with Matchers
+  with WireMockSupport {
 
-  override def fakeApplication = new GuiceApplicationBuilder()
-    .overrides(GuiceableModule.fromGuiceModules(Seq(overridingsModule)))
-    .configure(config()).build()
-
-  def config(): Map[String, Any] = Map()
-
-  lazy val overridingsModule = new AbstractModule {
+  val overridingsModule = new AbstractModule {
     override def configure(): Unit = ()
   }
 
+  override def fakeApplication = new GuiceApplicationBuilder()
+    .overrides(GuiceableModule.fromGuiceModules(Seq(overridingsModule)))
+    .configure(
+      "microservice.services.pdf-generator-service.host" -> WireMockSupport.host,
+      "microservice.services.pdf-generator-service.port" -> WireMockSupport.port,
+      "microservice.services.pay-api.host" -> WireMockSupport.host,
+      "microservice.services.pay-api.port" -> WireMockSupport.port
+    ).build()
 }

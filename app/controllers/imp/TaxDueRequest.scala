@@ -1,6 +1,6 @@
 package controllers.imp
 
-import Service.CountriesService
+import service.CountriesService
 import config.AppConfig
 import controllers.FormsImp.{journeyDetailsImp, taxDueImp}
 import exceptions.MibException
