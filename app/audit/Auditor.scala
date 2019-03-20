@@ -12,21 +12,21 @@ import scala.concurrent.ExecutionContext
 
 @Singleton
 class Auditor @Inject() (auditConnector: AuditConnector) {
-
+  import Auditor._
   private implicit val logger: Logger = Logger(this.getClass)
 
   def apply(auditData: AuditData, mibType: MibType, eventName: String)(implicit hc: HeaderCarrier, ec: ExecutionContext) = {
 
     val extendedDataEvent: ExtendedDataEvent = {
-      if (mibType == MibTypes.mibExport) Auditor.getExtendedDataEventExport(auditData.asInstanceOf[ExportAuditData], eventName)(hc)
+      if (mibType == MibTypes.mibExport) getExtendedDataEventExport(auditData.asInstanceOf[ExportAuditData], eventName)(hc)
       else
-        Auditor.getExtendedDataEventImport(auditData.asInstanceOf[ImportAuditData], eventName)(hc)
+        getExtendedDataEventImport(auditData.asInstanceOf[ImportAuditData], eventName)(hc)
     }
 
     val eventualResult = auditConnector.sendExtendedEvent(extendedDataEvent)
 
     eventualResult.onFailure {
-      case ex: Throwable => logger.warn(s"PaymentAuditEvent:: Failed with exception: ${ex.getMessage}", ex)
+      case ex: Throwable => logger.warn(s"MIBAuditEvent:: Failed with exception: ${ex.getMessage}", ex)
     }
     eventualResult
 
@@ -48,8 +48,6 @@ class Auditor @Inject() (auditConnector: AuditConnector) {
       def auditTags = Map(
         "path" -> hc.otherHeaders.find(p => p._1.equals("request.path")).getOrElse("-" -> "-")._2,
         "clientIP" -> hc.trueClientIp.getOrElse("-"),
-        "clientIP" -> hc.trueClientIp.getOrElse("-"),
-        "X-Request-Chain" -> hc.requestChain.value,
         "X-Session-ID" -> hc.sessionId.map(_.value).getOrElse("-"),
         "X-Request-ID" -> hc.requestId.map(_.value).getOrElse("-"),
         "deviceID" -> hc.deviceID.getOrElse("-"))
