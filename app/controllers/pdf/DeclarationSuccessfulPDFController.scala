@@ -19,13 +19,13 @@ class DeclarationSuccessfulPDFController @Inject() (
     pdfGeneratorConnector: PdfGeneratorConnector)(implicit ec: ExecutionContext) extends FrontendController with PDFGeneration with I18nSupport {
 
   def downloadPDF(): Action[AnyContent] = Action.async { implicit request =>
-    Logger.error("I AM GOD lalal")
+
     val dec = DeclarationReceived.fromSession(request.session).getOrElse(throw new MibException("Declaration data not found"))
 
     val pdfContent = declaration_successful_pdf.render(dec.currentDate, dec.traderNameAndAddress, dec.description, dec.mibReference, request, request2Messages).toString()
-    Logger.error("I AM GOD")
+
     pdfGeneratorConnector.generatePdf(pdfContent).map { response =>
-      Logger.error("I AM GOD Future")
+
       response.status match {
         case OK => Ok(response.bodyAsBytes.toArray).as("application/pdf")
           .withHeaders(
