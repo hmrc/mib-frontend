@@ -1,10 +1,10 @@
 package model.shared
 
 import audit.{NonUkAddress, UkAddress}
-import model.MibType
+import model.{MibType, YesNoValues}
 import play.api.mvc.Session
 
-final case class TraderDetails(uk: String = "Yes", trader: String, line1: Option[String], line2: Option[String] = None,
+final case class TraderDetails(uk: String = YesNoValues.yes, trader: String, line1: Option[String], line2: Option[String] = None,
                                city: Option[String] = None, county: Option[String] = None,
                                postcode: Option[String] = None, country: Option[String] = None, vrn: Option[String] = None,
                                vehicleRegNo: Option[String] = None, line3: Option[String] = None, buildingAndStreet: Option[String],
@@ -15,9 +15,9 @@ final case class TraderDetails(uk: String = "Yes", trader: String, line1: Option
   def getFormattedAddress(countryName: String): String = {
 
     uk match {
-      case "Yes" => trader + lineReturn + buildingAndStreet.fold("")(_ + lineReturn) + line2.fold("")(_ + lineReturn) + city.fold("")(_ + lineReturn) +
+      case YesNoValues.yes => trader + lineReturn + buildingAndStreet.fold("")(_ + lineReturn) + line2.fold("")(_ + lineReturn) + city.fold("")(_ + lineReturn) +
         county.fold("")(_ + lineReturn) + postcode.fold("")(_ + "")
-      case "No" => trader + lineReturn + line1.fold("")(_ + lineReturn) + line2nonuk.fold("")(_ + lineReturn) + line3.fold("")(_ + lineReturn) + countryName
+      case YesNoValues.no => trader + lineReturn + line1.fold("")(_ + lineReturn) + line2nonuk.fold("")(_ + lineReturn) + line3.fold("")(_ + lineReturn) + countryName
     }
 
   }

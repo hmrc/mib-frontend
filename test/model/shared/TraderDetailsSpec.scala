@@ -1,6 +1,6 @@
 package model.shared
 
-import model.MibTypes
+import model.{MibTypes, YesNoValues}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{Matchers, WordSpec}
 import play.api.mvc.Session
@@ -82,7 +82,7 @@ class TraderDetailsSpec extends WordSpec with Matchers with ScalaFutures {
       }
 
       "Non-UK" in {
-        val tradernonuk: TraderDetails = trader.copy(uk = "No")
+        val tradernonuk: TraderDetails = trader.copy(uk = YesNoValues.no)
         tradernonuk.getFormattedAddress("Angola") shouldBe "trader<br>line1<br>line2nonuk<br>line3<br>Angola"
       }
     }

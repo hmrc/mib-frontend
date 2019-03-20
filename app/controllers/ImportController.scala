@@ -12,7 +12,7 @@ import javax.inject.{Inject, Singleton}
 import model.imp.{JourneyDetailsImp, PricesTaxesImp}
 import model.payapi.SpjRequest
 import model.shared.{ImportExportDate, MerchandiseDetails, Prices, TraderDetails}
-import model.{ImportPages, MibTypes}
+import model.{ImportPages, MibTypes, YesNoValues}
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
@@ -110,12 +110,12 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
     val declarationCreate: ImportDeclarationCreateAudit = ImportDeclarationCreateAudit(purchasePriceInPence = pricesVal.purchasePrice.toInt * 100, importDate = departure.stringValue)
 
     val traderDetailsForAudit = traderDetail.uk match {
-      case "Yes" => {
+      case YesNoValues.yes => {
         TraderDetailsForAudit(NameOfTrader(traderDetail.trader),
                               Option(traderDetail.getAddressObjectUk()), None,
                               traderDetail.vrn, traderDetail.vehicleRegNo)
       }
-      case "No" => {
+      case YesNoValues.no => {
         TraderDetailsForAudit(NameOfTrader(traderDetail.trader),
                               None, Option(traderDetail.getAddressObjectNonUk(traderDetail.country.fold("")(countriesService.getCountry(_)))),
                               traderDetail.vrn, traderDetail.vehicleRegNo)

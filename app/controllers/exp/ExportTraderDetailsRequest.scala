@@ -26,11 +26,12 @@ class ExportTraderDetailsRequest @Inject() (val messagesApi: MessagesApi, countr
       {
         valueInForm =>
           {
-            val postcodeValidate = FormsConstraints.validateTraderDetailsNoPostCodeOrCountry(traderDetails.fill(valueInForm))
-            val line1Validate = FormsConstraints.validateTraderDetailsNoLine1(postcodeValidate)
+            val traderValidate = FormsConstraints.validateTraderDetailsNoTrader(traderDetails.fill(valueInForm))
+            val line1Validate = FormsConstraints.validateTraderDetailsNoLine1(traderValidate)
+            val postcodeValidate = FormsConstraints.validateTraderDetailsNoPostCodeOrCountry(line1Validate)
 
-            if (line1Validate.errors.size > 0) {
-              Ok(trader_details(line1Validate,
+            if (postcodeValidate.errors.size > 0) {
+              Ok(trader_details(postcodeValidate,
                                 countriesService.getCountries, ExportPages.trader_details.toString,
                                 controllers.routes.ExportController.getExportPage(ExportPages.journey_details.case_value), controllers.routes.ExportController.submitExportPage()
               ))

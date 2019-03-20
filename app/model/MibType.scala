@@ -9,11 +9,11 @@ sealed abstract class MibType extends EnumEntry {
 object MibTypes extends Enum[MibType] {
 
   case object mibImport extends MibType {
-    def caseValue = "mibImport"
+    val caseValue = "mibImport"
   }
 
   case object mibExport extends MibType {
-    def caseValue = "mibExport"
+    val caseValue = "mibExport"
   }
 
   override def values = findValues

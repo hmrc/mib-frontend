@@ -4,7 +4,7 @@ import java.time.temporal.ChronoUnit.DAYS
 import java.time.{LocalDate, ZoneId}
 
 import model.shared.{ImportExportDate, TraderDetails}
-import model.{MibType, MibTypes}
+import model.{MibType, MibTypes, YesNoValues}
 import play.api.data.format.Formatter
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 import play.api.data.{Form, FormError}
@@ -51,8 +51,16 @@ object FormsConstraints {
     } else {
       DAYS.between(currentDt, importDt) match {
         case x if (0 <= x && x <= 5) => form
-        case x if (x < 0)            => form.withError("", if (isImport) { "error.import.date.in.past" } else { "error.export.date.in.past" })
-        case _                       => form.withError("", if (isImport) { "error.import.date" } else { "error.export.date" })
+        case x if (x < 0) => form.withError("", if (isImport) {
+          "error.import.date.in.past"
+        } else {
+          "error.export.date.in.past"
+        })
+        case _ => form.withError("", if (isImport) {
+          "error.import.date"
+        } else {
+          "error.export.date"
+        })
       }
     }
 
@@ -71,7 +79,7 @@ object FormsConstraints {
 
   def validateTraderDetailsNoPostCodeOrCountry(form: Form[TraderDetails]) = {
 
-    if (form("uk").value.get == "Yes") {
+    if (form("uk").value.get == YesNoValues.yes) {
       if (form("postcode").value.isDefined) {
         form
       } else {
@@ -89,7 +97,7 @@ object FormsConstraints {
 
   def validateTraderDetailsNoLine1(form: Form[TraderDetails]) = {
 
-    if (form("uk").value.get == "Yes") {
+    if (form("uk").value.get == YesNoValues.yes) {
       if (form("buildingAndStreet").value.isDefined) {
         form
       } else {
@@ -101,6 +109,16 @@ object FormsConstraints {
       } else {
         form.withError("line1", "error.invalid.addressline1")
       }
+    }
+
+  }
+
+  def validateTraderDetailsNoTrader(form: Form[TraderDetails]) = {
+
+    if (form("trader").value.isDefined && form("trader").value.get.length > 0) {
+      form
+    } else {
+      form.withError("trader", "error.required.trader")
     }
 
   }

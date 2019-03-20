@@ -13,7 +13,7 @@ import exceptions.MibException
 import javax.inject.{Inject, Singleton}
 import model.exp.{DeclarationReceived, JourneyDetailsExp, TraderDetailsCheckExp}
 import model.shared._
-import model.{ExportPages, MibTypes}
+import model.{ExportPages, MibTypes, YesNoValues}
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{AnyContent, Request, Results}
@@ -48,12 +48,12 @@ class ExportCheckDetailsRequest @Inject() (val messagesApi: MessagesApi, countri
     val declarationCreate: ExportDeclarationCreateAudit = ExportDeclarationCreateAudit(purchasePriceInPence = pricesVal.purchasePrice.toInt * 100, exportDate = departure.stringValue)
 
     val traderDetailsForAudit = traderDetail.uk match {
-      case "Yes" => {
+      case YesNoValues.yes => {
         TraderDetailsForAudit(NameOfTrader(traderDetail.trader),
                               Option(traderDetail.getAddressObjectUk()), None,
                               traderDetail.vrn, traderDetail.vehicleRegNo)
       }
-      case "No" => {
+      case YesNoValues.no => {
         TraderDetailsForAudit(NameOfTrader(traderDetail.trader),
                               None, Option(traderDetail.getAddressObjectNonUk(traderDetail.country.fold("")(countriesService.getCountry(_)))),
                               traderDetail.vrn, traderDetail.vehicleRegNo)
