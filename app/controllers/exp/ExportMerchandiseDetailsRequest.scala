@@ -20,7 +20,7 @@ import scala.concurrent.ExecutionContext
 class ExportMerchandiseDetailsRequest @Inject() (val messagesApi: MessagesApi, countriesService: CountriesService)(implicit ec: ExecutionContext, appConfig: AppConfig) extends I18nSupport with Results {
 
   def post(implicit request: Request[AnyContent]) = {
-    merchandiseDetails.bindFromRequest().fold(
+    merchandiseDetails(MibTypes.mibExport).bindFromRequest().fold(
       formWithErrors => Ok(merchandise_details(
         formWithErrors, ExportPages.merchandise_details.toString,
         controllers.routes.ExportController.getExportPage(ExportPages.trader_details.case_value),
@@ -31,7 +31,7 @@ class ExportMerchandiseDetailsRequest @Inject() (val messagesApi: MessagesApi, c
           {
             val journey = journeyDetailsExp.fill(JourneyDetailsExp.fromSession(request.session).get)
             val traderFull = traderDetails.fill(TraderDetails.fromSession(request.session, MibTypes.mibExport).get).get
-            val merchandise = merchandiseDetails.fill(valueInForm)
+            val merchandise = merchandiseDetails(MibTypes.mibExport).fill(valueInForm)
             val traderCheck = traderDetailsCheckExp.fill(TraderDetailsCheckExp(traderFull.getFormattedAddress(traderFull.country.fold("")(countriesService.getCountry(_))), traderFull.vrn, traderFull.vehicleRegNo))
             val departure = importExportDate.fill(ImportExportDate.fromSession(request.session, MibTypes.mibExport).get)
             val pricesVal = prices.fill(Prices.fromSession(request.session, MibTypes.mibExport).get)
@@ -49,7 +49,7 @@ class ExportMerchandiseDetailsRequest @Inject() (val messagesApi: MessagesApi, c
   }
 
   def get(implicit request: Request[AnyContent]) = {
-    Ok(merchandise_details(merchandiseDetails.fill(MerchandiseDetails.fromSession(request.session, MibTypes.mibExport).getOrElse(throw new MibException("Merchandise Details not found"))),
+    Ok(merchandise_details(merchandiseDetails(MibTypes.mibExport).fill(MerchandiseDetails.fromSession(request.session, MibTypes.mibExport).getOrElse(throw new MibException("Merchandise Details not found"))),
                            ExportPages.merchandise_details.toString,
                            controllers.routes.ExportController.getExportPage(ExportPages.trader_details.case_value),
                            controllers.routes.ExportController.submitExportPage(), "export.merchandisedetails.desciptionOfGoods"))

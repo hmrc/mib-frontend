@@ -36,7 +36,7 @@ class ExportTraderDetailsRequest @Inject() (val messagesApi: MessagesApi, countr
               ))
             } else {
               Ok(merchandise_details(
-                MerchandiseDetails.fromSession(request.session, MibTypes.mibExport).fold(merchandiseDetails)(merchandiseDetails.fill(_)),
+                MerchandiseDetails.fromSession(request.session, MibTypes.mibExport).fold(merchandiseDetails(MibTypes.mibExport))(merchandiseDetails(MibTypes.mibExport).fill(_)),
                 ExportPages.merchandise_details.toString,
                 controllers.routes.ExportController.getExportPage(ExportPages.trader_details.case_value),
                 controllers.routes.ExportController.submitExportPage(), "export.merchandisedetails.desciptionOfGoods"

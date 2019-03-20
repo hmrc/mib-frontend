@@ -71,7 +71,7 @@ class ExportCheckDetailsRequest @Inject() (val messagesApi: MessagesApi, countri
   def get(implicit request: Request[AnyContent]) = {
     val journey = journeyDetailsExp.fill(JourneyDetailsExp.fromSession(request.session).getOrElse(throw new MibException("Journey Details not found")))
     val traderFull = traderDetails.fill(TraderDetails.fromSession(request.session, MibTypes.mibExport).getOrElse(throw new MibException("Trader Details not found"))).get
-    val merchandise = merchandiseDetails.fill(MerchandiseDetails.fromSession(request.session, MibTypes.mibExport).getOrElse(throw new MibException("Merchant Details not found")))
+    val merchandise = merchandiseDetails(MibTypes.mibExport).fill(MerchandiseDetails.fromSession(request.session, MibTypes.mibExport).getOrElse(throw new MibException("Merchant Details not found")))
     val traderCheck = traderDetailsCheckExp.fill(TraderDetailsCheckExp(traderFull.getFormattedAddress(traderFull.country.fold("")(countriesService.getCountry(_))), traderFull.vrn, traderFull.vehicleRegNo))
     val departure = importExportDate.fill(ImportExportDate.fromSession(request.session, MibTypes.mibExport).getOrElse(throw new MibException("ImportExport details not found")))
     val pricesVal = prices.fill(Prices.fromSession(request.session, MibTypes.mibExport).getOrElse(throw new MibException("Prices Details not found")))

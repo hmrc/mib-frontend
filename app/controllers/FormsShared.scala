@@ -6,6 +6,7 @@ import play.api.data.Form
 import play.api.data.Forms.{mapping, number, of, optional, text}
 import play.api.data.format.Formats.doubleFormat
 import play.api.data.validation.Constraints.maxLength
+import model.{MibType, MibTypes}
 
 object FormsShared {
 
@@ -47,11 +48,17 @@ object FormsShared {
     )(TraderDetails.apply)(TraderDetails.unapply))
   }
 
-  def merchandiseDetails: Form[MerchandiseDetails] = {
+  def merchandiseDetails(mibType: MibType): Form[MerchandiseDetails] = {
+
+    //MibTypes.mibImport
+    //MibTypes.mibExport
+    val errorMessage = if (mibType == MibTypes.mibImport) "error.invalid.descriptionOfGoods" else "error.invalid.descriptionOfGoodsExp"
+
     Form(mapping(
       "invoiceNumber" -> optional(text.transform[String](_.trim, identity).verifying(maxLength(20))),
-      "desciptionOfGoods" -> text.transform[String](_.trim, identity).verifying("error.invalid.desciptionOfGoods", s => s.length > 0).verifying(maxLength(1200))
+      "desciptionOfGoods" -> text.transform[String](_.trim, identity).verifying(errorMessage, s => s.length > 0).verifying(maxLength(1200))
     )(MerchandiseDetails.apply)(MerchandiseDetails.unapply))
   }
 
 }
+

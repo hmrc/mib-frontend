@@ -37,7 +37,7 @@ class ImportTraderDetailsRequest @Inject() (val messagesApi: MessagesApi, countr
               ))
             } else {
               Ok(merchandise_details(
-                MerchandiseDetails.fromSession(request.session, MibTypes.mibImport).fold(merchandiseDetails)(merchandiseDetails.fill(_)),
+                MerchandiseDetails.fromSession(request.session, MibTypes.mibImport).fold(merchandiseDetails(MibTypes.mibImport))(merchandiseDetails(MibTypes.mibImport).fill(_)),
                 ImportPages.merchandise_details.case_value,
                 controllers.routes.ImportController.getImportPage(ImportPages.trader_details.case_value),
                 controllers.routes.ImportController.submitImportPage(), "import.merchandisedetails.desciptionOfGoods"
