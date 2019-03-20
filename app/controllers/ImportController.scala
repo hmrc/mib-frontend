@@ -92,9 +92,10 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
     val traderDetail = TraderDetails.fromSession(request.session, MibTypes.mibImport).getOrElse(throw new MibException("Trader Details not found"))
     val traderFull = traderDetails.fill(traderDetail).get
     val address = traderFull.getFormattedAddress(traderFull.country.fold("")(countriesService.getCountry(_)))
-    val mibRefernce = refService.importRef
     val pTax = PricesTaxesImp.fromSession(request.session).getOrElse(throw new MibException("PricesTaxesImp details not found"))
-    val amtInPence = (pTax.customsDuty + pTax.importVat) * 100
+    val customsDutyPence = pTax.customsDuty * 100
+    val importVatPence = pTax.importVat * 100
+    val amtInPence = customsDutyPence + importVatPence
 
     val description = MerchandiseDetails.fromSession(request.session, MibTypes.mibImport).getOrElse(throw new MibException("Merchandise Details not found")).desciptionOfGoods
 
@@ -122,6 +123,7 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
       }
     }
 
+    val mibRefernce = appendTaxInfoToRef(refService.importRef, importVatPence.intValue(), customsDutyPence.intValue())
     val auditData: ImportAuditData = ImportAuditData(submissionRef = SubmissionRef(mibRefernce), declarationCreate, priceTaxesAudit, journeyWithCountryFull, merchDetails, traderDetailsForAudit)
 
     auditor(auditData, MibTypes.mibImport, "merchandiseDeclaration")
@@ -137,5 +139,7 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
       Redirect(response.nextUrl)
     })
   }
-
+  private def appendTaxInfoToRef(mibReferance: String, vatAmountInPense: Int, dutyAmount: Int): String = {
+    s"$mibReferance^vat:$vatAmountInPense^duty:$dutyAmount"
+  }
 }
