@@ -23,14 +23,13 @@ object FormsImp {
     )(PricesTaxesImp.apply)(PricesTaxesImp.unapply))
   }
 
-  def taxDueImp: Form[TaxDueImp] = {
+  def taxDueImp: Form[TaxDueImp] =
     Form(mapping(
       "purchasePrice" -> of(doubleFormat),
       "customsDuty" -> of(doubleFormat),
       "importVat" -> of(doubleFormat),
       "total" -> of(doubleFormat)
-    )(TaxDueImp.apply)(TaxDueImp.unapply))
-  }
+    ) (TaxDueImp.apply)(TaxDueImp.unapply))
 
   def traderDetailsCheckImp: Form[TraderDetailsCheckImp] = {
     Form(mapping(

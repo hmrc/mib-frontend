@@ -3,6 +3,7 @@ package controllers
 import java.time.temporal.ChronoUnit.DAYS
 import java.time.{LocalDate, ZoneId}
 
+import model.imp.{PricesTaxesImp, TaxDueImp}
 import model.shared.{ImportExportDate, TraderDetails}
 import model.{MibType, MibTypes, YesNoValues}
 import play.api.data.format.Formatter
@@ -64,6 +65,15 @@ object FormsConstraints {
       }
     }
 
+  }
+
+  def checkTotalTax(form: Form[PricesTaxesImp], purchasePrice: Double): Form[PricesTaxesImp] = {
+
+    if ((form("customsDuty").value.get.toDouble + form("importVat").value.get.toDouble) > purchasePrice) {
+      form.withError("", "error.tax.amount", purchasePrice.formatted("%,1.2f").toString)
+    } else {
+      form
+    }
   }
 
   def setImportExportDateSummaryError(form: Form[ImportExportDate], mibType: MibType) = {
