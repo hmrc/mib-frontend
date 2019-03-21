@@ -9,8 +9,8 @@ object TestData {
   val testPortOfExit = "Port of ColmExit"
   val testEoriNumber = "GB123456789000"
   val testCountry = "IRL"
-  val testCustomsDuty = "12345"
-  val testImportVat = "12345"
+  val testCustomsDuty = "22"
+  val testImportVat = "22"
   val testVrn = "1234567890"
   val testVehicleRegNo = "1234567890-123456"
   val testUkTraderDetails = TraderDetails(
