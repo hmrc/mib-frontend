@@ -93,8 +93,8 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
     val traderFull = traderDetails.fill(traderDetail).get
     val address = traderFull.getFormattedAddress(traderFull.country.fold("")(countriesService.getCountry(_)))
     val pTax = PricesTaxesImp.fromSession(request.session).getOrElse(throw new MibException("PricesTaxesImp details not found"))
-    val customsDutyPence = pTax.customsDuty * 100
-    val importVatPence = pTax.importVat * 100
+    val customsDutyPence = (pTax.customsDuty * 100).intValue()
+    val importVatPence = (pTax.importVat * 100).intValue()
     val amtInPence = customsDutyPence + importVatPence
 
     val description = MerchandiseDetails.fromSession(request.session, MibTypes.mibImport).getOrElse(throw new MibException("Merchandise Details not found")).desciptionOfGoods
