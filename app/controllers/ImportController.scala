@@ -123,14 +123,16 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
       }
     }
 
-    val mibRefernce = appendTaxInfoToRef(refService.importRef, importVatPence.intValue(), customsDutyPence.intValue())
+    val mibRefernce = refService.importRef
     val auditData: ImportAuditData = ImportAuditData(submissionRef = SubmissionRef(mibRefernce), declarationCreate, priceTaxesAudit, journeyWithCountryFull, merchDetails, traderDetailsForAudit)
 
     auditor(auditData, MibTypes.mibImport, "merchandiseDeclaration")
     //End Audit
 
     val spjRequest = SpjRequest(mibReference       = mibRefernce,
-                                amountInPence      = amtInPence.intValue(),
+                                vatAmountInPence   = importVatPence,
+                                dutyAmountInPence  = customsDutyPence,
+                                amountInPence      = amtInPence,
                                 traderDetails      = address,
                                 merchandiseDetails = description)
 
@@ -138,8 +140,5 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
       Logger.debug("redirecting to " + response.nextUrl)
       Redirect(response.nextUrl)
     })
-  }
-  private def appendTaxInfoToRef(mibReferance: String, vatAmountInPense: Int, dutyAmount: Int): String = {
-    s"$mibReferance^vat:$vatAmountInPense^duty:$dutyAmount"
   }
 }
