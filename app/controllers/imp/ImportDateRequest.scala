@@ -11,13 +11,14 @@ import model.shared.{ImportExportDate, Prices}
 import model.{ImportPages, MibTypes}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{AnyContent, Request, Results}
+import service.WorkingDaysService
 import views.html.importpages.prices_taxes
 import views.html.shared.import_export_date
 
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class ImportDateRequest @Inject() (val messagesApi: MessagesApi)(implicit ec: ExecutionContext, appConfig: AppConfig) extends I18nSupport with Results {
+class ImportDateRequest @Inject() (val messagesApi: MessagesApi, workingDaysService: WorkingDaysService)(implicit ec: ExecutionContext, appConfig: AppConfig) extends I18nSupport with Results {
 
   def post(implicit request: Request[AnyContent]) = {
     importExportDate.bindFromRequest().fold(
@@ -41,7 +42,7 @@ class ImportDateRequest @Inject() (val messagesApi: MessagesApi)(implicit ec: Ex
         valueInForm =>
           {
 
-            val importDateValidate = FormsConstraints.validDate(importExportDate.fill(valueInForm), true)
+            val importDateValidate = FormsConstraints.validDate(importExportDate.fill(valueInForm), true, workingDaysService)
 
             if (importDateValidate.errors.size == 0) {
 

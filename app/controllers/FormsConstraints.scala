@@ -9,6 +9,7 @@ import model.{MibType, MibTypes, YesNoValues}
 import play.api.data.format.Formatter
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 import play.api.data.{Form, FormError}
+import service.WorkingDaysService
 
 object FormsConstraints {
 
@@ -39,19 +40,20 @@ object FormsConstraints {
       Invalid(ValidationError("error.max.purchase.value"))
   }
 
-  def validDate(form: Form[ImportExportDate], isImport: Boolean) = {
+  def validDate(form: Form[ImportExportDate], isImport: Boolean, workingDaysService: WorkingDaysService) = {
 
     val format = new java.text.SimpleDateFormat("yyyy-MM-dd")
     val importDt: LocalDate = format.parse(form("importExportYear").value.get + "-" + form("importExportMonth").value.get +
       "-" + form("importExportDay").value.get).toInstant.atZone(ZoneId.systemDefault).toLocalDate
     val currentDt: LocalDate = java.time.LocalDate.now
     val importExportDate: ImportExportDate = ImportExportDate(form("importExportDay").value.get.toInt, form("importExportMonth").value.get.toInt, form("importExportYear").value.get.toInt)
+    val fiveWorkingDays = workingDaysService.addWorkingDays(currentDt, 5)
 
     if (!(importExportDate.isValidDate)) {
       form.withError("", "error.real.date")
     } else {
       DAYS.between(currentDt, importDt) match {
-        case x if (0 <= x && x <= 5) => form
+        case x if (0 <= x && importDt.isBefore(fiveWorkingDays)) => form
         case x if (x < 0) => form.withError("", if (isImport) {
           "error.import.date.in.past"
         } else {

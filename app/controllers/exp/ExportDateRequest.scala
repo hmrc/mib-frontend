@@ -1,6 +1,6 @@
 package controllers.exp
 
-import service.CountriesService
+import service.{CountriesService, WorkingDaysService}
 import config.AppConfig
 import controllers.FormsConstraints
 import controllers.FormsExp._
@@ -17,7 +17,9 @@ import views.html.shared.import_export_date
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class ExportDateRequest @Inject() (val messagesApi: MessagesApi, countriesService: CountriesService)(implicit ec: ExecutionContext, appConfig: AppConfig) extends I18nSupport with Results {
+class ExportDateRequest @Inject() (val messagesApi:    MessagesApi,
+                                   countriesService:   CountriesService,
+                                   workingDaysService: WorkingDaysService)(implicit ec: ExecutionContext, appConfig: AppConfig) extends I18nSupport with Results {
 
   def post(implicit request: Request[AnyContent]) = {
 
@@ -41,7 +43,7 @@ class ExportDateRequest @Inject() (val messagesApi: MessagesApi, countriesServic
         valueInForm =>
           {
 
-            val exportDateValidate = FormsConstraints.validDate(importExportDate.fill(valueInForm), false)
+            val exportDateValidate = FormsConstraints.validDate(importExportDate.fill(valueInForm), false, workingDaysService)
 
             if (exportDateValidate.errors.size == 0) {
 
