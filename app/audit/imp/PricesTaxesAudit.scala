@@ -2,9 +2,7 @@ package audit.imp
 
 import play.api.libs.json.{Json, OFormat}
 
-case class PricesTaxesAudit(customsDutyInPence: Int, importVatInPence: Int, totalTaxDue: Int) {
-  def this(customsDutyInPence: Int, importVatInPence: Int) = this(customsDutyInPence, importVatInPence, customsDutyInPence + importVatInPence)
-}
+final case class PricesTaxesAudit(customsDutyInPence: Int, importVatInPence: Int, totalTaxDue: Int)
 
 object PricesTaxesAudit {
 

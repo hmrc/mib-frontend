@@ -3,12 +3,13 @@ package controllers
 import audit._
 import audit.imp.{ImportDeclarationCreateAudit, PricesTaxesAudit}
 import config.AppConfig
-import connector.PayApiConnector
+import connector.{MibBackendConnector, PayApiConnector}
 import controllers.FormsShared.traderDetails
 import controllers.imp._
 import exceptions.MibException
 import javax.inject.{Inject, Singleton}
 import model.imp.{JourneyDetailsImp, PricesTaxesImp}
+import model.mib.StoreResponse
 import model.payapi.SpjRequest
 import model.shared.{ImportExportDate, MerchandiseDetails, Prices, TraderDetails}
 import model.{ImportPages, MibTypes, YesNoValues}
@@ -19,7 +20,7 @@ import service.{CountriesService, RefService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.error_template
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ImportController @Inject() (val messagesApi: MessagesApi, countriesService: CountriesService,
@@ -27,7 +28,7 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
                                   pricesTaxesRequest: PricesTaxesRequest, importJourneyDetailsRequest: ImportJourneyDetailsRequest,
                                   importTraderDetailsRequest: ImportTraderDetailsRequest, importMerchandiseDetails: ImportMerchandiseDetails,
                                   taxDueRequest: TaxDueRequest, importCheckDetailsRequest: ImportCheckDetailsRequest, payApiConnector: PayApiConnector,
-                                  refService: RefService, auditor: Auditor)
+                                  refService: RefService, auditor: Auditor, mibBackendConnector: MibBackendConnector)
   (implicit ec: ExecutionContext, appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   //------------------------------------------------------------------------------------------------------------------------------
@@ -106,7 +107,9 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
     val departure = ImportExportDate.fromSession(request.session, MibTypes.mibImport).getOrElse(throw new MibException("ImportExport details not found"))
     val merchDetails = MerchandiseDetails.fromSession(request.session, MibTypes.mibImport).getOrElse(throw new MibException("Merchant details not found"))
 
-    val priceTaxesAudit: PricesTaxesAudit = new PricesTaxesAudit(pTax.customsDuty.toInt * 100, pTax.importVat.toInt * 100)
+    val customs: Int = pTax.customsDuty.toInt * 100
+    val importDuty: Int = pTax.importVat.toInt * 100
+    val priceTaxesAudit: PricesTaxesAudit = new PricesTaxesAudit(customs, importDuty, customs + importDuty)
 
     val declarationCreate: ImportDeclarationCreateAudit = ImportDeclarationCreateAudit(purchasePriceInPence = pricesVal.purchasePrice.toInt * 100, importDate = departure.stringValue)
 
@@ -128,6 +131,9 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
 
     auditor(auditData, MibTypes.mibImport, "merchandiseDeclaration")
     //End Audit
+
+    val response: Future[StoreResponse] = mibBackendConnector.storeImport(auditData)
+    response.map(res => Logger.debug(res.value))
 
     val spjRequest = SpjRequest(mibReference       = mibRefernce,
                                 vatAmountInPence   = importVatPence,
