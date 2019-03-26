@@ -1,12 +1,15 @@
 package connector
 
 import audit.{ExportAuditData, ImportAuditData}
+import com.gargoylesoftware.htmlunit.javascript.host.media.MediaStreamAudioSourceNode
 import javax.inject.{Inject, Singleton}
 import model.mib.StoreResponse
+import play.Logger
 import play.api.Configuration
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.config.ServicesConfig
+import play.mvc.Http.Status
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -16,14 +19,21 @@ class MibBackendConnector @Inject() (httpClient: HttpClient, config: MibBackendC
   def storeImport(importDec: ImportAuditData)(implicit hc: HeaderCarrier): Future[StoreResponse] = {
 
     val targetUrl = s"${config.baseUrl}/mib-backend/store/import"
-    httpClient.POST[ImportAuditData, StoreResponse](targetUrl, importDec)
+    httpClient.POST(targetUrl, importDec).map(res => res.status match {
+      case Status.CREATED => res.json.as[StoreResponse]
 
+    }
+    )
   }
 
   def storeExport(exportDec: ExportAuditData)(implicit hc: HeaderCarrier): Future[StoreResponse] = {
 
     val targetUrl = s"${config.baseUrl}/mib-backend/store/export"
-    httpClient.POST[ExportAuditData, StoreResponse](targetUrl, exportDec)
+    httpClient.POST(targetUrl, exportDec).map(res => res.status match {
+      case Status.CREATED => res.json.as[StoreResponse]
+      case _              => Logger.debug("AAAAA did not store"); throw new RuntimeException("did not store")
+    }
+    )
 
   }
 

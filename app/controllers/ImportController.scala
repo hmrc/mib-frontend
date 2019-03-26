@@ -142,9 +142,9 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
                                 traderDetails      = address,
                                 merchandiseDetails = description)
 
-    payApiConnector.createJourney(spjRequest).map(response => {
-      Logger.debug("redirecting to " + response.nextUrl)
-      Redirect(response.nextUrl)
-    })
+    for {
+      response <- mibBackendConnector.storeImport(auditData)
+      response <- payApiConnector.createJourney(spjRequest)
+    } yield Redirect(response.nextUrl)
   }
 }

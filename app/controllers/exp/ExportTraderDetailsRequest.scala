@@ -12,17 +12,17 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{AnyContent, Request, Results}
 import views.html.shared.{merchandise_details, trader_details}
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ExportTraderDetailsRequest @Inject() (val messagesApi: MessagesApi, countriesService: CountriesService)(implicit ec: ExecutionContext, appConfig: AppConfig) extends I18nSupport with Results {
 
   def post(implicit request: Request[AnyContent]) = {
     traderDetails.bindFromRequest().fold(
-      formWithErrors => Ok(trader_details(
+      formWithErrors => Future.successful(Ok(trader_details(
         formWithErrors, countriesService.getCountries, ExportPages.trader_details.toString,
         controllers.routes.ExportController.getExportPage(ExportPages.journey_details.case_value), controllers.routes.ExportController.submitExportPage()
-      )),
+      ))),
       {
         valueInForm =>
           {
@@ -31,17 +31,17 @@ class ExportTraderDetailsRequest @Inject() (val messagesApi: MessagesApi, countr
             val postcodeValidate = FormsConstraints.validateTraderDetailsNoPostCodeOrCountry(line1Validate)
 
             if (postcodeValidate.errors.size > 0) {
-              Ok(trader_details(postcodeValidate,
-                                countriesService.getCountries, ExportPages.trader_details.toString,
-                                controllers.routes.ExportController.getExportPage(ExportPages.journey_details.case_value), controllers.routes.ExportController.submitExportPage()
-              ))
+              Future.successful(Ok(trader_details(postcodeValidate,
+                                                  countriesService.getCountries, ExportPages.trader_details.toString,
+                                                  controllers.routes.ExportController.getExportPage(ExportPages.journey_details.case_value), controllers.routes.ExportController.submitExportPage()
+              )))
             } else {
-              Ok(merchandise_details(
+              Future.successful(Ok(merchandise_details(
                 MerchandiseDetails.fromSession(request.session, MibTypes.mibExport).fold(merchandiseDetails(MibTypes.mibExport))(merchandiseDetails(MibTypes.mibExport).fill(_)),
                 ExportPages.merchandise_details.toString,
                 controllers.routes.ExportController.getExportPage(ExportPages.trader_details.case_value),
                 controllers.routes.ExportController.submitExportPage(), "export.merchandisedetails.desciptionOfGoods"
-              )).addingToSession(TraderDetails.toSession(valueInForm, MibTypes.mibExport): _*)
+              )).addingToSession(TraderDetails.toSession(valueInForm, MibTypes.mibExport): _*))
             }
           }
       }

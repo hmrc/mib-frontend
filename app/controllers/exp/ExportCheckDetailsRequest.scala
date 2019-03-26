@@ -12,10 +12,8 @@ import controllers.FormsShared._
 import exceptions.MibException
 import javax.inject.{Inject, Singleton}
 import model.exp.{DeclarationReceived, JourneyDetailsExp, TraderDetailsCheckExp}
-import model.mib.StoreResponse
 import model.shared._
 import model.{ExportPages, MibTypes, YesNoValues}
-import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{AnyContent, Request, Results}
 import service.{CountriesService, RefService}
@@ -23,7 +21,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
 import views.html.exportpages.{declaration_received, export_check_details}
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext}
 
 @Singleton
 class ExportCheckDetailsRequest @Inject() (val messagesApi: MessagesApi, countriesService: CountriesService, refService: RefService,
@@ -65,13 +63,13 @@ class ExportCheckDetailsRequest @Inject() (val messagesApi: MessagesApi, countri
 
     val auditData: ExportAuditData = ExportAuditData(submissionRef = SubmissionRef(decRecd.mibReference), declarationCreate, journeyWithCountryFull, merchDetails, traderDetailsForAudit)
 
-    auditor(auditData, MibTypes.mibExport, "merchandiseDeclaration")
+    for {
+      response <- mibBackendConnector.storeExport(auditData)
+    } yield {
+      Ok(declaration_received(declarationReceived.fill(decRecd),
+                              ExportPages.dec_received.case_value, ExportPages.check_details.case_value)).addingToSession(DeclarationReceived.toSession(decRecd): _*)
+    }
 
-    val response: Future[StoreResponse] = mibBackendConnector.storeExport(auditData)
-    response.map(res => Logger.debug(res.value))
-
-    Ok(declaration_received(declarationReceived.fill(decRecd),
-                            ExportPages.dec_received.case_value, ExportPages.check_details.case_value)).addingToSession(DeclarationReceived.toSession(decRecd): _*)
   }
 
   def get(implicit request: Request[AnyContent]) = {

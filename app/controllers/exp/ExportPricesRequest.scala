@@ -10,7 +10,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{AnyContent, Request, Results}
 import views.html.shared.{import_export_date, purchase_prices}
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ExportPricesRequest @Inject() (val messagesApi: MessagesApi)(implicit ec: ExecutionContext, appConfig: AppConfig) extends I18nSupport with Results {
@@ -24,17 +24,17 @@ class ExportPricesRequest @Inject() (val messagesApi: MessagesApi)(implicit ec: 
         else
           formWithErrors)
 
-        Ok(purchase_prices(
+        Future.successful(Ok(purchase_prices(
           newFormWithErrors, prices.withError("", "error.max.purchase.full"), ExportPages.prices.case_value,
           controllers.routes.ExportController.submitExportPage()
-        ))
+        )))
       },
       {
         valueInForm =>
           {
-            Ok(import_export_date(ImportExportDate.fromSession(request.session, MibTypes.mibExport).fold(importExportDate)(importExportDate.fill(_)), importExportDate,
-                                  ExportPages.export_date.case_value, controllers.routes.ExportController.getExportPage(ExportPages.prices.case_value),
-                                  controllers.routes.ExportController.submitExportPage(), "export.date.header")).addingToSession(Prices.toSession(valueInForm, MibTypes.mibExport): _*)
+            Future.successful(Ok(import_export_date(ImportExportDate.fromSession(request.session, MibTypes.mibExport).fold(importExportDate)(importExportDate.fill(_)), importExportDate,
+                                                    ExportPages.export_date.case_value, controllers.routes.ExportController.getExportPage(ExportPages.prices.case_value),
+                                                    controllers.routes.ExportController.submitExportPage(), "export.date.header")).addingToSession(Prices.toSession(valueInForm, MibTypes.mibExport): _*))
           }
       }
     )

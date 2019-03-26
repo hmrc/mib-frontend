@@ -5,12 +5,14 @@ import config.AppConfig
 import controllers.exp._
 import javax.inject.{Inject, Singleton}
 import model.ExportPages
+import org.scalatest.time.Seconds
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.error_template
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration.Duration
 
 @Singleton
 class ExportController @Inject() (val messagesApi: MessagesApi, countriesService: CountriesService,
@@ -45,8 +47,7 @@ class ExportController @Inject() (val messagesApi: MessagesApi, countriesService
 
   //------------------------------------------------------------------------------------------------------------------------------
 
-  def submitExportPage: Action[AnyContent] = Action { implicit request =>
-
+  def submitExportPage: Action[AnyContent] = Action.async { implicit request =>
     val pageno = request.body.asFormUrlEncoded.map(form => {
       val page = form.get("page")
       page.get.head
@@ -63,11 +64,8 @@ class ExportController @Inject() (val messagesApi: MessagesApi, countriesService
       case Some(ExportPages.merchandise_details.case_value) => exportMerchandiseDetailsRequest.post
 
       case Some(ExportPages.check_details.case_value)       => exportCheckDetailsRequest.post
-
-      case _ => {
-        Ok(error_template("Merchandise in Baggage", "Merchandise in Baggage", "Page not found"))
-      }
     }
+
   }
 
 }
