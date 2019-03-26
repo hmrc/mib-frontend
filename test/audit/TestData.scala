@@ -15,7 +15,7 @@ object TestData {
   val submissionRefImport: SubmissionRef = new SubmissionRef("MIBI1234567890")
   val importDeclarationCreateAudit: ImportDeclarationCreateAudit = new ImportDeclarationCreateAudit(purchasePriceInPence = 200, importDate = "20-03-2019")
   val journeyDetailsImp: JourneyDetailsImp = new JourneyDetailsImp("port of entry", "country of origin", Some("eori"))
-  val pricesTaxesAudit: PricesTaxesAudit = new PricesTaxesAudit(50, 20)
+  val pricesTaxesAudit: PricesTaxesAudit = new PricesTaxesAudit(50, 20, 70)
 
   val merchandiseDetails: MerchandiseDetails = new MerchandiseDetails(Some("invoice number"), "description of goods")
 

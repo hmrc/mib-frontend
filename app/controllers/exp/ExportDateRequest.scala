@@ -14,7 +14,7 @@ import play.api.mvc.{AnyContent, Request, Results}
 import views.html.exportpages.export_journey_details
 import views.html.shared.import_export_date
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ExportDateRequest @Inject() (val messagesApi:    MessagesApi,
@@ -32,12 +32,12 @@ class ExportDateRequest @Inject() (val messagesApi:    MessagesApi,
           case _ => formWithErrors.discardingErrors
         }
 
-        Ok(import_export_date(
+        Future.successful(Ok(import_export_date(
           newFormWithErrors,
           errorSummary,
           ExportPages.export_date.toString, controllers.routes.ExportController.getExportPage(ExportPages.prices.case_value),
           controllers.routes.ExportController.submitExportPage(), "export.date.header"
-        ))
+        )))
       },
       {
         valueInForm =>
@@ -47,16 +47,16 @@ class ExportDateRequest @Inject() (val messagesApi:    MessagesApi,
 
             if (exportDateValidate.errors.size == 0) {
 
-              Ok(export_journey_details(JourneyDetailsExp.fromSession(request.session).fold(journeyDetailsExp)(journeyDetailsExp.fill(_)), countriesService.getCountries,
-                                        ExportPages.journey_details.case_value, ExportPages.export_date.case_value)).addingToSession(ImportExportDate.toSession(valueInForm, MibTypes.mibExport): _*)
+              Future.successful(Ok(export_journey_details(JourneyDetailsExp.fromSession(request.session).fold(journeyDetailsExp)(journeyDetailsExp.fill(_)), countriesService.getCountries,
+                                                          ExportPages.journey_details.case_value, ExportPages.export_date.case_value)).addingToSession(ImportExportDate.toSession(valueInForm, MibTypes.mibExport): _*))
 
             } else {
-              Ok(import_export_date(
+              Future.successful(Ok(import_export_date(
                 importExportDate.fill(valueInForm),
                 exportDateValidate,
                 ExportPages.export_date.toString, controllers.routes.ExportController.getExportPage(ExportPages.prices.case_value),
                 controllers.routes.ExportController.submitExportPage(), "export.date.header"
-              ))
+              )))
             }
           }
       }

@@ -3,7 +3,7 @@ package audit
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
-case class SubmissionRef(value: String)
+final case class SubmissionRef(value: String)
 
 object SubmissionRef {
 
