@@ -132,8 +132,6 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
     auditor(auditData, MibTypes.mibImport, "merchandiseDeclaration")
     //End Audit
 
-    val response: Future[StoreResponse] = mibBackendConnector.storeImport(auditData)
-    response.map(res => Logger.debug(res.value))
 
     val spjRequest = SpjRequest(mibReference       = mibRefernce,
                                 vatAmountInPence   = importVatPence,
@@ -143,7 +141,7 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
                                 merchandiseDetails = description)
 
     for {
-      response <- mibBackendConnector.storeImport(auditData)
+      storeImport <- mibBackendConnector.storeImport(auditData)
       response <- payApiConnector.createJourney(spjRequest)
     } yield Redirect(response.nextUrl)
   }
