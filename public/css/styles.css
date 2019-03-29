@@ -102,3 +102,92 @@
 .govuk-box-highlight h2{
     margin-bottom:0;
 }
+/* js disbale address selection */
+
+.divukaddress,
+.divnon-ukaddress{
+    display:none;
+}
+
+.ukaddress:checked ~ div#ukaddress {
+    display:inline;
+}
+
+
+.non-ukaddress:checked ~ div#non-ukaddress {
+    display:inline;
+}
+
+
+input[type=radio].non-ukaddress,
+input[type=radio].ukaddress {
+    position: absolute;
+    cursor: pointer;
+    left: 0;
+    top: 0;
+    width: 38px;
+    height: 38px;
+    z-index: 1;
+    margin: 0;
+    zoom: 1;
+    filter: alpha(opacity=0);
+    opacity: 0;
+}
+
+
+
+ input[type=radio] + label.multiple-choice{
+    cursor: pointer;
+    padding: 8px 10px 9px 12px;
+    display: block;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+}
+
+@media (min-width: 641px){
+    input[type=radio] + label.multiple-choice{
+          float:left;
+          padding-top: 7px;
+          padding-bottom: 7px;
+              text-align: right;
+              width: 70px;
+    }
+
+}
+
+
+input[type=radio] + label.multiple-choice:before {
+    content: "";
+    border: 2px solid;
+    background: transparent;
+    width: 34px;
+    height: 34px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+}
+
+input[type=radio] + label.multiple-choice:after {
+    content: "";
+    border: 10px solid;
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: 9px;
+    left: 9px;
+    border-radius: 50%;
+    opacity: 0
+  }
+
+input:checked + label.multiple-choice:after {
+    zoom: 1;
+    filter: alpha(opacity=100);
+    opacity: 1;
+}
+
+
+input[type=radio]:focus + label.multiple-choice:before {
+    -webkit-box-shadow: 0 0 0 4px #ffbf47;
+    box-shadow: 0 0 0 4px #ffbf47;
+}
