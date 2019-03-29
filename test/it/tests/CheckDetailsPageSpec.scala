@@ -6,6 +6,7 @@ import it.testsupport.BrowserSpec
 import org.openqa.selenium.WebDriver
 import it.pages.DeclarationPage
 import it.pages.DeclarationPage.currentPath
+import it.testsupport.MibBackendStub.storeExport
 class CheckDetailsPageSpec extends BrowserSpec {
 
   "show the Details of trader page export" in new SetUp {
@@ -19,11 +20,11 @@ class CheckDetailsPageSpec extends BrowserSpec {
   }
 
   "go to the next page for export " in new SetUp {
+    storeExport()
     goToPageVia(asImport = false)
     CheckDetailsPage.clickContinue()
     DeclarationPage.assertPageIsDisplayed()
   }
-
   "go start the payments journey " in new SetUp {
     goToPageVia()
     CheckDetailsPage.clickContinue()

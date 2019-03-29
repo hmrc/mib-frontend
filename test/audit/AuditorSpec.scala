@@ -2,14 +2,14 @@ package audit
 
 import audit.exp.ExportDeclarationCreateAudit
 import audit.imp.{ImportDeclarationCreateAudit, PricesTaxesAudit}
+import filters.MibSessionIdCheck.sessionIdKey
 import model.exp.JourneyDetailsExp
 import model.imp.JourneyDetailsImp
 import model.shared.MerchandiseDetails
 import support.ITSpec
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.logging.{RequestId, SessionId}
+import uk.gov.hmrc.http.logging.RequestId
 import uk.gov.hmrc.play.audit.model.ExtendedDataEvent
-
 class AuditorSpec extends ITSpec {
 
   val auditor = fakeApplication.injector.instanceOf[Auditor]
@@ -19,7 +19,7 @@ class AuditorSpec extends ITSpec {
     "export audit" in {
 
       val hc = HeaderCarrier()
-      val extendedDataEvent: ExtendedDataEvent = auditor.Auditor.getExtendedDataEventExport(TestData.exportData, "merchandiseDeclaration")(hc)
+      val extendedDataEvent: ExtendedDataEvent = auditor.Auditor.getExtendedDataEventExport(TestData.exportData, "merchandiseDeclaration", "session-id-value")(hc)
 
       extendedDataEvent.auditType shouldBe "merchandiseDeclaration"
       extendedDataEvent.auditSource shouldBe "mib"
@@ -34,7 +34,7 @@ class AuditorSpec extends ITSpec {
     "import audit" in {
 
       val hc = HeaderCarrier()
-      val extendedDataEvent: ExtendedDataEvent = auditor.Auditor.getExtendedDataEventImport(TestData.importData, "merchandiseDeclaration")(hc)
+      val extendedDataEvent: ExtendedDataEvent = auditor.Auditor.getExtendedDataEventImport(TestData.importData, "merchandiseDeclaration", "session-id-value")(hc)
 
       extendedDataEvent.auditType shouldBe "merchandiseDeclaration"
       extendedDataEvent.auditSource shouldBe "mib"
@@ -54,15 +54,13 @@ class AuditorSpec extends ITSpec {
     "return a map for session information" in {
       val hc = HeaderCarrier(
         trueClientIp = Some("client-ip-value"),
-        sessionId    = Some(SessionId("session-id-value")),
         requestId    = Some(RequestId("request-id-value")),
         deviceID     = Some("device-id-value"),
-        otherHeaders = Seq("request.path" -> "/path/payment-id/confirm-payment"))
+        otherHeaders = Seq("request.path" -> "/path/payment-id/confirm-payment")).withExtraHeaders(sessionIdKey -> "session-id-value")
 
       auditor.Auditor.AuditTags(hc).auditTags shouldBe Map(
         "clientIP" -> "client-ip-value",
         "path" -> "/path/payment-id/confirm-payment",
-        "X-Session-ID" -> "session-id-value",
         "X-Request-ID" -> "request-id-value",
         "deviceID" -> "device-id-value")
 
@@ -74,7 +72,6 @@ class AuditorSpec extends ITSpec {
       auditor.Auditor.AuditTags(hc).auditTags shouldBe Map(
         "clientIP" -> "-",
         "path" -> "-",
-        "X-Session-ID" -> "-",
         "X-Request-ID" -> "-",
         "deviceID" -> "-")
 

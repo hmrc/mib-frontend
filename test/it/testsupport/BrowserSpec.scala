@@ -47,8 +47,8 @@ class BrowserSpec
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
-      "microservice.services.pay-api.port" -> WireMockSupport.port
-
+      "microservice.services.pay-api.port" -> WireMockSupport.port,
+      "microservice.services.mib-backend.port" -> WireMockSupport.port
     )
     .build()
 

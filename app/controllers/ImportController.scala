@@ -129,9 +129,8 @@ class ImportController @Inject() (val messagesApi: MessagesApi, countriesService
     val mibRefernce = refService.importRef
     val auditData: ImportAuditData = ImportAuditData(submissionRef = SubmissionRef(mibRefernce), declarationCreate, priceTaxesAudit, journeyWithCountryFull, merchDetails, traderDetailsForAudit)
 
-    auditor(auditData, MibTypes.mibImport, "merchandiseDeclaration")
+    auditor.sendAuditData(auditData, MibTypes.mibImport, "merchandiseDeclaration")
     //End Audit
-
 
     val spjRequest = SpjRequest(mibReference       = mibRefernce,
                                 vatAmountInPence   = importVatPence,
