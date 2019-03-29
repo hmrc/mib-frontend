@@ -106,16 +106,18 @@
 
 .divukaddress,
 .divnon-ukaddress{
-    display:none;
+    /*display:none;*/
+    position:absolute;
+    left:-99999999px;
 }
 
 .ukaddress:checked ~ div#ukaddress {
-    display:inline;
+    position:inherit;
 }
 
 
 .non-ukaddress:checked ~ div#non-ukaddress {
-    display:inline;
+    position:inherit;
 }
 
 
@@ -168,6 +170,18 @@ input[type=radio] + label.multiple-choice:before {
     border-radius: 50%;
 }
 
+@media (max-width: 641px) {
+
+    label#ukaddress-label {
+        margin-left: 35px;
+    }
+    input[type=radio] + label.multiple-choice:before {
+        left:-35px;
+    }
+
+}
+
+
 input[type=radio] + label.multiple-choice:after {
     content: "";
     border: 10px solid;
@@ -179,6 +193,15 @@ input[type=radio] + label.multiple-choice:after {
     border-radius: 50%;
     opacity: 0
   }
+
+
+@media (max-width: 641px) {
+
+    input[type=radio] + label.multiple-choice:after {
+        left:-26px;
+    }
+
+}
 
 input:checked + label.multiple-choice:after {
     zoom: 1;
