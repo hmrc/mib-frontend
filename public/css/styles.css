@@ -105,7 +105,7 @@
 /* js disbale address selection */
 
 .divukaddress,
-.divnon-ukaddress{
+.divnon-ukaddress {
     position:absolute;
     left:-99999999px;
 }

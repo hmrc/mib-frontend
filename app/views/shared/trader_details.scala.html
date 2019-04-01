@@ -67,64 +67,73 @@ action = submitPage,
     <label class="form-label">@Messages("shared.traderDetails.has.address")</label>
     <fieldset class="inline">
         @views.html.partial.error_message_form_input("uk", form)
-        @views.html.partial.radio_option(form("uk"), "uk", Messages("global.yes"), Messages("global.yes"), Messages("global.yes"), None, None, "ukaddress")
-        @views.html.partial.radio_option(form("uk"), "uk", Messages("global.no"), Messages("global.no"), Messages("global.no"), None, None, "non-ukaddress")
 
+        <div class="">
+            <input  data-target="ukaddress"  class="ukaddress" id="Yes" type="radio" name="uk" value="Yes" @{if(form("uk").value.contains(Messages("global.yes"))) "checked"}>
+            <label for="Yes" id="ukaddress-label" class="multiple-choice">
+                Yes
+            </label>
+
+
+            <input data-target="non-ukaddress" class="non-ukaddress" id="No" type="radio" name="uk" value="No" @{if(form("uk").value.contains(Messages("global.no"))) "checked"}>
+            <label for="No" id="non-ukaddress-label" class="multiple-choice">
+                No
+            </label>
+
+            <div class="js-hidden divukaddress" id="ukaddress">
+                <br><br>
+                @for(field <- Seq("buildingAndStreet", "line2", "city", "county", "postcode")) {
+                <div id="@field-fieldset" class="form-group @form.errors(field).map { e => form-group-error }">
+
+                    <label for="@field" class="form-label">
+                        @Messages("shared.traderDetails." + field) @if(field == "county" || field == "line2" || field == "city") { @Messages("global.optional") }
+                        @views.html.partial.error_message_form_input(field,form)
+                    </label>
+
+                    <input type="text" class="form-control @if(form.errors(field).nonEmpty) { form-control-error }" name="@field" id="@field" value="@form(field).value" @if(field == "postcode") { style="width: 150px" }/>
+
+                </div>
+                }
+            </div>
+
+            <div class="js-hidden divnon-ukaddress" id="non-ukaddress">
+                <br><br>
+                @for(field <- Seq("line1", "line2nonuk", "line3")) {
+                <div id="@field-fieldset" class="form-group @form.errors(field).map { e => form-group-error }">
+
+                    <label for="@field" class="form-label">
+                        @Messages("shared.traderDetails." + field) @if(field == "line2nonuk" || field == "line3") { @Messages("global.optional") }
+                        @views.html.partial.error_message_form_input(field,form)
+                    </label>
+
+                    <input type="text" class="form-control @if(form.errors(field).nonEmpty) { form-control-error }" name="@field" id="@field" value="@form(field).value" />
+
+                </div>
+                }
+
+                <div  id="country-fieldset"  class="form-group @form.errors("country").map { e => form-group-error }">
+
+                <label for="country" class="form-label">@Messages("shared.traderDetails.country")
+                    @if(form.errors("country").nonEmpty) {
+                    @for(error <- form.errors("country")) {
+                    <span id="@error.message-country" class="error-message">@Messages(error.message)</span>
+                    }
+                    }
+                </label>
+
+                <select id="country" class="form-control @if(form.errors("country").nonEmpty) { form-control-error }" name="country">
+                <option value="">@Messages("global.select.message")</option>
+                @for(country <- countries) {
+                <option value="@country.code" @if(form("country").value.getOrElse("") == country.code){ selected }>@country.name</option>
+                }
+                </select>
+            </div>
+
+        </div>
+        </div>
     </fieldset>
     <br>
 
-
-
-    <div class="js-hidden" id="ukaddress">
-
-    @for(field <- Seq("buildingAndStreet", "line2", "city", "county", "postcode")) {
-    <div id="@field-fieldset" class="form-group @form.errors(field).map { e => form-group-error }">
-
-        <label for="@field" class="form-label">
-            @Messages("shared.traderDetails." + field) @if(field == "county" || field == "line2" || field == "city") { @Messages("global.optional") }
-            @views.html.partial.error_message_form_input(field,form)
-        </label>
-
-        <input type="text" class="form-control @if(form.errors(field).nonEmpty) { form-control-error }" name="@field" id="@field" value="@form(field).value" @if(field == "postcode") { style="width: 150px" }/>
-
-    </div>
-    }
-    </div>
-
-    <div class="js-hidden" id="non-ukaddress">
-
-        @for(field <- Seq("line1", "line2nonuk", "line3")) {
-        <div id="@field-fieldset" class="form-group @form.errors(field).map { e => form-group-error }">
-
-            <label for="@field" class="form-label">
-                @Messages("shared.traderDetails." + field) @if(field == "line2nonuk" || field == "line3") { @Messages("global.optional") }
-                @views.html.partial.error_message_form_input(field,form)
-            </label>
-
-            <input type="text" class="form-control @if(form.errors(field).nonEmpty) { form-control-error }" name="@field" id="@field" value="@form(field).value" />
-
-        </div>
-        }
-
-        <div  id="country-fieldset"  class="form-group @form.errors("country").map { e => form-group-error }">
-
-            <label for="country" class="form-label">@Messages("shared.traderDetails.country")
-                @if(form.errors("country").nonEmpty) {
-                @for(error <- form.errors("country")) {
-                <span id="@error.message-country" class="error-message">@Messages(error.message)</span>
-                }
-                }
-            </label>
-
-            <select id="country" class="form-control @if(form.errors("country").nonEmpty) { form-control-error }" name="country">
-            <option value="">@Messages("global.select.message")</option>
-            @for(country <- countries) {
-            <option value="@country.code" @if(form("country").value.getOrElse("") == country.code){ selected }>@country.name</option>
-            }
-            </select>
-        </div>
-
-    </div>
 
 
     @for(field <- Seq("vrn","vehicleRegNo")) {
@@ -149,4 +158,4 @@ action = submitPage,
     <button id="next" type="submit" class="button">@Messages("global.continue")</button>
 </div>
 }
-} 
+}
