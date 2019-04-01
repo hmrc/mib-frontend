@@ -16,9 +16,9 @@ object DetailsOfTraderPage extends CommonPage {
     currentPath shouldBe pathImport
     getPageHeader shouldBe "Details of trader"
   }
-  def clickUk()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("Yes")).click())
+  def clickUk()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("ukaddress-label")).click())
 
-  def clickNotUk()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("No")).click())
+  def clickNotUk()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("nonukaddress-label")).click())
 
   def enterDetails(trader: TraderDetails, isUK: Boolean = true)(implicit driver: WebDriver): Unit = {
     textField("trader").value = trader.trader
