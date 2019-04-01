@@ -106,7 +106,6 @@
 
 .divukaddress,
 .divnon-ukaddress{
-    /*display:none;*/
     position:absolute;
     left:-99999999px;
 }
