@@ -51,6 +51,7 @@ error.export.date.in.past = Export date must not be in the past
 error.invalid.import.date = Enter an import date
 error.invalid.export.date = Enter an export date
 error.tax.amount = Total tax due cannot be more than purchase amount (£{0})
+error.invalid.char = Field contains an invalid character
 #
 #error.real=Real number value expected
 error.real = Enter a real number

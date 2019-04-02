@@ -33,18 +33,25 @@ object FormsShared {
   def traderDetails: Form[TraderDetails] = {
     Form(mapping(
       "uk" -> text,
-      "trader" -> text.transform[String](_.trim, identity).verifying(maxLength(100)),
-      "line1" -> optional(text.transform[String](_.trim, identity).verifying(maxLength(100))),
-      "line2" -> optional(text.transform[String](_.trim, identity).verifying(maxLength(100))),
-      "city" -> optional(text.transform[String](_.trim, identity).verifying(maxLength(60))),
-      "county" -> optional(text.transform[String](_.trim, identity).verifying(maxLength(60))),
+      "trader" -> text.transform[String](_.trim, identity).verifying(maxLength(100))
+        .verifying(FormsConstraints.emojiConstraint("trader", "error.invalid.char")),
+      "line1" -> optional(text.transform[String](_.trim, identity).verifying(maxLength(100))
+        .verifying(FormsConstraints.emojiConstraint("line1", "error.invalid.char"))),
+      "line2" -> optional(text.transform[String](_.trim, identity).verifying(maxLength(100))
+        .verifying(FormsConstraints.emojiConstraint("line2", "error.invalid.char"))),
+      "city" -> optional(text.transform[String](_.trim, identity).verifying(maxLength(60))
+        .verifying(FormsConstraints.emojiConstraint("city", "error.invalid.char"))),
+      "county" -> optional(text.transform[String](_.trim, identity).verifying(maxLength(60))
+        .verifying(FormsConstraints.emojiConstraint("county", "error.invalid.char"))),
       "postcode" -> optional(of(FormsConstraints.postcodeFormatter)),
       "country" -> optional(text.verifying(FormsConstraints.countryConstraint)),
       "vrn" -> optional(text.transform[String](_.trim, identity).verifying(maxLength(60))),
       "vehicleRegNo" -> optional(text.transform[String](_.trim, identity).verifying(maxLength(60))),
-      "line3" -> optional(text.transform[String](_.trim, identity).verifying(maxLength(100))),
-      "buildingAndStreet" -> optional(text.transform[String](_.trim, identity).verifying(maxLength(100))),
-      "line2nonuk" -> optional(text.transform[String](_.trim, identity).verifying(maxLength(100)))
+      "line3" -> optional(text.transform[String](_.trim, identity).verifying(maxLength(100)).verifying(FormsConstraints.emojiConstraint("line3", "error.invalid.char"))),
+      "buildingAndStreet" -> optional(text.transform[String](_.trim, identity)
+        .verifying(maxLength(100)).verifying(FormsConstraints.emojiConstraint("buildingAndStreet", "error.invalid.char"))),
+      "line2nonuk" -> optional(text.transform[String](_.trim, identity)
+        .verifying(maxLength(100)).verifying(FormsConstraints.emojiConstraint("line2nonuk", "error.invalid.char")))
     )(TraderDetails.apply)(TraderDetails.unapply))
   }
 

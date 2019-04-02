@@ -3,15 +3,48 @@ package controllers
 import java.time.temporal.ChronoUnit.DAYS
 import java.time.{LocalDate, ZoneId}
 
-import model.imp.{PricesTaxesImp, TaxDueImp}
+import model.imp.PricesTaxesImp
 import model.shared.{ImportExportDate, TraderDetails}
 import model.{MibType, MibTypes, YesNoValues}
+import play.api.Logger
 import play.api.data.format.Formatter
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 import play.api.data.{Form, FormError}
 import service.WorkingDaysService
 
 object FormsConstraints {
+
+  /**
+   *
+   * \p{L} – to allow all letters from any language
+   * \p{N} – for numbers
+   * \p{P} – for punctuation
+   * \p{Z} – for whitespace separators
+   * \p{M} - characater intended to be used with another character , e.g. accent
+   * ^ is for negation, so all these expressions will be whitelisted
+   *
+   */
+  def containsEmoji(valueToCheck: String): Boolean = {
+
+    val regex: String = "[^\\p{L}\\p{N}\\p{P}\\p{Z}\\p{M}\\£$^<>|]"
+    val replaced: String = valueToCheck.replaceAll(regex, "")
+    if (replaced == valueToCheck) false else true
+
+  }
+
+  def emojiConstraint(name: String, error: String) = Constraint[String](name) { o =>
+
+    if (o != null) {
+
+      if (containsEmoji(o)) {
+        Invalid(ValidationError(error))
+      } else {
+        Valid
+      }
+    } else {
+      Valid
+    }
+  }
 
   val postcodeFormatter: Formatter[String] = new Formatter[String] {
 
