@@ -34,16 +34,8 @@ object FormsConstraints {
 
   def emojiConstraint(name: String, error: String) = Constraint[String](name) { o =>
 
-    if (o != null) {
-
-      if (containsEmoji(o)) {
-        Invalid(ValidationError(error))
-      } else {
-        Valid
-      }
-    } else {
-      Valid
-    }
+    if (containsEmoji(o)) Invalid(ValidationError(error))
+    else Valid
   }
 
   val postcodeFormatter: Formatter[String] = new Formatter[String] {
