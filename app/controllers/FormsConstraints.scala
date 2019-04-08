@@ -96,11 +96,15 @@ object FormsConstraints {
 
   def checkTotalTax(form: Form[PricesTaxesImp], purchasePrice: Double): Form[PricesTaxesImp] = {
 
-    if ((form("customsDuty").value.get.toDouble + form("importVat").value.get.toDouble) > purchasePrice) {
+    val customsDuty = form("customsDuty").value.get.toDouble
+    val importVat = form("importVat").value.get.toDouble
+
+    if (customsDuty + importVat == 0)
+      form.withError("", "error.zero.tax")
+    else if ((customsDuty + importVat) > purchasePrice)
       form.withError("", "error.tax.amount", purchasePrice.formatted("%,1.2f").toString)
-    } else {
+    else
       form
-    }
   }
 
   def setImportExportDateSummaryError(form: Form[ImportExportDate], mibType: MibType) = {
