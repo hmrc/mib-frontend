@@ -100,7 +100,7 @@ object FormsConstraints {
     val importVat = form("importVat").value.get.toDouble
 
     if (customsDuty + importVat == 0)
-      form.withError("", "error.zero.tax")
+      form.withError("customsDuty", "error.zero.tax")
     else if ((customsDuty + importVat) > purchasePrice)
       form.withError("", "error.tax.amount", purchasePrice.formatted("%,1.2f").toString)
     else
