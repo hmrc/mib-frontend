@@ -7,7 +7,7 @@ object AppDependencies {
 
     "uk.gov.hmrc" %% "govuk-template" % "5.27.0-play-25",
     "uk.gov.hmrc" %% "play-ui" % "7.30.0-play-25",
-    "uk.gov.hmrc" %% "bootstrap-play-25" % "4.7.0",
+    "uk.gov.hmrc" %% "bootstrap-play-25" % "4.12.0",
     "com.beachape" %% "enumeratum" % "1.5.13",
     "uk.gov.hmrc" %% "time" % "3.3.0",
     "org.xhtmlrenderer" % "core-renderer" % "R8" exclude("bouncycastle", "bcprov-jdk14")
