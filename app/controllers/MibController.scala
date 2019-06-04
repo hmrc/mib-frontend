@@ -7,15 +7,14 @@ import controllers.ResultWrapper._
 import javax.inject.{Inject, Singleton}
 import model._
 import model.shared.Prices
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.shared._
 
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class MibController @Inject() (val messagesApi: MessagesApi, countriesService: CountriesService)(implicit ec: ExecutionContext, appConfig: AppConfig) extends FrontendController with I18nSupport {
+class MibController @Inject() (countriesService: CountriesService, mcc: MessagesControllerComponents)(implicit ec: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) {
 
   def getSelectDeclarationTypePage(): Action[AnyContent] = Action { implicit request =>
     Ok(select_declaration_type(controllers.routes.MibController.submitSelectDecTypePage(), selectDecType)).purgeSession

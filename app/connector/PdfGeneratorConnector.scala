@@ -2,7 +2,7 @@ package connector
 
 import javax.inject.{Inject, Singleton}
 import play.api.libs.ws.{WSClient, WSResponse}
-import uk.gov.hmrc.play.config.ServicesConfig
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import scala.concurrent.Future
 

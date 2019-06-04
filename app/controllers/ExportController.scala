@@ -1,26 +1,25 @@
 package controllers
 
-import service.{CountriesService, RefService}
 import config.AppConfig
 import controllers.exp._
 import javax.inject.{Inject, Singleton}
 import model.ExportPages
-import org.scalatest.time.Seconds
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import service.{CountriesService, RefService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.error_template
 
-import scala.concurrent.{ExecutionContext, Future}
-import scala.concurrent.duration.Duration
+import scala.concurrent.ExecutionContext
 
 @Singleton
-class ExportController @Inject() (val messagesApi: MessagesApi, countriesService: CountriesService,
+class ExportController @Inject() (countriesService:    CountriesService,
                                   exportPricesRequest: ExportPricesRequest, exportDateRequest: ExportDateRequest,
                                   exportJourneyDetails: ExportJourneyDetailsRequest, exportTraderDetailsRequest: ExportTraderDetailsRequest,
                                   exportMerchandiseDetailsRequest: ExportMerchandiseDetailsRequest,
-                                  exportCheckDetailsRequest:       ExportCheckDetailsRequest)
-  (implicit ec: ExecutionContext, appConfig: AppConfig, refService: RefService) extends FrontendController with I18nSupport {
+                                  exportCheckDetailsRequest:       ExportCheckDetailsRequest,
+                                  mcc:                             MessagesControllerComponents
+)
+  (implicit ec: ExecutionContext, appConfig: AppConfig, refService: RefService) extends FrontendController(mcc) {
 
   //------------------------------------------------------------------------------------------------------------------------------
   def getExportPage(page: String): Action[AnyContent] = Action { implicit request =>

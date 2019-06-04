@@ -9,27 +9,25 @@ import controllers.imp._
 import exceptions.MibException
 import javax.inject.{Inject, Singleton}
 import model.imp.{JourneyDetailsImp, PricesTaxesImp}
-import model.mib.StoreResponse
+
 import model.payapi.SpjRequest
 import model.shared.{ImportExportDate, MerchandiseDetails, Prices, TraderDetails}
 import model.{ImportPages, MibTypes, YesNoValues}
-import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import service.{CountriesService, RefService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.error_template
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
-class ImportController @Inject() (val messagesApi: MessagesApi, countriesService: CountriesService,
-                                  pricesRequest: ImportPricesRequest, importDateRequest: ImportDateRequest,
+class ImportController @Inject() (countriesService: CountriesService,
+                                  pricesRequest:    ImportPricesRequest, importDateRequest: ImportDateRequest,
                                   pricesTaxesRequest: PricesTaxesRequest, importJourneyDetailsRequest: ImportJourneyDetailsRequest,
                                   importTraderDetailsRequest: ImportTraderDetailsRequest, importMerchandiseDetails: ImportMerchandiseDetails,
                                   taxDueRequest: TaxDueRequest, importCheckDetailsRequest: ImportCheckDetailsRequest, payApiConnector: PayApiConnector,
-                                  refService: RefService, auditor: Auditor, mibBackendConnector: MibBackendConnector)
-  (implicit ec: ExecutionContext, appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                  refService: RefService, auditor: Auditor, mibBackendConnector: MibBackendConnector, mcc: MessagesControllerComponents)
+  (implicit ec: ExecutionContext, appConfig: AppConfig) extends FrontendController(mcc) {
 
   //------------------------------------------------------------------------------------------------------------------------------
   def getImportPage(page: String): Action[AnyContent] = Action { implicit request =>

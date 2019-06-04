@@ -26,6 +26,8 @@ import util.DateHelper.turnJavaTimeToJoda
 import util.ResourceReader
 
 import scala.language.postfixOps
+import play.api.libs.json.JodaWrites._
+import play.api.libs.json.JodaReads._
 
 @Singleton
 class WorkingDaysService @Inject() () {
