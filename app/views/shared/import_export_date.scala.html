@@ -44,15 +44,12 @@ action = currentSubmit,
     @header
 
 
-
     <div class="form-group @form.errors("import-date").map { e => form-group-error }">
-
 
     @views.html.partial.error_message_form_input("import-date", form)
 
     <input type="hidden" name="page" value="@currentPage" />
 
-    <!-- -->
 
     <label class="form-label">@if(form.errors("importExportDay").nonEmpty) { @for(error <- form.errors("importExportDay")) {
         <span id="@error.message-importDay" class="error-message">@Messages(error.message)</span>
@@ -83,7 +80,7 @@ action = currentSubmit,
             </div>
             <div class="form-group form-group-year" id="arrivalyeardiv">
                 <label for="importExportYear" class="form-label">@Messages("global.year")</label>
-                <input type="number" class="form-control @if(form.errors("importExportYear").nonEmpty) { form-control-error }" name="importExportYear" id="importYear" value="@form("importExportYear").value" />
+                <input type="number" class="form-control @if(form.errors("importExportYear").nonEmpty) { form-control-error }" name="importExportYear" id="importExportYear" value="@form("importExportYear").value" />
             </div>
 
         </div>

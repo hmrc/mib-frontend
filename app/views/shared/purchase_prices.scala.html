@@ -39,9 +39,6 @@ action = formAction,
 'novalidate -> "novalidate"
 ) {
 <fieldset id="import-pricestaxes">
-    @header
-
-
 
     <div class="form-group @form.errors("import-pricestaxes").map { e => form-group-error }">
 
@@ -53,9 +50,10 @@ action = formAction,
 
     <div id="@field-fieldset" class="form-group @form.errors(field).map { e => form-group-error }">
 
-        <label for="@field" class="form-label">
-            @views.html.partial.error_message_form_input(field,form)
-        </label>
+        <h1 class="heading-large">
+            <label for="@field" class="form-label-is-header">@Messages("shared.purchaseprice.header")</label>
+        </h1>
+        @views.html.partial.error_message_form_input(field,form)
         <span>&pound;</span>
         <input type="text" class="form-control form-control-1-4 @if(form.errors(field).nonEmpty) { form-control-error }" name="@field" id="@field" value="@form(field).value" @if(field == "postcode") { style="width: 150px" }/>
 

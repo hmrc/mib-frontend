@@ -213,3 +213,14 @@ input[type=radio]:focus + label.multiple-choice:before {
     -webkit-box-shadow: 0 0 0 4px #ffbf47;
     box-shadow: 0 0 0 4px #ffbf47;
 }
+
+/* a11y fixes */
+.form-label-is-header {
+    font-weight: 700;
+    font-size: 24px;
+}
+@media screen and (min-width: 641px) {
+    .form-label-is-header {
+        font-size: 36px;
+    }
+}
