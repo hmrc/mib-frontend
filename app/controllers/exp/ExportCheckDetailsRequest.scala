@@ -65,6 +65,7 @@ class ExportCheckDetailsRequest @Inject() (val messagesApi: MessagesApi, countri
 
     for {
       response <- mibBackendConnector.storeExport(auditData)
+      response <- auditor.sendAuditData(auditData, MibTypes.mibExport, "merchandiseDeclaration")
     } yield {
       Ok(declaration_received(declarationReceived.fill(decRecd),
                               ExportPages.dec_received.case_value, ExportPages.check_details.case_value)).addingToSession(DeclarationReceived.toSession(decRecd): _*)
