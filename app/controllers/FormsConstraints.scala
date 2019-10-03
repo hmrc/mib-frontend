@@ -59,7 +59,7 @@ object FormsConstraints {
   def priceConstraint = Constraint[Double]("constraint.price") { o =>
     val bigDec = BigDecimal(o).setScale(2, BigDecimal.RoundingMode.HALF_UP)
 
-    if (bigDec <= 900)
+    if ((bigDec <= 900) & (bigDec > 0))
       Valid
     else
       Invalid(ValidationError("error.max.purchase.value"))
@@ -101,6 +101,10 @@ object FormsConstraints {
 
     if (customsDuty + importVat == 0)
       form.withError("customsDuty", "error.zero.tax")
+    else if (customsDuty < 0)
+      form.withError("customsDuty", "error.max.purchase.value")
+    else if (importVat < 0)
+      form.withError("importVat", "error.max.purchase.value")
     else if ((customsDuty + importVat) > purchasePrice)
       form.withError("", "error.tax.amount", purchasePrice.formatted("%,1.2f").toString)
     else
