@@ -65,7 +65,10 @@ headScripts = None)
 @footerTop = {}
 
 @footerLinks = {
-    @uiLayouts.footer_links(None)
+    @uiLayouts.footer_links(
+    Some(Html(
+    s"""<li><a href="/mib-frontend/accessibility-statement" target="_blank" data-sso="false" data-journey-click="footer:Click:Accessibility">Accessibility</a></li>""") )
+    )
 }
 
 @serviceInfo = {

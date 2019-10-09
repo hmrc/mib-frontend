@@ -1,0 +1,127 @@
+@import config.AppConfig
+@import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
+
+
+@()(implicit request: play.api.mvc.Request[_], messages: Messages, appConfig: AppConfig)
+
+@views.html.main(appConfig = appConfig,
+contentHeader = None,
+bodyClasses = None,
+navTitle = Some(Messages("global.title")),
+backButtonUrl = None,
+title = Some(Messages("global.title")),
+includeHmrcLogo = true){
+
+<div id ="using-this-service">
+    <h1>Using this service </h1>
+    <p>
+        The Merchandise in Baggage service is HMRC’s digital declaration journey for users who enter or leave the UK with goods in their luggage to be sold. There are journeys for exporting and importing of Merchandise in Baggage, with a payment integration for importers.
+    </p>
+    <p>
+        This service is run by HM Revenue and Customs (HMRC). We want as many people as possible to be able to use this service. This means you should be able to:
+    </p>
+    <ul class="list list-bullet">
+        <li>change colours, contrast levels and fonts</li>
+        <li>zoom in up to 300% without the text spilling off the screen</li>
+        <li>get from the start of the service to the end using just a keyboard</li>
+        <li>get from the start of the service to the end using speech recognition software</li>
+        <li>listen to the service using a screen reader (including the most recent versions of JAWS, NVDA and VoiceOver)</li>
+    </ul>
+    <p>
+        We have also made the text in the service as simple as possible to understand.
+    </p>
+    <p>
+        <a href="https://mcmw.abilitynet.org.uk/">AbilityNet</a> has advice on making your device easier to use if you have a disability.
+    </p>
+</div>
+<div id="how-accessible-this-service-is">
+    <h1>
+        How accessible this service is
+    </h1>
+    <p>
+        This service is partially compliant with the <a href="https://www.w3.org/TR/WCAG21/">Web Content Accessibility Guidelines version 2.1 AA standard</a>.
+    </p>
+    <p>
+        Some people may find parts of this service difficult to use:
+    </p>
+    <ul class="list list-bullet">
+        <li>There are some error messages in this service that may not be descriptive enough for some users with visual impairments - however they are compatible with common assistive technology tools.</li>
+        <li>In this service, when the user enters an invalid input, link text is generated to navigate a users fo-cus to the field where the error occurred. Some of these links are only connected to the first fieldon the page, in the event that both fields are invalid. This may hinder the navigation for some keyboard only users. However this does not prevent a user from navigating the rest of the serviceusing the keyboard</li>
+    </ul>
+</div>
+<div id="reporting-accessibility-problems-with-this-service">
+    <h1>
+        Reporting accessibility problems with this service
+    </h1>
+    <p>
+        We are always looking to improve the accessibility of this service. If you find any problems that are not listed on this page or think we are not meeting accessibility requirements, report the <a href=" https://www.qa.tax.service.gov.uk/contact/accessibility">accessibility problem</a>
+    </p>
+</div>
+<div id="what-to-do-if-you-are-not-happy-with-how-we-respond-to-your-complaint">
+    <h1>
+        What to do if you are not happy with how we respond to your complaint
+    </h1>
+    <p>
+        The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018 (the ‘accessibility regulations’). If you are not happy with how we respond to your complaint, <a href="https://www.equalityadvisoryservice.com/">contact the Equality Advisory and Support Service</a> (EASS), or the <a href="https://www.equalityni.org/Home">Equality Commission for Northern Ireland </a>(ECNI) if you live in Northern Ireland.
+    </p>
+</div>
+<div id="contacting-us-by-phone-or-getting-a-visit-from-us-in-person">
+    <h1>
+        Contacting us by phone or getting a visit from us in person
+    </h1>
+    <p>
+        We provide a text relay service if you are deaf, hearing impaired or have a speech impediment.
+    </p>
+    <p>
+        We can provide a British Sign Language (BSL) interpreter, or you can arrange a visit from an HMRC advisor to help you complete the service.
+    </p>
+    <p>
+        Find out how to <a href="https://www.gov.uk/dealing-hmrc-additional-needs">contact us</a>.
+    </p>
+</div>
+<div id="technical-information-about-this-services-accessibility">
+    <h1>
+        Technical information about this service’s accessibility
+    </h1>
+    <p>
+        HMRC is committed to making this service accessible, in accordance with the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018.
+    </p>
+    <p>
+        This service is partially compliant with the <a href="https://www.w3.org/TR/WCAG21/">Web Content Accessibility Guidelines version 2.1 AA standard</a>, due to the non-compliances listed below.
+    </p>
+    <h2>
+        Non-accessible content
+    </h2>
+    <p>
+        The content listed below is non-accessible for the following reasons.
+    </p>
+    <h3>
+        Non-compliance with the accessibility regulations
+    </h3>
+    <p>
+        We use titles on our webpages in order to describe the topic or purpose of the page that the user is currently viewing. In some instances, the tab titles and main titles are not consistent. This means theservice does not meet WCAG 2.1 success criterion 2.4.6
+    </p>
+    <p>
+        We plan to add consistent titles for all the pages in the service by March 2020.
+    </p>
+    <p>
+        We use error messages and error links to highlight to users where they have entered information thatdoes not meet the correct criteria, and to focus on the field where the incorrect input was found. In some instances, the error links are shared between the fields, as their validation is the same. This means the focus only applies to the first field where the error is present.  Therefore the service does not meet WCAG 2.1 success criterion 3.3.3</p>
+    <p>
+        We plan to fix the error message focus to meet the success criterion by March 2020.
+    </p>
+</div>
+<div id="how-we-tested-this-service">
+    <h1>
+        How we tested this service
+    </h1>
+    <p>
+        The service was last tested on 18/09/19 and was checked for compliance with WCAG 2.1 AA.
+    </p>
+    <p>
+        The service was built using parts that were tested by the <a href="https://www.digitalaccessibilitycentre.org/">Digital Accessibility Centre</a>. The full service was tested by HMRC and included disabled users.
+    </p>
+    <p>
+        This page was prepared on 09/10/2019. It was last updated on 09/10/2019.
+    </p>
+</div>
+}

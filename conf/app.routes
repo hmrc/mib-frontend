@@ -16,3 +16,5 @@ GET        /export-page/declaration/successful/download-pdf   controllers.pdf.De
 
 
 POST       /start-journey                           controllers.ImportController.startJourney
+
+GET        /accessibility-statement                 controllers.AccessibilityController.getAccessibilityStatement
