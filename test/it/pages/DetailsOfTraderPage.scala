@@ -10,11 +10,11 @@ object DetailsOfTraderPage extends CommonPage {
   val pathImport = "/mib-frontend/import-page"
   def assertExportPageIsDisplayed()(implicit webDriver: WebDriver): Assertion = {
     currentPath shouldBe pathExport
-    getPageHeader shouldBe "Details of trader"
+    getPageHeader shouldBe "Details of the business moving goods"
   }
   def assertImportPageIsDisplayed()(implicit webDriver: WebDriver): Assertion = {
     currentPath shouldBe pathImport
-    getPageHeader shouldBe "Details of trader"
+    getPageHeader shouldBe "Details of the business moving goods"
   }
   def clickUk()(implicit driver: WebDriver): Unit = probing(_.findElement(By.id("ukaddress-label")).click())
 

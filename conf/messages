@@ -165,8 +165,8 @@ shared.date.header = Import date
 shared.date.example = For example, 20 12 2018
 
 #page6 Import / page 4 export
-shared.traderDetails.header = Details of trader
-shared.traderDetails.trader = What is the name of the trader?
+shared.traderDetails.header = Details of the business moving goods
+shared.traderDetails.trader = Enter the name of the business moving goods
 shared.traderDetails.buildingAndStreet = Building and street
 shared.traderDetails.line1 = Address line 1
 shared.traderDetails.line2 = Address line 2
@@ -179,7 +179,7 @@ shared.traderDetails.country = Country
 shared.traderDetails.vrn = VAT registration number
 shared.traderDetails.vehicleRegNo = Vehicle registration number
 shared.traderDetails.nameaddress = Trader name and address
-shared.traderDetails.has.address = Does the trader have a UK address?
+shared.traderDetails.has.address = Does the business have a UK address?
 shared.traderDetails = Trader details
 
 #page7 import / page 4 export
