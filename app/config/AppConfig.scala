@@ -29,13 +29,14 @@ class AppConfig @Inject() (configuration:            play.api.Configuration,
   private def loadConfig(key: String) = runModeConfiguration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
 
   private val contactHost = runModeConfiguration.getString(s"contact-frontend.host").getOrElse("")
-  private val contactFormServiceIdentifier = "MyService"
+  private val contactFormServiceIdentifier = "mib"
+  private val contactFormUserAction = "start"
 
   lazy val assetsPrefix = loadConfig(s"assets.url") + loadConfig(s"assets.version")
   lazy val analyticsToken = loadConfig(s"google-analytics.token")
   lazy val analyticsHost = loadConfig(s"google-analytics.host")
   lazy val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   lazy val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
-  lazy val reportAccessibilityProblemUrl = s"$contactHost/contact/accessibility?service=$contactFormServiceIdentifier"
+  lazy val reportAccessibilityProblemUrl = s"$contactHost/contact/accessibility?service=$contactFormServiceIdentifier&userAction=%2$contactFormUserAction"
 
 }
